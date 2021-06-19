@@ -35,30 +35,29 @@
       </div>
       <div class="col p-5 bg-light">
         <h2 class="fs-4 d-flex mb-4">訂購資訊</h2>
-        {{ order.user }}
-        <!-- <ul class="list-unstyled">
+        <ul class="list-unstyled">
           <li class="d-flex">
             <p class="col-4">Email：</p>
-            <p class="col">{{ order.user.email }}</p>
+            <p class="col">{{ user.email }}</p>
           </li>
           <li class="d-flex">
             <p class="col-4">收件人姓名：</p>
-            <p class="col">{{ order.user.name }}</p>
+            <p class="col">{{ user.name }}</p>
           </li>
           <li class="d-flex">
             <p class="col-4">收件電話：</p>
-            <p class="col">{{ order.user.tel }}</p>
+            <p class="col">{{ user.tel }}</p>
           </li>
           <li class="d-flex">
             <p class="col-4">收件地址：</p>
-            <p class="col">{{ order.user.address }}</p>
+            <p class="col">{{ user.address }}</p>
           </li>
           <li class="d-flex">
             <p class="col-4">備註：</p>
             <p class="col" v-if="order.message">{{ order.message }}</p>
             <p class="col" v-else>無</p>
           </li>
-        </ul> -->
+        </ul>
         <button type="submit" class="btn btn-primary w-100 py-3"
           v-if="!order.is_paid"
           @click="payOrder">信用卡付款</button>
@@ -68,7 +67,7 @@
 </template>
 
 <script>
-import { apiAllProducts, apiGetOrder, apiPayOrder } from '../../assets/js/api';
+import { apiGetOrder, apiPayOrder } from '../../assets/js/api';
 import { scrollTop } from '../../assets/js/plugins';
 import mitt from '../../assets/js/mitt';
 
@@ -76,29 +75,10 @@ export default {
   data() {
     return {
       order: {},
-      products: [],
+      user: {},
     };
   },
   methods: {
-    getProducts() {
-      apiAllProducts()
-        .then((res) => {
-          if (res.data.success) {
-            this.products = res.data.products;
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
-          }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
-        });
-    },
     getOrder() {
       const { id } = this.$route.params;
       apiGetOrder(id)
@@ -106,6 +86,7 @@ export default {
           if (res.data.success) {
             this.order = JSON.parse(JSON.stringify(res.data.order));
             this.getTime(this.order.create_at);
+            this.user = this.order.user;
           } else {
             mitt.emit('toast-message', {
               msg: res.data.message,
@@ -161,7 +142,6 @@ export default {
     scrollTop();
   },
   created() {
-    this.getProducts();
     this.getOrder();
   },
 };
