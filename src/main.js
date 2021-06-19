@@ -1,5 +1,39 @@
 import { createApp } from 'vue';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import fontawesome from '@fortawesome/fontawesome-free/js/all';
+// validate start
+import {
+  Field, Form, ErrorMessage, defineRule, configure,
+} from 'vee-validate';
+import AllRules from '@vee-validate/rules';
+import { localize, setLocale } from '@vee-validate/i18n';
+import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
+// validate end
 import App from './App.vue';
 import router from './router';
+import Toast from './components/toast.vue';
+import Logo from './components/logo.vue';
+import CartBag from './components/bag.vue';
+import 'bootstrap/dist/js/bootstrap.esm';
 
-createApp(App).use(router).mount('#app');
+Object.keys(AllRules).forEach((rule) => {
+  defineRule(rule, AllRules[rule]);
+});
+configure({
+  generateMessage: localize({ zh_TW: zhTW }),
+  validateOnInput: true,
+});
+setLocale('zh_TW');
+
+createApp(App)
+  .component('Toast', Toast)
+  .component('Logo', Logo)
+  .component('CartBag', CartBag)
+  .component('Form', Form)
+  .component('Field', Field)
+  .component('ErrorMessage', ErrorMessage)
+  .use(fontawesome)
+  .use(VueAxios, axios)
+  .use(router)
+  .mount('#app');

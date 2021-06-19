@@ -1,0 +1,62 @@
+@import './mixin'
+@import './components/front-nav'
+@import './components/front-cart'
+@import './components/front-products'
+@import './components/front-product'
+*
+  // outline: 1px solid red
+
+.container
+  max-width: 940px
+  position: relative
+  &-fluid
+    background: $gray-400
+
+.form-control
+  background: transparent
+  border-radius: 0
+  border: 1px solid rgba($light, .2)
+  text-align: center
+  color: $light
+  font-weight: 300
+  padding: .6rem
+  &::after
+    content: ''
+    display: block
+    position: absolute
+    width: 100%
+    height: 100%
+  &:focus, &:hover
+    color: $light
+    box-shadow: none
+    background: transparent
+    outline: 0
+    border-color: rgba($light, .6)
+
+.panya-input
+  border: 1px solid $gray-500
+  color: $blue-400
+  font-weight: 600
+  padding: 1rem
+  &:focus, &:hover
+    color: $primary
+    border-color: $primary
+
+form .panya-input
+  text-align: left
+  padding: .3rem
+  font-weight: 400
+
+.btn
+  letter-spacing: 2px
+  border-radius: 0 !important
+  &-light
+    &:hover
+      background: $primary
+      border-color: $primary
+      color: $white
+  &.disabled
+    opacity: .6
+    cursor: default
+
+      

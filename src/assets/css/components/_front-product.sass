@@ -1,0 +1,76 @@
+*
+  // outline: 1px solid red
+
+$img-size-sm: calc(100vw - 2em)
+$img-size-md: calc(30vw - 2em)
+
+.product
+  line-height: 1.6
+  h1
+    font-size: 2rem
+  .photo-lg, .photo-sm
+    span
+      display: block
+      width: 100%
+      height: 100%
+      overflow: hidden
+      position: relative
+    img
+      width: 100%
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+  .photo-lg
+    height: $img-size-sm
+    padding-bottom: 1em
+    +media-breakpoint-up(md)
+      height: $img-size-md
+      max-width: 390px
+      max-height: 390px
+  .photo-sm
+    height: calc(#{$img-size-sm} / 3)
+    span::after
+      content: ''
+      display: block
+      width: 100%
+      height: 100%
+      position: absolute
+      left: 0
+      top: 0
+      background: rgba($dark, .3)
+      opacity: 0
+      transition: all .15s
+    +media-breakpoint-up(md)
+      height: calc(#{$img-size-md} / 3)
+      max-width: 130px
+      max-height: 130px
+      span::after
+        opacity: 1
+      &:hover span::after, &.active span::after
+        opacity: 0
+    & + .photo-sm
+      padding-left: 1em
+
+.product-content
+  padding: 0 1rem
+  +media-breakpoint-up(md)
+    padding: 0 5rem
+
+.product-desc
+  color: $gray-700
+  font-weight: 300
+
+.product-price
+  span
+    color: $red-400
+    font-size: 2rem
+    margin-right: 1rem
+  small
+    color: $gray-700
+    font-size: 1.5rem
+    &.del
+      color: $secondary
+      font-size: 1rem
+      text-decoration: line-through
+  

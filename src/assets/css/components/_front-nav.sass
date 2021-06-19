@@ -1,0 +1,75 @@
+.navbar
+  background: $gray-400
+  &.show
+    background: $light
+
+.navbar-collapse
+  position: absolute
+  left: 50%
+  top: 100%
+  transform: translateX(-50%)
+  transition: all .3s
+  width: 100vw
+  height: 0
+  padding: 0
+  text-align: center
+  overflow: hidden
+  &:not(.show)
+    display: block
+  &.show
+    background: $light
+    z-index: 9
+    height: auto
+    padding: $spacer 0
+  +media-breakpoint-up(md)
+    position: relative
+    width: auto
+    height: auto
+    text-align: left
+    top: 0
+    left: 0
+    transform: translateX(0%)
+  
+.nav-brand
+  width: 100px
+
+.nav-cart
+  display: flex
+  justify-content: flex-end
+  align-items: center
+  div
+    display: flex
+    justify-content: center
+    align-items: center
+    color: $secondary
+    &:hover
+      color: $dark
+      .cart-bag
+        fill: $dark
+      .badge
+        background: $dark
+  .cart-bag
+    width: 1.2em
+    fill: $secondary
+  .badge
+    background: $secondary
+    transition: all .2s
+    &.active
+      background: $red-400
+      animation: jump .6s forwards cubic-bezier(0.65, 0.05, 0.15, 1)
+
+@keyframes jump
+  0%, 100%
+    transform: translateY(0) scale(1, 1)
+  10%
+    transform: translateY(20%) scale(1.1, .9)
+  50%
+    transform: translateY(-20%) scale(.9, 1.1)
+
+.nav-link
+  text-transform: uppercase
+  letter-spacing: 1px
+  color: $secondary
+  font-size: 0.875rem
+  &.disabled
+    color: $secondary

@@ -1,0 +1,109 @@
+.modal .btn-close
+  color: $light
+  background: rgba($light, .5)
+  border-radius: 50%
+  display: flex
+  justify-content: center
+  align-items: center
+  .material-icons
+    transform: scale(.8)
+
+.modal-body
+  .nav
+    background: $gray-200
+  .nav-link
+    background: transparent
+    color: $gray-600
+    font-size: 0.875rem
+    &.active
+      background: $white
+      color: $primary
+  .form-label
+    color: $gray-700
+    
+.place-image, .show-image
+  width: calc((100% - 1rem) / 3)
+  min-height: 8rem
+
+.place-image
+  display: flex
+  justify-content: center
+  align-items: center
+  border: 2px dashed $gray-200
+  .material-icons
+    font-size: $h1-font-size
+    color: $gray-200
+
+.show-image
+  position: relative
+  overflow: hidden
+  & + .show-image
+    margin-left: .5rem
+  &:hover
+    label, .btn-close
+      opacity: 1
+  &.active label
+    opacity: 1
+  input[type="radio"]
+    opacity: 0
+    display: none
+  label
+    position: absolute
+    width: 100%
+    bottom: 0
+    left: 0
+    text-align: center
+    background: rgba($yellow, .2)
+    color: $white
+    opacity: 0
+    transition: all .15s
+  .btn-close
+    position: absolute
+    right: 0
+    opacity: 0
+    transition: all .15s
+    transform: scale(.85)
+
+.modal-footer
+  border: 0
+  background: $gray-100
+
+$switch-size: 1.4rem
+.switch-group
+  position: relative
+  width: $switch-size * 1.7
+  height: $switch-size
+  input[type="checkbox"]
+    width: 100%
+    height: 100%
+    opacity: 0
+    position: relative
+    z-index: 2
+    &:checked + .ico_switch
+      background: $primary
+      &::after
+        right: 2px
+        background: $white
+        box-shadow: -2px 0 4px rgba($dark, .1)
+  .ico_switch
+    position: absolute
+    left: 0
+    top: 0
+    z-index: 1
+    display: block
+    width: 100%
+    height: 100%
+    background: $gray-300
+    border-radius: $switch-size
+    transition: all .15s
+    &::after
+      content: ''
+      display: block
+      width: calc(#{$switch-size} - 4px)
+      height: calc(#{$switch-size} - 4px)
+      background: rgba($white, 1)
+      border-radius: 50%
+      position: absolute
+      top: 2px
+      right: calc(100% - #{$switch-size} + 2px)
+      transition: all .15s

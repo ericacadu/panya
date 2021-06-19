@@ -1,0 +1,76 @@
+.cart
+  display: flex
+  position: fixed
+  top: 0
+  right: 0
+  opacity: 0
+  min-height: 100vh
+  height: 100vh
+  overflow: scroll
+  background: $blue-800
+  z-index: 1060
+  color: $gray-300
+  transform: translateX(100%)
+  transition: all .3s linear
+  &.show
+    opacity: 1
+    transform: translateX(0)
+
+.cart-header
+  border-bottom: 1px solid rgba($light, .1)
+  color: $secondary
+
+.cart-count
+  border-top: 1px solid rgba($light, .1)
+
+.cart-footer
+  text-transform: uppercase
+  background: $blue-800
+  width: 100%
+  padding-bottom: 10vh
+  +media-breakpoint-up(md)
+    padding-bottom: 0
+
+.cart-img
+  width: 5rem
+  height: 5rem
+  overflow: hidden
+  position: relative
+  img
+    width: 100%
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    
+.close-btn
+  width: 1.2rem
+  height: 1.2rem
+  position: relative
+  opacity: .5
+  &:hover
+    opacity: 1
+  &::before, &::after
+    content: ''
+    display: block
+    width: 100%
+    height: 1px
+    background: $light
+    position: absolute
+    top: 50%
+    left: 50%
+  &::before
+    transform: translate(-50%, -50%) rotate(45deg)
+  &::after
+    transform: translate(-50%, -50%) rotate(-45deg)
+
+.clear-btn
+  border: 0
+  &:hover
+    background: transparent
+    // color: $secondary
+  &:focus
+    box-shadow: none
+  &:disabled
+    cursor: default
+    color: $gray-700
