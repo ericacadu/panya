@@ -22,6 +22,11 @@ export const apiUploadFile = (data) => axios.post(
   `${api}/api/${path}/admin/upload`, data,
 );
 
+// 訂單管理
+export const apiGetOrders = (page = 1) => axios.get(
+  `${api}/api/${path}/admin/orders?page=${page}`,
+);
+
 // 前台相關
 
 // 商品

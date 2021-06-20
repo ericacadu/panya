@@ -148,6 +148,8 @@ $utilities: map-merge(
         70: 70%,
         75: 75%,
         80: 80%,
+        85: 85%,
+        90: 90%,
         100: 100%,
         auto: auto
       )
@@ -165,6 +167,8 @@ $utilities: map-merge(
         70: 70%,
         75: 75%,
         80: 80%,
+        85: 85%,
+        90: 90%,
         100: 100%,
         auto: auto
       )
@@ -212,6 +216,7 @@ $utilities: map-merge(
       class: min-vh,
       responsive: true,
       values: (
+        20: 20vh,
         25: 25vh,
         50: 50vh,
         55: 55vh,

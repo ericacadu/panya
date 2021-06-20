@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid g-0 min-vh-100 text-dark">
+  <div class="front container-fluid g-0 min-vh-100 text-dark">
     <nav
       class="navbar navbar-expand-md navbar-light py-md-4 sticky-top"
       :class="toggleNav ? 'show' : ''"
@@ -250,6 +250,6 @@ export default {
   },
 };
 </script>
-<style lang="sass" scope>
+<style scope lang="sass">
 @import '@/assets/css/front.sass'
 </style>

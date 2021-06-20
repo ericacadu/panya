@@ -79,7 +79,8 @@
             </li>
             <li>
               <label for="message" class="form-label">備註</label>
-              <textarea id="message" class="form-control panya-input" rows="3"></textarea>
+              <textarea id="message" class="form-control panya-input" rows="3"
+                v-model="message"></textarea>
             </li>
           </ul>
           <button type="submit" class="btn btn-primary w-100 py-3">送出訂單</button>

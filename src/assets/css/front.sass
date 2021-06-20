@@ -9,10 +9,11 @@
 .container
   max-width: 940px
   position: relative
-  &-fluid
-    background: $gray-400
 
-.form-control
+.front
+  background: $gray-400
+
+.front .form-control
   background: transparent
   border-radius: 0
   border: 1px solid rgba($light, .2)
@@ -33,7 +34,7 @@
     outline: 0
     border-color: rgba($light, .6)
 
-.panya-input
+.front .panya-input
   border: 1px solid $gray-500
   color: $blue-400
   font-weight: 600
@@ -42,12 +43,12 @@
     color: $primary
     border-color: $primary
 
-form .panya-input
+.front form .panya-input
   text-align: left
   padding: .3rem
   font-weight: 400
 
-.btn
+.front .btn
   letter-spacing: 2px
   border-radius: 0 !important
   &-light

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid row g-0 min-vh-100 bg-dark">
+  <div class="admin container-fluid row g-0 min-vh-100 bg-dark">
     <div class="col-lg-2 text-light">
       <nav
         class="
@@ -55,7 +55,7 @@
         </span>
         <button
           type="button"
-          class="btn btn-sm btn-outline-secondary"
+          class="btn btn-sm btn-secondary"
           @click="logout"
         >
           登出
@@ -125,7 +125,7 @@ export default {
 };
 </script>
 
-<style lang="sass" scope>
+<style scope lang="sass">
 @import '@/assets/css/admin.sass'
 .navbar-brand
   letter-spacing: .5rem

@@ -68,7 +68,7 @@
 
 <script>
 import { apiGetOrder, apiPayOrder } from '../../assets/js/api';
-import { scrollTop } from '../../assets/js/plugins';
+import { scrollTop, getDate, getTime } from '../../assets/js/plugins';
 import mitt from '../../assets/js/mitt';
 
 export default {
@@ -85,7 +85,7 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.order = JSON.parse(JSON.stringify(res.data.order));
-            this.getTime(this.order.create_at);
+            this.order.time = `${getDate(this.order.create_at)} ${getTime(this.order.create_at)}`;
             this.user = this.order.user;
           } else {
             mitt.emit('toast-message', {
@@ -124,18 +124,6 @@ export default {
             theme: 'danger',
           });
         });
-    },
-    getTime(date) {
-      const now = new Date(date * 1000);
-      const year = now.getFullYear();
-      const m = now.getMonth() + 1;
-      const d = now.getDate();
-      const month = m < 10 ? `0${m}` : m;
-      const day = d < 10 ? `0${d}` : d;
-      const hour = now.getHours();
-      const min = now.getMinutes();
-      const sec = now.getSeconds();
-      this.order.time = `${year} / ${month} / ${day} ${hour}:${min}:${sec}`;
     },
   },
   mounted() {
