@@ -58,7 +58,7 @@
               <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
             </li>
             <li class="mb-3">
-              <label for="tel" class="form-label">收件電話</label>
+              <label for="tel" class="form-label">聯絡電話</label>
               <Field type="tel" id="tel" name="電話"
                 class="form-control panya-input"
                 :class="{ 'is-invalid': errors['電話'] }"

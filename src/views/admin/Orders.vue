@@ -1,5 +1,14 @@
 <template>
   <div class="container-fluid p-3">
+    <p class="text-end">
+      <button
+        class="btn btn-danger ms-auto"
+        type="button"
+        @click="opdenModal('delete')"
+      >
+        刪除全部訂單
+      </button>
+    </p>
     <ul
       class="row g-0 list-unstyled rounded p-2 products-list-header text-nowrap"
     >
@@ -15,10 +24,10 @@
       <li class="list-group-item p-2" v-for="item in orders" :key="item.id">
         <div class="col-2 overflow-hidden">
           {{ item.create_date }}
-           <small class="d-block text-secondary">{{ item.create_time }}</small>
+          <small class="d-block text-secondary">{{ item.create_time }}</small>
         </div>
         <div class="col-3 overflow-hidden text-start">{{ item.id }}</div>
-        <div class="col-1">{{ item.total_qty }}</div>
+        <div class="col-1">{{ item.qty }}</div>
         <div class="col-1">{{ item.total }}</div>
         <div class="col-1 text-success">
           <span class="d-block text-success" v-if="item.is_paid">已付款</span>
@@ -35,7 +44,7 @@
           <button
             class="btn btn-sm btn-outline-primary fs-7"
             type="button"
-            @click="opdenModal(item)"
+            @click="opdenModal('edit', item)"
           >
             查看訂單
           </button>
@@ -50,35 +59,55 @@
       </li>
     </ul>
 
-    <!-- <DeleteModal :modalData="deleteData" @delete-product="deleteProduct">
+    <DeleteModal :modalData="deleteData" @delete-data="deleteOrder">
       <template #title>{{ modalTitle }}</template>
       <template #default>
         是否刪除
-        <span class="text-danger"> {{ deleteData.title }} </span>
-        商品？
+        <span class="text-danger" v-if="deleteData.id">
+          {{ deleteData.id }}
+        </span>
+        <b class="text-danger" v-else> 全部 </b>
+        訂單？
         <small class="text-muted">(刪除後將無法恢復)</small>
       </template>
-    </DeleteModal> -->
-    <OrderModal :modal-data="modalData"></OrderModal>
+    </DeleteModal>
+    <OrderModal
+      :modal-data="modalData"
+      @update-order="updateOrder"
+    ></OrderModal>
   </div>
 </template>
 
 <script>
-import { apiGetOrders } from '../../assets/js/api';
 import {
-  bsModal, bsToast, getDate, getTime,
+  apiGetOrders,
+  apiUpdateOrder,
+  apiDeleteOrder,
+  apiDeleteOrders,
+} from '../../assets/js/api';
+import {
+  bsModal,
+  bsToast,
+  bsTooltip,
+  getDate,
+  getTime,
 } from '../../assets/js/plugins';
 import OrderModal from '../../components/admin/orderModal.vue';
+import DeleteModal from '../../components/admin/deleteModal.vue';
 import mitt from '../../assets/js/mitt';
 
 export default {
   components: {
     OrderModal,
+    DeleteModal,
   },
   data() {
     return {
+      modal: {},
       orders: {},
       modalData: {},
+      deleteData: {},
+      modalTitle: '',
     };
   },
   methods: {
@@ -108,22 +137,81 @@ export default {
           order.paid_day = getDate(item.paid_date);
           order.paid_time = getTime(item.paid_date);
         }
-        order.total_qty = 0;
+        order.qty = 0;
         Object.values(item.products).forEach((el) => {
-          order.total_qty += el.qty;
+          order.qty += el.qty;
         });
       });
     },
-    opdenModal(item) {
-      console.log(item);
-      this.modalData = JSON.parse(JSON.stringify(item));
-      bsModal('orderModal').show();
+    updateOrder(data) {
+      apiUpdateOrder(data.id, { data })
+        .then((res) => {
+          if (res.data.success) {
+            this.getOrders();
+            mitt.emit('toast-message', {
+              msg: res.data.message,
+              theme: 'success',
+            });
+          } else {
+            mitt.emit('toast-message', {
+              msg: res.data.message,
+              theme: 'danger',
+            });
+          }
+          this.modal.hide();
+        })
+        .catch((err) => {
+          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+        });
+    },
+    deleteOrder(item) {
+      let func = {};
+      if (!this.deleteData.id) {
+        func = () => apiDeleteOrders();
+      } else {
+        func = () => apiDeleteOrder(item.id);
+      }
+      func()
+        .then((res) => {
+          if (res.data.success) {
+            this.getOrders();
+            mitt.emit('toast-message', {
+              msg: res.data.message,
+              theme: 'success',
+            });
+            this.modal.hide();
+          } else {
+            mitt.emit('toast-message', {
+              msg: res.data.message,
+              theme: 'danger',
+            });
+          }
+        })
+        .catch((err) => {
+          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+        });
+    },
+    opdenModal(isModal = 'edit', item) {
+      if (isModal === 'delete') {
+        this.modal = bsModal('deleteModal');
+        this.modalTitle = '刪除訂單';
+        if (!item) {
+          this.deleteData = {};
+          this.deleteData.id = '';
+        } else {
+          this.deleteData = item;
+        }
+      } else {
+        this.modal = bsModal('orderModal');
+        this.modalData = JSON.parse(JSON.stringify(item));
+        bsTooltip();
+        // console.log(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      }
+      this.modal.show();
     },
   },
   created() {
     this.getOrders();
-  },
-  mounted() {
   },
   unmounted() {
     bsToast('toast').hide();

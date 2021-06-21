@@ -48,7 +48,7 @@
     <ProductModal :modalData="modalData" @update-product="updateProduct">
       <template #title>{{ modalTitle }}</template>
     </ProductModal>
-    <DeleteModal :modalData="deleteData" @delete-product="deleteProduct">
+    <DeleteModal :modalData="deleteData" @delete-data="deleteProduct">
       <template #title>{{ modalTitle }}</template>
       <template #default>
         是否刪除

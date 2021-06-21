@@ -23,7 +23,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="$emit('delete-product', datas)"
+            @click="$emit('delete-data', datas)"
           >
             確定刪除
           </button>

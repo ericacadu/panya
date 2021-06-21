@@ -14,7 +14,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <!-- content -->
+          <!-- content start -->
           <div class="nav rounded p-2 mb-3 d-flex align-items-center">
             <div>
               訂單狀態：
@@ -27,12 +27,13 @@
               target="_blank"
               :href="`${url}/#/checkout/${datas.id}`"
               v-if="!datas.is_paid"
-            >付款連結</a>
-            <small class="ms-auto text-secondary"
-              v-if="datas.final_edit">
+              >付款連結</a
+            >
+            <small class="ms-auto text-secondary" v-if="datas.final_edit">
               最後修改時間：{{ datas.final_edit }}
             </small>
           </div>
+          <!-- 訂購資訊 -->
           <div class="row g-3 d-md-flex">
             <div class="col-md-6">
               <h2 class="fs-4 d-flex mb-3">
@@ -48,8 +49,9 @@
                 </button>
               </h2>
               <ul class="list-unstyled">
-                <li class="mb-1">
-                  建立時間：{{ datas.create_date }} {{ datas.create_time }}
+                <li class="d-flex align-items-center mb-2">
+                  <span class="form-label m-0 col-4">建立時間：</span>
+                  <span>{{ datas.create_date }} {{ datas.create_time }}</span>
                 </li>
                 <li class="d-flex align-items-center mb-1">
                   <label for="email" class="form-label m-0 col-4"
@@ -102,7 +104,7 @@
                 <li class="d-flex align-items-start mb-1">
                   <label for="message" class="form-label m-0 col-4">備註</label>
                   <textarea
-                    id="product-desc"
+                    id="message"
                     class="form-control"
                     row="3"
                     placeholder="無"
@@ -112,9 +114,10 @@
                 </li>
               </ul>
             </div>
+            <!-- 商品細項 -->
             <div class="col-md-6">
-              <h2 class="fs-4 d-flex mb-3">
-                商品細項
+              <div class="d-flex align-items-center">
+                <h2 class="fs-4 m-0">商品細項</h2>
                 <button
                   type="button"
                   class="btn btn-sm ms-2"
@@ -125,9 +128,76 @@
                   <span v-if="!isEditProduct">修改</span>
                   <span v-else>完成</span>
                 </button>
-              </h2>
+              </div>
+              <div
+                class="
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                  border
+                  rounded
+                  p-2
+                  my-2
+                "
+              >
+                <p class="m-0">商品數量：{{ datas.qty }}</p>
+                <p class="m-0">
+                  訂單金額：
+                  <span class="fs-5 fw-bold text-danger">{{
+                    datas.total
+                  }}</span>
+                </p>
+              </div>
+              <ul class="list-unstyled">
+                <li
+                  class="d-flex align-items-center mb-2"
+                  v-for="item in products"
+                  :key="item"
+                >
+                  <div class="cart-img">
+                    <img :src="item.product.imageUrl" />
+                  </div>
+                  <div class="cart-cont col px-3 d-flex">
+                    <div class="col-5">
+                      <p class="m-0">{{ item.product.title }}</p>
+                      <small>$ {{ item.product.price }} NTD</small>
+                    </div>
+                    <div class="col-5 d-flex align-items-center text-nowrap">
+                      數量：
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        v-model.number="item.qty"
+                        :disabled="!isEditProduct"
+                      />
+                    </div>
+                    <div
+                      class="
+                        col-2
+                        d-flex
+                        align-items-center
+                        justify-content-end
+                      "
+                    >
+                      <!-- 這裡想加入按鈕提示 -->
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="right"
+                        title="刪除後將無法恢復"
+                        :disabled="!isEditProduct"
+                        @click="removeProduct(item)"
+                      >
+                        <i class="material-icons">delete</i>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
+          <!-- content end -->
         </div>
         <div class="modal-footer">
           <button
@@ -139,10 +209,10 @@
           </button>
           <button
             type="button"
-            class="btn btn-primary"
-            @click="$emit('update-product', datas)"
+            class="btn btn-danger"
+            @click="updateOrder"
           >
-            儲存
+            儲存修改訂單
           </button>
         </div>
       </div>
@@ -152,8 +222,7 @@
 
 <script>
 import { getDate, getTime } from '../../assets/js/plugins';
-// import { apiUploadFile } from '../../assets/js/api';
-// import mitt from '../../assets/js/mitt';
+import mitt from '../../assets/js/mitt';
 
 export default {
   props: ['modalData'],
@@ -161,6 +230,7 @@ export default {
     return {
       datas: {},
       user: {},
+      products: [],
       isEditInfo: false,
       isEditProduct: false,
       url: 'https://ericacadu.github.io/panya',
@@ -168,16 +238,54 @@ export default {
       final_edit: '',
     };
   },
-  // methods: {
-
-  // },
+  methods: {
+    updateTotal(data) {
+      this.datas.total = 0;
+      this.datas.qty = 0;
+      Object.values(data).forEach((item) => {
+        const newPrice = item;
+        newPrice.final_total = item.product.price * item.qty;
+        this.datas.total += item.final_total;
+        this.datas.qty += item.qty;
+      });
+    },
+    removeProduct(item) {
+      this.products = Object.values(this.products).filter(
+        (elemt) => elemt.id !== item.id,
+      );
+    },
+    updateOrder() {
+      if (!this.isEditInfo && !this.isEditProduct) {
+        this.$emit('update-order', this.datas);
+      } else {
+        mitt.emit('toast-message', {
+          msg: '訂單內容尚未修改完成',
+          theme: 'danger',
+        });
+      }
+    },
+  },
   watch: {
     modalData() {
       this.datas = this.modalData;
+      this.products = this.modalData.products;
       this.user = this.modalData.user;
-      this.user.message = this.modalData.message;
       this.isEditInfo = false;
       this.isEditProduct = false;
+      this.edit_count = 0;
+    },
+    datas: {
+      handler() {
+        this.datas.products = this.products;
+        this.datas.user = this.user;
+      },
+      deep: true,
+    },
+    products: {
+      handler(val) {
+        this.updateTotal(val);
+      },
+      deep: true,
     },
     isEditInfo(val) {
       if (!val) {

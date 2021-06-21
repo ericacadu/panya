@@ -14,6 +14,9 @@ export default {
       document.title = `${nowTitle} PANYA`;
     },
   },
+  mounted() {
+
+  },
 };
 </script>
 

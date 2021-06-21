@@ -26,6 +26,15 @@ export const apiUploadFile = (data) => axios.post(
 export const apiGetOrders = (page = 1) => axios.get(
   `${api}/api/${path}/admin/orders?page=${page}`,
 );
+export const apiUpdateOrder = (id, data) => axios.put(
+  `${api}/api/${path}/admin/order/${id}`, data,
+);
+export const apiDeleteOrder = (id) => axios.delete(
+  `${api}/api/${path}/admin/order/${id}`,
+);
+export const apiDeleteOrders = () => axios.delete(
+  `${api}/api/${path}/admin/orders/all`,
+);
 
 // 前台相關
 

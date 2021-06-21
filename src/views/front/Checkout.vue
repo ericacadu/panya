@@ -45,7 +45,7 @@
             <p class="col">{{ user.name }}</p>
           </li>
           <li class="d-flex">
-            <p class="col-4">收件電話：</p>
+            <p class="col-4">聯絡電話</p>
             <p class="col">{{ user.tel }}</p>
           </li>
           <li class="d-flex">
