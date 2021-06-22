@@ -91,9 +91,8 @@
 </template>
 
 <script>
-import { apiCheckout } from '../../assets/js/api';
-import { scrollTop } from '../../assets/js/plugins';
-import mitt from '../../assets/js/mitt';
+import { apiCheckout } from '@/scripts/api';
+import { scrollTop } from '@/scripts/methods';
 
 export default {
   props: ['cartData', 'totalPrice', 'isDisabled'],
@@ -118,25 +117,11 @@ export default {
       apiCheckout({ data: { user: this.user, message: this.message } })
         .then((res) => {
           if (res.data.success) {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
             this.$emit('get-carts');
             this.$refs.order.resetForm();
             this.$router.push(`/checkout/${res.data.orderId}`);
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.$pushMessage(res);
         });
     },
   },

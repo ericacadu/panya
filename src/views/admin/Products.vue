@@ -65,11 +65,10 @@ import {
   apiGetProducts,
   apiUpdateProducts,
   apiDeleteProducts,
-} from '../../assets/js/api';
-import { bsModal, bsToast } from '../../assets/js/plugins';
-import ProductModal from '../../components/admin/productModal.vue';
-import DeleteModal from '../../components/admin/deleteModal.vue';
-import mitt from '../../assets/js/mitt';
+} from '@/scripts/api';
+import { bsModal, bsToast } from '@/scripts/methods';
+import ProductModal from '@/components/productModal.vue';
+import DeleteModal from '@/components/deleteModal.vue';
 
 export default {
   components: {
@@ -94,17 +93,10 @@ export default {
     getProducts() {
       apiGetProducts()
         .then((res) => {
-          if (res.data.success) {
-            this.products = res.data.products;
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
+          if (!res.data.success) {
+            this.$pushMessage(res);
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.products = res.data.products;
         });
     },
     updateProduct(data) {
@@ -123,20 +115,9 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getProducts();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
             this.modal.hide();
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res);
         });
     },
     deleteProduct(item) {
@@ -144,20 +125,9 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getProducts();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
             this.modal.hide();
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res);
         });
     },
     opdenModal(isModal = 'add', item) {

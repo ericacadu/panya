@@ -67,9 +67,8 @@
 </template>
 
 <script>
-import { apiGetOrder, apiPayOrder } from '../../assets/js/api';
-import { scrollTop, getDate, getTime } from '../../assets/js/plugins';
-import mitt from '../../assets/js/mitt';
+import { apiGetOrder, apiPayOrder } from '@/scripts/api';
+import { scrollTop, getDate, getTime } from '@/scripts/methods';
 
 export default {
   data() {
@@ -83,22 +82,12 @@ export default {
       const { id } = this.$route.params;
       apiGetOrder(id)
         .then((res) => {
-          if (res.data.success) {
-            this.order = JSON.parse(JSON.stringify(res.data.order));
-            this.order.time = `${getDate(this.order.create_at)} ${getTime(this.order.create_at)}`;
-            this.user = this.order.user;
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
+          if (!res.data.success) {
+            this.$pushMessage(res);
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.order = JSON.parse(JSON.stringify(res.data.order));
+          this.order.time = `${getDate(this.order.create_at)} ${getTime(this.order.create_at)}`;
+          this.user = this.order.user;
         });
     },
     payOrder() {
@@ -106,23 +95,9 @@ export default {
       apiPayOrder(id)
         .then((res) => {
           if (res.data.success) {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
             this.getOrder();
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.$pushMessage(res);
         });
     },
   },

@@ -1,6 +1,6 @@
 <template>
   <router-view/>
-  <Toast></Toast>
+  <ToastMessage></ToastMessage>
 </template>
 
 <script>

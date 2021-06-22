@@ -56,8 +56,7 @@
 </template>
 
 <script>
-import mitt from '../../assets/js/mitt';
-import { apiProducts } from '../../assets/js/api';
+import { apiProducts } from '@/scripts/api';
 
 export default {
   props: ['isDisabled'],
@@ -79,14 +78,14 @@ export default {
             this.category = [...newSet];
             this.filterProducts('all');
           } else {
-            mitt.emit('toast-message', {
+            this.$emitter.emit('toast-message', {
               msg: res.data.message,
               theme: 'danger',
             });
           }
         })
         .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$emitter.emit('toast-message', { msg: err, theme: 'danger' });
         });
     },
     goToProduct(id) {

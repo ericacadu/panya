@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { apiUserLogin } from '../../assets/js/api';
+import { apiUserLogin } from '@/scripts/api';
 
 export default {
   data() {

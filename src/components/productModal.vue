@@ -293,8 +293,7 @@
 </template>
 
 <script>
-import { apiUploadFile } from '../../assets/js/api';
-import mitt from '../../assets/js/mitt';
+import { apiUploadFile } from '@/scripts/api';
 
 export default {
   props: ['modalData'],
@@ -318,16 +317,13 @@ export default {
       const isRepeat = this.datas.imagesUrl.find((item) => item === isImage);
       if (isImage !== '') {
         if (isRepeat) {
-          mitt.emit('toast-message', {
-            msg: '連結網址不可重複',
-            theme: 'danger',
-          });
-        } else {
-          this.datas.imagesUrl.push(this.tempUrl);
+          this.$pushMessage(false, '連結網址不可重複');
+          return;
         }
+        this.datas.imagesUrl.push(this.tempUrl);
         this.tempUrl = '';
       } else {
-        mitt.emit('toast-message', { msg: '請輸入連結網址', theme: 'danger' });
+        this.$pushMessage(false, '請輸入連結網址');
       }
     },
     getUploadFile() {
@@ -338,7 +334,7 @@ export default {
       const formData = new FormData();
       formData.append('add-to-upload', this.uploadData);
       if (!this.$refs['upload-file'].value) {
-        mitt.emit('toast-message', { msg: '沒有選擇檔案', theme: 'danger' });
+        this.$pushMessage(false, '沒有選擇檔案');
         return;
       }
       apiUploadFile(formData)
@@ -347,15 +343,8 @@ export default {
             this.datas.imagesUrl.push(res.data.imageUrl);
             this.$refs['upload-file'].value = '';
             this.uploadData = '';
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res, res.data.message || '上傳成功');
         });
     },
     removeImage(item) {

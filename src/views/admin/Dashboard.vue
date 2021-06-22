@@ -10,7 +10,8 @@
           align-items-start
         "
       >
-        <div class="navbar-brand fs-6 fw-light">PANYA</div>
+        <router-link to="../" target="_blank"
+          class="navbar-brand fs-6 fw-light">PANYA</router-link>
         <button
           class="navbar-toggler"
           data-bs-toggle="collapse"
@@ -26,13 +27,13 @@
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link px-0" to="/admin/orders"
-                >訂單管理</router-link
+              <router-link class="nav-link px-0" to="/admin/coupons"
+                >優惠券管理</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link px-0" to="/admin/coupons"
-                >優惠券管理</router-link
+              <router-link class="nav-link px-0" to="/admin/orders"
+                >訂單管理</router-link
               >
             </li>
             <li class="nav-item">
@@ -72,8 +73,7 @@
 </template>
 
 <script>
-import { apiUserCheck, apiUserLogout } from '../../assets/js/api';
-import mitt from '../../assets/js/mitt';
+import { apiUserCheck, apiUserLogout } from '@/scripts/api';
 
 export default {
   data() {
@@ -81,8 +81,6 @@ export default {
       path: '',
       page: '',
       status: '',
-      message: '',
-      theme: '',
     };
   },
   watch: {
@@ -96,29 +94,18 @@ export default {
       this.$http.defaults.headers.common.Authorization = token;
       apiUserCheck()
         .then((res) => {
-          if (res.data.success) {
-            this.status = '已登入';
-            mitt.emit('toast-message', { msg: this.status, theme: 'success' });
-          } else {
-            this.status = res.data.message;
-            mitt.emit('toast-message', { msg: res.data.message, theme: 'danger' });
-
+          if (!res.data.success) {
             this.$router.push('/login');
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res, '已登入');
+          this.status = res.data.message || '登入中';
         });
     },
     logout() {
       apiUserLogout().then((res) => {
-        if (res.data.success) {
-          document.cookie = `panyaToken= ; expires=${new Date()}`;
-          this.$router.push('/login');
-        }
-        mitt.emit('toast-message', { msg: res.data.message, theme: 'danger' });
-      }).catch((err) => {
-        mitt.emit('toast-message', { msg: err, theme: 'danger' });
+        document.cookie = `panyaToken= ; expires=${new Date()}`;
+        this.$router.push('/login');
+        this.$pushMessage(res);
       });
     },
   },

@@ -1,12 +1,12 @@
 <template>
   <div
-    class="toast p-1 m-3 fade"
+    class="toast mw-60 mw-md-auto p-1 m-3 fade"
     id="toast"
-    :class="theme ? `toast-${theme} text-${theme}` : 'hide'"
+    :class="data.style ? `toast-${data.style} text-${data.style}` : 'hide'"
     data-bs-delay="2500"
   >
     <div class="d-flex">
-      <div class="toast-body">{{ message }}</div>
+      <div class="toast-body">{{ data.content }}</div>
       <button
         type="button"
         class="btn-close me-2 m-auto"
@@ -17,22 +17,21 @@
 </template>
 
 <script>
-import { bsToast } from '../assets/js/plugins';
-import mitt from '../assets/js/mitt';
+import { bsToast } from '@/scripts/methods';
 
 export default {
   data() {
     return {
       toast: {},
-      message: '',
-      theme: '',
+      data: {},
     };
   },
   mounted() {
     this.toast = bsToast('toast');
-    mitt.on('toast-message', (args) => {
-      this.message = args.msg;
-      this.theme = args.theme;
+    this.$emitter.on('push-message', (message) => {
+      const { style = 'success', content } = message;
+      this.data.style = style;
+      this.data.content = content;
       this.toast.show();
     });
   },
@@ -41,8 +40,8 @@ export default {
 <style lang="sass">
 .toast
   position: fixed
-  left: 50%
+  right: 0
   top: 0
-  transform: translateX(-50%)
+  // transform: translateX(-50%)
   z-index: 99999
 </style>

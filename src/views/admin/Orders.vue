@@ -113,16 +113,15 @@ import {
   apiUpdateOrder,
   apiDeleteOrder,
   apiDeleteOrders,
-} from '../../assets/js/api';
+} from '@/scripts/api';
 import {
   bsModal,
   bsToast,
   getDate,
   getTime,
-} from '../../assets/js/plugins';
-import OrderModal from '../../components/admin/orderModal.vue';
-import DeleteModal from '../../components/admin/deleteModal.vue';
-import mitt from '../../assets/js/mitt';
+} from '@/scripts/methods';
+import OrderModal from '@/components/orderModal.vue';
+import DeleteModal from '@/components/deleteModal.vue';
 
 export default {
   components: {
@@ -148,19 +147,12 @@ export default {
     getOrders() {
       apiGetOrders()
         .then((res) => {
-          if (res.data.success) {
-            this.orders = res.data.orders;
-            this.orderDatas(this.orders);
-            this.filterDatas = this.orders;
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
+          if (!res.data.success) {
+            this.$pushMessage(res);
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.orders = res.data.orders;
+          this.orderDatas(this.orders);
+          this.filterDatas = this.orders;
         });
     },
     orderDatas(data) {
@@ -183,20 +175,9 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getOrders();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
+            this.modal.hide();
           }
-          this.modal.hide();
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res);
         });
     },
     deleteOrder(item) {
@@ -210,20 +191,9 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getOrders();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
             this.modal.hide();
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res);
         });
     },
     opdenModal(isModal = 'edit', item) {

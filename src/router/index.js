@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/front/Index.vue'),
+    component: () => import('@/views/front/Home.vue'),
     children: [
       {
         path: '/products',
@@ -43,7 +43,7 @@ const routes = [
   }, {
     path: '/admin',
     name: 'Admin',
-    component: () => import('@/views/admin/Index.vue'),
+    component: () => import('@/views/admin/Dashboard.vue'),
     meta: {
       title: '後台管理',
     },

@@ -3,6 +3,7 @@ import {
   Modal,
   Tooltip,
 } from 'bootstrap';
+import mitt from '@/scripts/mitt';
 
 export const bsToast = (id) => new Toast(document.getElementById(id));
 export const bsModal = (id) => new Modal(document.getElementById(id));
@@ -17,16 +18,23 @@ export const scrollTop = () => {
 };
 export const getDate = (date) => {
   const newDate = new Date(date * 1000);
-  const year = newDate.getFullYear();
-  const month = newDate.getMonth() + 1 < 10 ? `0${newDate.getMonth() + 1}` : newDate.getMonth() + 1;
-  const day = newDate.getDate() < 10 ? `0${newDate.getDate()}` : newDate.getDate();
-  return `${year}-${month}-${day}`;
+  return newDate.toLocaleDateString();
 };
 export const getTime = (date) => {
   const newDate = new Date(date * 1000);
-  const hour = newDate.getHours();
-  const min = newDate.getMinutes();
-  const sec = newDate.getSeconds() < 10 ? `0${newDate.getSeconds()}` : newDate.getSeconds();
+  return newDate.toLocaleTimeString('it-IT');
+};
 
-  return `${hour}:${min}:${sec}`;
+export const pushMessageState = (response, message) => {
+  if (response && response.data.success) {
+    mitt.emit('push-message', {
+      style: 'success',
+      content: response.data.message || message,
+    });
+  } else {
+    mitt.emit('push-message', {
+      style: 'danger',
+      content: message || response.data.message,
+    });
+  }
 };

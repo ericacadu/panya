@@ -27,7 +27,7 @@
         </div>
         <div class="nav-cart col">
           <div role="button" @click="toggleCart = !toggleCart">
-            <CartBag></CartBag>
+            <Cart></Cart>
             <!-- <small class="mx-1">購物車</small> -->
             <span class="badge rounded-pill fw-normal ms-1" ref="chart-num">
               {{ sum }}
@@ -74,9 +74,8 @@
 <script>
 import {
   apiCarts, apiUpdateCarts, apiAddCart, apiClearCarts, apiDeleteCart,
-} from '../../assets/js/api';
-import CartModal from '../../components/front/cartModal.vue';
-import mitt from '../../assets/js/mitt';
+} from '@/scripts/api';
+import CartModal from '@/components/cartModal.vue';
 
 export default {
   components: {
@@ -122,23 +121,13 @@ export default {
     getCarts() {
       apiCarts()
         .then((res) => {
-          if (res.data.success) {
-            this.cart = res.data.data;
-            this.totalPrice = this.cart.final_total;
-            this.getCartSum();
-            this.isDisabled = '';
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
+          if (!res.data.success) {
+            this.$pushMessage(res);
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.cart = res.data.data;
+          this.totalPrice = this.cart.final_total;
+          this.getCartSum();
+          this.isDisabled = '';
         });
     },
     addCarts(item, qty = 1) {
@@ -151,19 +140,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getCarts();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.$pushMessage(res);
         });
     },
     updateCarts(item, qty) {
@@ -179,22 +157,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getCarts();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.$pushMessage(res);
         });
     },
     deleteCart(id) {
@@ -203,22 +167,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getCarts();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.$pushMessage(res);
         });
     },
     clearCarts() {
@@ -226,22 +176,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.getCarts();
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'success',
-            });
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', {
-            msg: err,
-            theme: 'danger',
-          });
+          this.$pushMessage(res);
         });
     },
   },

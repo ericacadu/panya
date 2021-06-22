@@ -57,9 +57,8 @@
 </template>
 
 <script>
-import mitt from '../../assets/js/mitt';
-import { scrollTop } from '../../assets/js/plugins';
-import { apiGetProduct } from '../../assets/js/api';
+import { scrollTop } from '@/scripts/methods';
+import { apiGetProduct } from '@/scripts/api';
 
 export default {
   props: ['isDisabled'],
@@ -74,21 +73,14 @@ export default {
       const { id } = this.$route.params;
       apiGetProduct(id)
         .then((res) => {
-          if (res.data.success) {
-            this.product = res.data.product;
-            this.product.qty = 1;
-            const { 0: img } = this.product.imagesUrl;
-            this.enterImage = img;
-            document.title = `${this.product.title} - PANYA`;
-          } else {
-            mitt.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
+          if (!res.data.success) {
+            this.$pushMessage(res);
           }
-        })
-        .catch((err) => {
-          mitt.emit('toast-message', { msg: err, theme: 'danger' });
+          this.product = res.data.product;
+          this.product.qty = 1;
+          const { 0: img } = this.product.imagesUrl;
+          this.enterImage = img;
+          document.title = `${this.product.title} - PANYA`;
         });
     },
   },

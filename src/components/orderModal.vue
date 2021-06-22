@@ -207,7 +207,7 @@
             取消
           </button>
           <button type="button" class="btn btn-danger" @click="updateOrder">
-            儲存修改訂單
+            更新訂單
           </button>
         </div>
       </div>
@@ -216,8 +216,9 @@
 </template>
 
 <script>
-import { getDate, getTime, bsTooltip } from '../../assets/js/plugins';
-import mitt from '../../assets/js/mitt';
+import {
+  getDate, getTime, bsTooltip,
+} from '@/scripts/methods';
 
 export default {
   props: ['modalData'],
@@ -255,10 +256,7 @@ export default {
       if (!this.isEditInfo && !this.isEditProduct) {
         this.$emit('update-order', this.datas);
       } else {
-        mitt.emit('toast-message', {
-          msg: '訂單內容尚未修改完成',
-          theme: 'danger',
-        });
+        this.$pushMessage(false, '訂單內容尚未修改完成');
       }
     },
   },
