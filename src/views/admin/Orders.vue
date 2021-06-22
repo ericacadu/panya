@@ -1,27 +1,56 @@
 <template>
   <div class="container-fluid p-3">
-    <p class="text-end">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="input-group mw-30">
+        <input
+          type="text"
+          class="form-control"
+          :placeholder="placeholder"
+          v-model="searchInput"
+        />
+        <button
+          class="btn btn-outline-secondary dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+        >
+        </button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item"
+            role="button"
+            @click="placeholder = '輸入訂單編號',
+                    searchMode = 'searchOrder'"
+            :class="searchMode === 'searchOrder' ? 'active' : '' "
+          >{{ searchOrder }}</li>
+          <li class="dropdown-item"
+            role="button"
+            @click="placeholder = '輸入 Email',
+                    searchMode = 'searchEmail'"
+            :class="searchMode === 'searchEmail' ? 'active' : '' "
+          >{{ searchEmail }}</li>
+        </ul>
+      </div>
       <button
         class="btn btn-danger ms-auto"
         type="button"
         @click="opdenModal('delete')"
       >
+        <i class="material-icons me-1">delete</i>
         刪除全部訂單
       </button>
-    </p>
+    </div>
     <ul
       class="row g-0 list-unstyled rounded p-2 products-list-header text-nowrap"
     >
       <li class="col-2">日期</li>
       <li class="col-3 text-start">訂單編號</li>
-      <li class="col-1">數量</li>
+      <li class="col-1">品項</li>
       <li class="col-1">金額</li>
       <li class="col-1">訂單狀態</li>
       <li class="col-2">付款日期</li>
       <li class="col-2"></li>
     </ul>
     <ul class="list-group list-group-flush shadow-sm">
-      <li class="list-group-item p-2" v-for="item in orders" :key="item.id">
+      <li class="list-group-item p-2" v-for="item in filterDatas" :key="item.id">
         <div class="col-2 overflow-hidden">
           {{ item.create_date }}
           <small class="d-block text-secondary">{{ item.create_time }}</small>
@@ -88,7 +117,6 @@ import {
 import {
   bsModal,
   bsToast,
-  bsTooltip,
   getDate,
   getTime,
 } from '../../assets/js/plugins';
@@ -104,10 +132,16 @@ export default {
   data() {
     return {
       modal: {},
-      orders: {},
+      orders: [],
       modalData: {},
       deleteData: {},
       modalTitle: '',
+      filterDatas: [],
+      placeholder: '',
+      searchInput: '',
+      searchOrder: '查詢訂單',
+      searchEmail: '查詢 Email',
+      searchMode: '',
     };
   },
   methods: {
@@ -117,6 +151,7 @@ export default {
           if (res.data.success) {
             this.orders = res.data.orders;
             this.orderDatas(this.orders);
+            this.filterDatas = this.orders;
           } else {
             mitt.emit('toast-message', {
               msg: res.data.message,
@@ -204,11 +239,37 @@ export default {
       } else {
         this.modal = bsModal('orderModal');
         this.modalData = JSON.parse(JSON.stringify(item));
-        bsTooltip();
-        // console.log(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
       }
       this.modal.show();
     },
+    filterOrders(val) {
+      this.filterDatas = this.orders.filter(
+        (item) => item.id.trim().toLowerCase().match(val),
+      );
+    },
+    filterEmails(val) {
+      this.filterDatas = this.orders.filter(
+        (item) => item.user.email.trim().toLowerCase().match(val),
+      );
+    },
+  },
+  watch: {
+    searchMode() {
+      this.searchInput = '';
+      this.filterDatas = this.orders;
+    },
+    searchInput(val) {
+      const keyword = val.trim().toLowerCase();
+      if (this.searchMode === 'searchEmail') {
+        this.filterEmails(keyword);
+      } else {
+        this.filterOrders(keyword);
+      }
+    },
+  },
+  mounted() {
+    this.placeholder = '輸入訂單編號';
+    this.searchMode = 'searchOrder';
   },
   created() {
     this.getOrders();
@@ -218,8 +279,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass" scoped>
-*
-  // outline: 1px solid red
-</style>

@@ -25,7 +25,7 @@
               type="button"
               class="btn btn-sm btn-outline-secondary ms-2"
               target="_blank"
-              :href="`${url}/#/checkout/${datas.id}`"
+              :href="`../#/checkout/${datas.id}`"
               v-if="!datas.is_paid"
               >付款連結</a
             >
@@ -36,7 +36,7 @@
           <!-- 訂購資訊 -->
           <div class="row g-3 d-md-flex">
             <div class="col-md-6">
-              <h2 class="fs-4 d-flex mb-3">
+              <h3 class="fs-5 d-flex mb-3">
                 訂購資訊
                 <button
                   type="button"
@@ -47,7 +47,7 @@
                   <span v-if="!isEditInfo">修改</span>
                   <span v-else>完成</span>
                 </button>
-              </h2>
+              </h3>
               <ul class="list-unstyled">
                 <li class="d-flex align-items-center mb-2">
                   <span class="form-label m-0 col-4">建立時間：</span>
@@ -117,7 +117,7 @@
             <!-- 商品細項 -->
             <div class="col-md-6">
               <div class="d-flex align-items-center">
-                <h2 class="fs-4 m-0">商品細項</h2>
+                <h3 class="fs-5 m-0">商品細項</h3>
                 <button
                   type="button"
                   class="btn btn-sm ms-2"
@@ -140,7 +140,7 @@
                   my-2
                 "
               >
-                <p class="m-0">商品數量：{{ datas.qty }}</p>
+                <p class="m-0">品項：{{ datas.qty }}</p>
                 <p class="m-0">
                   訂單金額：
                   <span class="fs-5 fw-bold text-danger">{{
@@ -179,12 +179,11 @@
                         justify-content-end
                       "
                     >
-                      <!-- 這裡想加入按鈕提示 -->
                       <button
                         type="button"
                         class="btn btn-sm btn-outline-danger"
                         data-bs-toggle="tooltip"
-                        data-bs-placement="right"
+                        data-bs-placement="bottom"
                         title="刪除後將無法恢復"
                         :disabled="!isEditProduct"
                         @click="removeProduct(item)"
@@ -207,11 +206,7 @@
           >
             取消
           </button>
-          <button
-            type="button"
-            class="btn btn-danger"
-            @click="updateOrder"
-          >
+          <button type="button" class="btn btn-danger" @click="updateOrder">
             儲存修改訂單
           </button>
         </div>
@@ -221,7 +216,7 @@
 </template>
 
 <script>
-import { getDate, getTime } from '../../assets/js/plugins';
+import { getDate, getTime, bsTooltip } from '../../assets/js/plugins';
 import mitt from '../../assets/js/mitt';
 
 export default {
@@ -233,7 +228,6 @@ export default {
       products: [],
       isEditInfo: false,
       isEditProduct: false,
-      url: 'https://ericacadu.github.io/panya',
       edit_count: 0,
       final_edit: '',
     };
@@ -253,6 +247,9 @@ export default {
       this.products = Object.values(this.products).filter(
         (elemt) => elemt.id !== item.id,
       );
+      Array.from(document
+        .querySelectorAll('.tooltip'))
+        .forEach((node) => node.remove());
     },
     updateOrder() {
       if (!this.isEditInfo && !this.isEditProduct) {
@@ -273,6 +270,9 @@ export default {
       this.isEditInfo = false;
       this.isEditProduct = false;
       this.edit_count = 0;
+      setTimeout(() => {
+        bsTooltip();
+      }, 100);
     },
     datas: {
       handler() {
@@ -307,7 +307,3 @@ export default {
   },
 };
 </script>
-<style lang="sass" scoped>
-*
-  // outline: 1px solid red
-</style>
