@@ -45,8 +45,7 @@
         </div>
       </li>
     </ul>
-    <Pagination :pages="pages" @get-products="getProducts">
-    </Pagination>
+    <Pagination :pages="pages" @get-products="getProducts"></Pagination>
     <ProductModal :modalData="modalData" @update-product="updateProduct">
       <template #title>{{ modalTitle }}</template>
     </ProductModal>
@@ -71,13 +70,11 @@ import {
 import { bsModal, bsToast } from '@/scripts/methods';
 import ProductModal from '@/components/productModal.vue';
 import DeleteModal from '@/components/deleteModal.vue';
-import Pagination from '@/components/pagination.vue';
 
 export default {
   components: {
     ProductModal,
     DeleteModal,
-    Pagination,
   },
   data() {
     return {

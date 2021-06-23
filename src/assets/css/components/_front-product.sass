@@ -16,8 +16,10 @@ $img-size-md: calc(30vw - 2em)
       overflow: hidden
       position: relative
       background-repeat: no-repeat
-      background-position: center center
+      background-position: center 60%
       background-size: cover
+      +media-breakpoint-up(md)
+        background-position: center 70%
   .photo-lg
     height: $img-size-sm
     padding-bottom: 1em

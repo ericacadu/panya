@@ -1,16 +1,34 @@
 <template>
   <div class="container">
     <h1 class="py-3 fs-3 fw-normal text-center ls-3">PANYA 手感烘焙</h1>
-    <ul class="category list-unstyled d-flex justify-content-center my-5">
-      <li li class="btn btn-outline-primary mx-1 py-1 px-4"
-        @click="filterProducts('all')">全部</li>
-      <li class="btn btn-outline-primary mx-1 py-1 px-4"
-        v-for="(item, i) in category" :key="i"
-        @click="filterProducts(item)">{{ item }}</li>
-    </ul>
-    <ul class="products row g-3 p-0 mt-5">
+    <ul class="category list-unstyled d-flex justify-content-center mt-4">
       <li
-        class="products-item col-10 col-md-4 mx-auto mx-md-0 mb-5 list-unstyled"
+        li
+        class="btn btn-outline-primary py-1 px-4"
+        :class="isActive === 'all' ? 'active' : ''"
+        @click="getProducts(1), (isActive = 'all')"
+      >
+        全部
+      </li>
+      <li
+        class="btn btn-outline-primary py-1 ms-1 px-4"
+        v-for="(item, i) in category"
+        :key="i"
+        :class="isActive === item ? 'active' : ''"
+        @click="filterProducts(item), (isActive = item)"
+      >
+        {{ item }}
+      </li>
+    </ul>
+    <ul class="products row g-0 g-md-3 p-0 mt-5">
+      <li
+        class="
+          products-item
+          col-10 col-md-4
+          mx-auto mx-md-0
+          mb-5
+          list-unstyled
+        "
         v-for="item in filterDatas"
         :key="item.id"
       >
@@ -52,53 +70,66 @@
         </div>
       </li>
     </ul>
+    <Pagination
+      v-if="filterDatas === products"
+      :pages="pages"
+      @get-products="getProducts"
+    ></Pagination>
   </div>
 </template>
 
 <script>
-import { apiProducts } from '@/scripts/api';
+import { apiProducts, apiAllProducts } from '@/scripts/api';
+import { scrollTop } from '@/scripts/methods';
 
 export default {
   props: ['isDisabled'],
   data() {
     return {
+      all: [],
       products: [],
+      pages: [],
       category: [],
       filterDatas: [],
+      isActive: 'all',
     };
   },
   methods: {
-    getProducts() {
-      apiProducts()
-        .then((res) => {
-          if (res.data.success) {
-            this.products = res.data.products;
-            const arry = this.products.map((item) => item.category);
-            const newSet = new Set(arry);
-            this.category = [...newSet];
-            this.filterProducts('all');
-          } else {
-            this.$emitter.emit('toast-message', {
-              msg: res.data.message,
-              theme: 'danger',
-            });
-          }
-        })
-        .catch((err) => {
-          this.$emitter.emit('toast-message', { msg: err, theme: 'danger' });
-        });
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.all = res.data.products;
+        const arry = this.all.map((item) => item.category);
+        const newSet = new Set(arry);
+        this.category = [...newSet].reverse();
+      });
+    },
+    getProducts(page) {
+      apiProducts(page).then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        scrollTop();
+        this.products = res.data.products;
+        this.filterDatas = this.products;
+        this.pages = res.data.pagination;
+      });
     },
     goToProduct(id) {
       this.$router.push(`/product/${id}`);
     },
     filterProducts(val) {
-      this.filterDatas = this.products.filter(
-        (item) => item.category === val || val === 'all',
-      );
+      this.filterDatas = this.all.filter((item) => item.category === val);
+      this.filterDatas.reverse();
     },
   },
   mounted() {
     this.$emit('close-cart');
+  },
+  created() {
+    this.getAllProducts();
     this.getProducts();
   },
 };

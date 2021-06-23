@@ -28,12 +28,5 @@
 <script>
 export default {
   props: ['pages'],
-  // "pagination": {
-  //       "total_pages": 1,
-  //       "current_page": 1,
-  //       "has_pre": false,
-  //       "has_next": false,
-  //       "category": null
-  //     },
 };
 </script>

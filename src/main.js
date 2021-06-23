@@ -11,6 +11,7 @@ import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 // validate end
 import ToastMessage from '@/components/ToastMessage.vue';
+import Pagination from '@/components/pagination.vue';
 import Logo from '@/components/logo.vue';
 import Cart from '@/components/bag.vue';
 import 'bootstrap/dist/js/bootstrap.esm';
@@ -32,13 +33,14 @@ const app = createApp(App);
 app.config.globalProperties.$emitter = emitter;
 app.config.globalProperties.$pushMessage = pushMessageState;
 
-app.component('ToastMessage', ToastMessage);
-app.component('Logo', Logo);
-app.component('Cart', Cart);
-app.component('Form', Form);
-app.component('Field', Field);
-app.component('ErrorMessage', ErrorMessage);
-app.use(fontawesome);
-app.use(VueAxios, axios);
-app.use(router);
-app.mount('#app');
+app.component('ToastMessage', ToastMessage)
+  .component('Pagination', Pagination)
+  .component('Logo', Logo)
+  .component('Cart', Cart)
+  .component('Form', Form)
+  .component('Field', Field)
+  .component('ErrorMessage', ErrorMessage)
+  .use(fontawesome)
+  .use(VueAxios, axios)
+  .use(router)
+  .mount('#app');
