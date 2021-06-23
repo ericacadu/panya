@@ -3,7 +3,7 @@
     <div class="product container d-md-flex pb-5">
       <div class="product-photos col-md-5 d-flex flex-wrap p-3 p-md-0">
         <div class="photo-lg col-12">
-          <span><img :src="enterImage" alt="" /></span>
+          <span :style="{ 'background-image': `url(${enterImage})` }"></span>
         </div>
         <div
           class="photo-sm col-4"
@@ -14,7 +14,7 @@
           @mouseover="enterImage = img"
           @click="enterImage = img"
         >
-          <span><img :src="img" alt="" /></span>
+          <span :style="{ 'background-image': `url(${img})` }"></span>
         </div>
       </div>
       <div class="product-content col text-center text-md-start">

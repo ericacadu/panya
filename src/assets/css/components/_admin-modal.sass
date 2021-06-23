@@ -19,6 +19,8 @@
       color: $primary
   .form-label
     color: $gray-700
+  textarea
+    min-height: 120px
     
 .place-image, .show-image
   width: calc((100% - 1rem) / 3)
@@ -36,6 +38,9 @@
 .show-image
   position: relative
   overflow: hidden
+  background-repeat: no-repeat
+  background-position: center center
+  background-size: cover
   & + .show-image
     margin-left: .5rem
   &:hover

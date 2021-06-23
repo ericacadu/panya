@@ -159,11 +159,11 @@
                     id="product-desc"
                     class="form-control"
                     placeholder="輸入商品描述"
-                    row="3"
+                    row="5"
                     v-model="datas.description"
                   />
                 </div>
-                <div class="col-12 mt-2">
+                <!-- <div class="col-12 mt-2">
                   <label class="form-label" for="product-content"
                     >商品內容</label
                   >
@@ -174,7 +174,7 @@
                     row="3"
                     v-model="datas.content"
                   />
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="tab-pane fade" id="pills-photo" role="tabpanel">
@@ -198,6 +198,7 @@
                     v-for="(img, i) in datas.imagesUrl"
                     :key="i"
                     :class="datas.imageUrl == img ? 'active' : ''"
+                    :style="{'background-image': `url(${img})`}"
                   >
                     <span
                       class="btn-close m-2 p-2"
@@ -221,7 +222,6 @@
                       ></span>
                       設定主圖
                     </label>
-                    <img class="img-fluid" :src="img" alt="" />
                   </div>
                 </div>
                 <div class="col-12 mt-3">
