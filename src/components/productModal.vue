@@ -306,7 +306,7 @@ export default {
         unit: '選擇單位',
       },
       category: ['麵包', '蛋糕', '餅乾'],
-      unit: ['個', '袋', '片', '盒', '包'],
+      unit: ['個', '袋', '片', '盒'],
       tempUrl: '',
       uploadData: '',
     };

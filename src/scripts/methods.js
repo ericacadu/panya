@@ -38,3 +38,33 @@ export const pushMessageState = (response, message) => {
     });
   }
 };
+
+export const navigator = (page, data) => {
+  const newData = data;
+  const newArray = [];
+  const per = 9;
+  const pages = {
+    total_pages: Math.ceil(newData.length / per),
+    current_page: Number(page),
+    has_pre: false,
+    has_next: false,
+    maxData: page * per,
+    minData: (page - 1) * per + 1,
+  };
+  newData.forEach((item, idx) => {
+    if (idx + 1 >= pages.minData
+      && idx + 1 <= pages.maxData) {
+      newArray.push(item);
+    }
+  });
+  if (page > 1) {
+    pages.has_pre = true;
+  }
+  if (page < pages.total_pages) {
+    pages.has_next = true;
+  }
+  return {
+    pages,
+    newArray,
+  };
+};

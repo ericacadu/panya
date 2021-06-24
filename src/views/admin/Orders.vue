@@ -87,7 +87,7 @@
         </div>
       </li>
     </ul>
-
+    <Pagination :pages="pages" @get-datas="getOrders"></Pagination>
     <DeleteModal :modalData="deleteData" @delete-data="deleteOrder">
       <template #title>{{ modalTitle }}</template>
       <template #default>
@@ -141,6 +141,7 @@ export default {
       searchOrder: '查詢訂單',
       searchEmail: '查詢 Email',
       searchMode: '',
+      pages: {},
     };
   },
   methods: {
@@ -152,6 +153,7 @@ export default {
           }
           this.orders = res.data.orders;
           this.orderDatas(this.orders);
+          this.pages = res.data.pagination;
           this.filterDatas = this.orders;
         });
     },

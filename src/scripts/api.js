@@ -9,6 +9,9 @@ export const apiUserLogout = () => axios.post(`${api}/logout`);
 export const apiUserCheck = () => axios.post(`${api}/api/user/check`);
 
 // 商品管理
+export const apiGetAllProducts = () => axios.get(
+  `${api}/api/${path}/admin/products/all`,
+);
 export const apiGetProducts = (page = 1) => axios.get(
   `${api}/api/${path}/admin/products?page=${page}`,
 );

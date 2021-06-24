@@ -68,7 +68,7 @@
 
 <script>
 import { apiGetOrder, apiPayOrder } from '@/scripts/api';
-import { scrollTop, getDate, getTime } from '@/scripts/methods';
+import { getDate, getTime } from '@/scripts/methods';
 
 export default {
   data() {
@@ -100,9 +100,6 @@ export default {
           this.$pushMessage(res);
         });
     },
-  },
-  mounted() {
-    scrollTop();
   },
   created() {
     this.getOrder();

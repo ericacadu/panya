@@ -95,10 +95,12 @@ export default {
       apiUserCheck()
         .then((res) => {
           if (!res.data.success) {
+            this.$pushMessage(res);
             this.$router.push('/login');
+          } else {
+            this.$pushMessage(res, '已登入');
+            this.status = res.data.message || '登入中';
           }
-          this.$pushMessage(res, '已登入');
-          this.status = res.data.message || '登入中';
         });
     },
     logout() {

@@ -75,26 +75,24 @@
       </li>
     </ul>
     <Pagination
-      v-if="pages.total_pages > 1"
       :pages="pages"
-      @get-products="filterProducts"></Pagination>
+      @get-datas="filterProducts"></Pagination>
   </div>
 </template>
 
 <script>
 import { apiAllProducts } from '@/scripts/api';
-import { scrollTop } from '@/scripts/methods';
+import { navigator } from '@/scripts/methods';
 
 export default {
   props: ['isDisabled'],
   data() {
     return {
-      all: [],
       products: [],
       pages: [],
       category: [],
       filterDatas: [],
-      tempDatas: [],
+      tempArry: [],
       isActive: 'all',
       path: {
         category: '',
@@ -113,7 +111,6 @@ export default {
         const newSet = new Set(arry);
         this.category = [...newSet];
         this.filterProducts(this.path.page, this.path.category);
-        scrollTop();
       });
     },
     getPath() {
@@ -121,53 +118,35 @@ export default {
       this.path.page = this.$route.query.page;
       this.isActive = this.path.category;
     },
-    getPages(page) {
-      const per = 9;
-      this.filterDatas = [];
-      this.pages = {
-        total_pages: Math.ceil(this.tempDatas.length / per),
-        current_page: Number(page),
-        has_pre: false,
-        has_next: false,
-        maxData: page * per,
-        minData: (page - 1) * per + 1,
-      };
-      this.tempDatas.forEach((item, idx) => {
-        if (idx + 1 >= this.pages.minData
-            && idx + 1 <= this.pages.maxData) {
-          this.filterDatas.push(item);
-        }
-      });
-      if (page > 1) {
-        this.pages.has_pre = true;
-      }
-      if (page < this.pages.total_pages) {
-        this.pages.has_next = true;
-      }
-    },
     filterProducts(page) {
       this.getPath();
       if (this.path.category === 'all') {
-        this.tempDatas = this.products;
+        this.tempArry = this.products;
       } else {
-        this.tempDatas = this.products.filter(
+        this.tempArry = this.products.filter(
           (item) => item.category === this.path.category,
         );
       }
-      this.getPages(page);
+      const newNavigator = navigator(page, this.tempArry);
+      this.pages = newNavigator.pages;
+      this.filterDatas = newNavigator.newArray;
       this.$router.push(
         `./products?category=${this.path.category}&page=${page}`,
       );
-      scrollTop();
     },
     goToProduct(id) {
       this.$router.push(`/product/${id}`);
     },
   },
   watch: {
-    // $route(val) {
-    //   this.filterProducts(val.query.page);
-    // },
+    $route: {
+      handler(val) {
+        if (val.name === 'Products') {
+          this.filterProducts(val.query.page, val.query.category);
+        }
+      },
+      deep: true,
+    },
   },
   mounted() {
     this.$emit('close-cart');

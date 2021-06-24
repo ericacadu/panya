@@ -1,11 +1,22 @@
 <template>
   <div class="container-fluid p-3">
-    <p class="text-end">
+    <div class="d-flex justify-content-between mb-3">
+      <select
+        class="form-select mw-25"
+        v-model="filterInput"
+        @change="filterProducts(1)"
+      >
+        <option value="all" selected>全部商品</option>
+        <option v-for="(item, key) in category" :key="key" :value="item">
+          {{ item }}
+        </option>
+      </select>
+
       <button class="btn btn-primary ms-auto" type="button" @click="opdenModal">
         <i class="material-icons me-1">add_circle_outline</i>
         新增商品
       </button>
-    </p>
+    </div>
     <ul
       class="row g-0 list-unstyled rounded p-2 products-list-header text-nowrap"
     >
@@ -17,7 +28,7 @@
       <li class="col-3 col-md-2"></li>
     </ul>
     <ul class="list-group list-group-flush shadow-sm">
-      <li class="list-group-item p-2" v-for="item in products" :key="item.id">
+      <li class="list-group-item p-2" v-for="item in filterDatas" :key="item.id">
         <div class="col-1 d-none d-md-block">{{ item.category }}</div>
         <div class="col-4 text-start">{{ item.title }}</div>
         <div class="col-2">{{ item.origin_price }}</div>
@@ -45,7 +56,7 @@
         </div>
       </li>
     </ul>
-    <Pagination :pages="pages" @get-products="getProducts"></Pagination>
+    <Pagination :pages="pages" @get-datas="filterProducts"></Pagination>
     <ProductModal :modalData="modalData" @update-product="updateProduct">
       <template #title>{{ modalTitle }}</template>
     </ProductModal>
@@ -63,11 +74,11 @@
 
 <script>
 import {
-  apiGetProducts,
+  apiGetAllProducts,
   apiUpdateProducts,
   apiDeleteProducts,
 } from '@/scripts/api';
-import { bsModal, bsToast } from '@/scripts/methods';
+import { bsModal, bsToast, navigator } from '@/scripts/methods';
 import ProductModal from '@/components/productModal.vue';
 import DeleteModal from '@/components/deleteModal.vue';
 
@@ -79,7 +90,8 @@ export default {
   data() {
     return {
       products: [],
-      pages: [],
+      category: [],
+      pages: {},
       modal: {},
       modalTitle: '',
       isModal: 'add',
@@ -89,18 +101,35 @@ export default {
         method: '',
         id: '',
       },
+      filterDatas: [],
+      filterInput: 'all',
+      tempArry: [],
     };
   },
   methods: {
-    getProducts(page) {
-      apiGetProducts(page)
-        .then((res) => {
-          if (!res.data.success) {
-            this.$pushMessage(res);
-          }
-          this.products = res.data.products;
-          this.pages = res.data.pagination;
-        });
+    getAllProducts() {
+      apiGetAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = Object.values(res.data.products).reverse();
+        const arry = this.products.map((item) => item.category);
+        const newSet = new Set(arry);
+        this.category = [...newSet];
+        this.filterProducts(1);
+      });
+    },
+    filterProducts(page) {
+      if (this.filterInput === 'all') {
+        this.tempArry = this.products;
+      } else {
+        this.tempArry = this.products.filter(
+          (item) => item.category === this.filterInput,
+        );
+      }
+      const newNavigator = navigator(page, this.tempArry);
+      this.pages = newNavigator.pages;
+      this.filterDatas = newNavigator.newArray;
     },
     updateProduct(data) {
       let { method, id } = this.apiInfo;
@@ -114,24 +143,22 @@ export default {
           id = '';
           break;
       }
-      apiUpdateProducts(method, { data }, id)
-        .then((res) => {
-          if (res.data.success) {
-            this.getProducts();
-            this.modal.hide();
-          }
-          this.$pushMessage(res);
-        });
+      apiUpdateProducts(method, { data }, id).then((res) => {
+        if (res.data.success) {
+          this.getProducts(this.pages.current_page);
+          this.modal.hide();
+        }
+        this.$pushMessage(res);
+      });
     },
     deleteProduct(item) {
-      apiDeleteProducts(item.id)
-        .then((res) => {
-          if (res.data.success) {
-            this.getProducts();
-            this.modal.hide();
-          }
-          this.$pushMessage(res);
-        });
+      apiDeleteProducts(item.id).then((res) => {
+        if (res.data.success) {
+          this.getProducts();
+          this.modal.hide();
+        }
+        this.$pushMessage(res);
+      });
     },
     opdenModal(isModal = 'add', item) {
       if (isModal === 'edit') {
@@ -159,8 +186,8 @@ export default {
       this.modal.show();
     },
   },
-  mounted() {
-    this.getProducts();
+  created() {
+    this.getAllProducts();
   },
   unmounted() {
     bsToast('toast').hide();

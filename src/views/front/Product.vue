@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import { scrollTop } from '@/scripts/methods';
 import { apiGetProduct } from '@/scripts/api';
 
 export default {
@@ -86,7 +85,6 @@ export default {
   },
   mounted() {
     this.$emit('close-cart');
-    scrollTop();
   },
   created() {
     this.getProduct();

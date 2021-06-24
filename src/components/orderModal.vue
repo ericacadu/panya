@@ -21,13 +21,13 @@
               <span class="text-success" v-if="datas.is_paid">已付款</span>
               <span class="text-danger" v-else>未付款</span>
             </div>
-            <a
+            <router-link
               type="button"
               class="btn btn-sm btn-outline-secondary ms-2"
               target="_blank"
-              :href="`../#/checkout/${datas.id}`"
+              :to="`/checkout/${datas.id}`"
               v-if="!datas.is_paid"
-              >付款連結</a
+              >付款連結</router-link
             >
             <small class="ms-auto text-secondary" v-if="datas.final_edit">
               最後修改時間：{{ datas.final_edit }}

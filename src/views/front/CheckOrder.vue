@@ -92,7 +92,6 @@
 
 <script>
 import { apiCheckout } from '@/scripts/api';
-import { scrollTop } from '@/scripts/methods';
 
 export default {
   props: ['cartData', 'totalPrice', 'isDisabled'],
@@ -133,7 +132,6 @@ export default {
   },
   mounted() {
     this.$emit('close-cart');
-    scrollTop();
   },
   created() {
     this.$emit('get-carts');
