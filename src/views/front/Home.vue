@@ -17,7 +17,7 @@
               >關於panya</router-link>
             </li>
             <li class="navbar-item">
-              <router-link class="nav-link" to="/products"
+              <router-link class="nav-link" to="/products?category=all&page=1"
               >手感烘焙</router-link>
             </li>
             <li class="navbar-itemdisabled">

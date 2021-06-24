@@ -4,31 +4,35 @@
     <ul class="category list-unstyled d-flex justify-content-center mt-4">
       <li
         li
-        class="btn btn-outline-primary py-1 px-4"
+        class="btn btn-outline-primary p-0"
         :class="isActive === 'all' ? 'active' : ''"
-        @click="getProducts(1), (isActive = 'all')"
+        @click="filterProducts(1, 'all'), (isActive = 'all')"
       >
-        全部
+        <router-link
+          class="px-4 py-1"
+          :to="{ query: { category: 'all', page: 1 } }"
+        >
+          全部
+        </router-link>
       </li>
       <li
-        class="btn btn-outline-primary py-1 ms-1 px-4"
+        class="btn btn-outline-primary p-0 ms-1"
         v-for="(item, i) in category"
         :key="i"
         :class="isActive === item ? 'active' : ''"
-        @click="filterProducts(item), (isActive = item)"
+        @click="filterProducts(1, item), (isActive = item)"
       >
-        {{ item }}
+        <router-link
+          class="px-4 py-1"
+          :to="{ query: { category: item, page: 1 } }"
+        >
+          {{ item }}
+        </router-link>
       </li>
     </ul>
     <ul class="products row g-0 g-md-3 p-0 mt-5">
       <li
-        class="
-          products-item
-          col-10 col-md-4
-          mx-auto mx-md-0
-          mb-5
-          list-unstyled
-        "
+        class="products-item col-10 col-md-4 mx-auto mx-md-0 mb-5 list-unstyled"
         v-for="item in filterDatas"
         :key="item.id"
       >
@@ -71,15 +75,14 @@
       </li>
     </ul>
     <Pagination
-      v-if="filterDatas === products"
+      v-if="pages.total_pages > 1"
       :pages="pages"
-      @get-products="getProducts"
-    ></Pagination>
+      @get-products="filterProducts"></Pagination>
   </div>
 </template>
 
 <script>
-import { apiProducts, apiAllProducts } from '@/scripts/api';
+import { apiAllProducts } from '@/scripts/api';
 import { scrollTop } from '@/scripts/methods';
 
 export default {
@@ -91,7 +94,12 @@ export default {
       pages: [],
       category: [],
       filterDatas: [],
+      tempDatas: [],
       isActive: 'all',
+      path: {
+        category: '',
+        page: '',
+      },
     };
   },
   methods: {
@@ -100,37 +108,73 @@ export default {
         if (!res.data.success) {
           this.$pushMessage(res);
         }
-        this.all = res.data.products;
-        const arry = this.all.map((item) => item.category);
+        this.products = res.data.products.reverse();
+        const arry = this.products.map((item) => item.category);
         const newSet = new Set(arry);
-        this.category = [...newSet].reverse();
+        this.category = [...newSet];
+        this.filterProducts(this.path.page, this.path.category);
+        scrollTop();
       });
     },
-    getProducts(page) {
-      apiProducts(page).then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
+    getPath() {
+      this.path.category = this.$route.query.category;
+      this.path.page = this.$route.query.page;
+      this.isActive = this.path.category;
+    },
+    getPages(page) {
+      const per = 9;
+      this.filterDatas = [];
+      this.pages = {
+        total_pages: Math.ceil(this.tempDatas.length / per),
+        current_page: Number(page),
+        has_pre: false,
+        has_next: false,
+        maxData: page * per,
+        minData: (page - 1) * per + 1,
+      };
+      this.tempDatas.forEach((item, idx) => {
+        if (idx + 1 >= this.pages.minData
+            && idx + 1 <= this.pages.maxData) {
+          this.filterDatas.push(item);
         }
-        scrollTop();
-        this.products = res.data.products;
-        this.filterDatas = this.products;
-        this.pages = res.data.pagination;
       });
+      if (page > 1) {
+        this.pages.has_pre = true;
+      }
+      if (page < this.pages.total_pages) {
+        this.pages.has_next = true;
+      }
+    },
+    filterProducts(page) {
+      this.getPath();
+      if (this.path.category === 'all') {
+        this.tempDatas = this.products;
+      } else {
+        this.tempDatas = this.products.filter(
+          (item) => item.category === this.path.category,
+        );
+      }
+      this.getPages(page);
+      this.$router.push(
+        `./products?category=${this.path.category}&page=${page}`,
+      );
+      scrollTop();
     },
     goToProduct(id) {
       this.$router.push(`/product/${id}`);
     },
-    filterProducts(val) {
-      this.filterDatas = this.all.filter((item) => item.category === val);
-      this.filterDatas.reverse();
+  },
+  watch: {
+    $route(val) {
+      this.filterProducts(val.query.page);
     },
   },
   mounted() {
     this.$emit('close-cart');
   },
   created() {
+    this.getPath();
     this.getAllProducts();
-    this.getProducts();
   },
 };
 </script>
