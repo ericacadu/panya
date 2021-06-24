@@ -165,9 +165,9 @@ export default {
     },
   },
   watch: {
-    $route(val) {
-      this.filterProducts(val.query.page);
-    },
+    // $route(val) {
+    //   this.filterProducts(val.query.page);
+    // },
   },
   mounted() {
     this.$emit('close-cart');
