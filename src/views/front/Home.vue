@@ -57,6 +57,7 @@
     >
     </CartModal>
     <router-view
+      class="min-vh-100"
       :is-disabled="isDisabled"
       :cart-data="cart"
       :total-price="totalPrice"

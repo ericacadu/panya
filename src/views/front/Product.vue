@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="product container d-md-flex pb-5">
+    <div class="product container d-md-flex px-3 pb-5">
       <div class="product-photos col-md-5 d-flex flex-wrap p-3 p-md-0">
         <div class="photo-lg col-12">
           <span :style="{ 'background-image': `url(${enterImage})` }"></span>

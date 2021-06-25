@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid p-3">
+  <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="input-group mw-30">
         <input
@@ -32,7 +32,7 @@
       <button
         class="btn btn-danger ms-auto"
         type="button"
-        @click="opdenModal('delete')"
+        @click="openModal('delete')"
       >
         <i class="material-icons me-1">delete</i>
         刪除全部訂單
@@ -73,14 +73,14 @@
           <button
             class="btn btn-sm btn-outline-primary fs-7"
             type="button"
-            @click="opdenModal('edit', item)"
+            @click="openModal('edit', item)"
           >
             查看訂單
           </button>
           <button
             class="btn btn-sm btn-outline-danger fs-7 ms-2 ms-md-3"
             type="button"
-            @click="opdenModal('delete', item)"
+            @click="openModal('delete', item)"
           >
             刪除
           </button>
@@ -198,7 +198,7 @@ export default {
           this.$pushMessage(res);
         });
     },
-    opdenModal(isModal = 'edit', item) {
+    openModal(isModal = 'edit', item) {
       if (isModal === 'delete') {
         this.modal = bsModal('deleteModal');
         this.modalTitle = '刪除訂單';

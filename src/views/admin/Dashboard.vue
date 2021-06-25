@@ -37,7 +37,7 @@
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link px-0 disabled" to="/"
+              <router-link class="nav-link px-0" to="/admin/articles"
                 >文章管理</router-link
               >
             </li>
@@ -67,7 +67,7 @@
           登出
         </button>
       </nav>
-      <router-view></router-view>
+      <router-view class="p-3"></router-view>
     </div>
   </div>
 </template>

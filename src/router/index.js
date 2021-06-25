@@ -66,6 +66,12 @@ const routes = [
         meta: {
           title: '優惠券管理',
         },
+      }, {
+        path: 'articles',
+        component: () => import('@/views/admin/Articles.vue'),
+        meta: {
+          title: '文章管理',
+        },
       },
     ],
   },

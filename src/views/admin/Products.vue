@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid p-3">
+  <div class="container-fluid">
     <div class="d-flex justify-content-between mb-3">
       <select
         class="form-select mw-25"
@@ -12,7 +12,7 @@
         </option>
       </select>
 
-      <button class="btn btn-primary ms-auto" type="button" @click="opdenModal">
+      <button class="btn btn-primary ms-auto" type="button" @click="openModal">
         <i class="material-icons me-1">add_circle_outline</i>
         新增商品
       </button>
@@ -42,14 +42,14 @@
           <button
             class="btn btn-sm btn-outline-primary fs-7"
             type="button"
-            @click="opdenModal('edit', item)"
+            @click="openModal('edit', item)"
           >
             編輯
           </button>
           <button
             class="btn btn-sm btn-outline-danger fs-7 ms-2 ms-md-3"
             type="button"
-            @click="opdenModal('delete', item)"
+            @click="openModal('delete', item)"
           >
             刪除
           </button>
@@ -160,7 +160,7 @@ export default {
         this.$pushMessage(res);
       });
     },
-    opdenModal(isModal = 'add', item) {
+    openModal(isModal = 'add', item) {
       if (isModal === 'edit') {
         this.modal = bsModal('productModal');
         this.isModal = 'edit';

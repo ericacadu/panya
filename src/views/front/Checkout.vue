@@ -1,5 +1,5 @@
 <template>
-  <div class="container min-vh-100 p-3">
+  <div class="container px-3">
     <div class="row g-0">
       <div class="col-md-6 p-3">
         <small class="path d-block mb-4">首頁 / 訂單結帳</small>

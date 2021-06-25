@@ -25,6 +25,17 @@ export const apiUploadFile = (data) => axios.post(
   `${api}/api/${path}/admin/upload`, data,
 );
 
+// 優惠券
+export const apiGetCoupons = (page = 1) => axios.get(
+  `${api}/api/${path}/admin/coupons?page=${page}`,
+);
+export const apiUpdateCoupon = (method, data, id) => axios[method](
+  `${api}/api/${path}/admin/coupon/${id}`, data,
+);
+export const apiDeleteCoupon = (id) => axios.delete(
+  `${api}/api/${path}/admin/coupon/${id}`,
+);
+
 // 訂單管理
 export const apiGetOrders = (page = 1) => axios.get(
   `${api}/api/${path}/admin/orders?page=${page}`,

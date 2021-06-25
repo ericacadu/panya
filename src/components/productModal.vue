@@ -65,8 +65,8 @@
               role="tabpanel"
             >
               <!-- 商品資訊 -->
-              <div class="row g-0 d-flex flew-wrap">
-                <div class="col-6 pe-1">
+              <div class="row g-2">
+                <div class="col-6">
                   <label class="form-label" for="product-title">商品名稱</label>
                   <input
                     type="text"
@@ -76,7 +76,7 @@
                     v-model="datas.title"
                   />
                 </div>
-                <div class="col-6 ps-1">
+                <div class="col-6">
                   <label class="form-label" for="product-category"
                     >商品類別</label
                   >
@@ -95,7 +95,7 @@
                     </option>
                   </select>
                 </div>
-                <div class="col-4 pe-1 mt-2">
+                <div class="col-4 mt-2">
                   <label class="form-label" for="product-origin-price"
                     >原價</label
                   >
@@ -108,7 +108,7 @@
                     v-model.number="datas.origin_price"
                   />
                 </div>
-                <div class="col-4 ps-1 mt-2">
+                <div class="col-4 mt-2">
                   <label class="form-label" for="product-price">售價</label>
                   <input
                     type="number"

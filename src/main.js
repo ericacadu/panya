@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import VCalendar from 'v-calendar';
 import fontawesome from '@fortawesome/fontawesome-free/js/all';
 // validate start
 import {
@@ -14,11 +15,11 @@ import ToastMessage from '@/components/ToastMessage.vue';
 import Pagination from '@/components/pagination.vue';
 import Logo from '@/components/logo.vue';
 import Cart from '@/components/bag.vue';
-import 'bootstrap/dist/js/bootstrap.esm';
 import emitter from '@/scripts/mitt';
 import router from '@/router';
 import App from '@/App.vue';
 import { pushMessageState } from '@/scripts/methods';
+import 'bootstrap/dist/js/bootstrap.esm';
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
@@ -40,6 +41,7 @@ app.component('ToastMessage', ToastMessage)
   .component('Form', Form)
   .component('Field', Field)
   .component('ErrorMessage', ErrorMessage)
+  .use(VCalendar, {})
   .use(fontawesome)
   .use(VueAxios, axios)
   .use(router)
