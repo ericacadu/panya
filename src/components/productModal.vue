@@ -282,7 +282,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            @click="$emit('update-product', datas)"
+            @click="$emit('update-data', datas)"
           >
             儲存
           </button>

@@ -57,7 +57,7 @@
       </li>
     </ul>
     <Pagination :pages="pages" @get-datas="filterProducts"></Pagination>
-    <ProductModal :modalData="modalData" @update-product="updateProduct">
+    <ProductModal :modalData="modalData" @update-data="updateProduct">
       <template #title>{{ modalTitle }}</template>
     </ProductModal>
     <DeleteModal :modalData="deleteData" @delete-data="deleteProduct">
@@ -104,20 +104,22 @@ export default {
       filterDatas: [],
       filterInput: 'all',
       tempArry: [],
+      now_page: '',
     };
   },
   methods: {
-    getAllProducts() {
-      apiGetAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = Object.values(res.data.products).reverse();
-        const arry = this.products.map((item) => item.category);
-        const newSet = new Set(arry);
-        this.category = [...newSet];
-        this.filterProducts(1);
-      });
+    getAllProducts(page = 1) {
+      apiGetAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.products = Object.values(res.data.products).reverse();
+          const arry = this.products.map((item) => item.category);
+          const newSet = new Set(arry);
+          this.category = [...newSet];
+          this.filterProducts(page);
+        });
     },
     filterProducts(page) {
       if (this.filterInput === 'all') {
@@ -130,6 +132,7 @@ export default {
       const newNavigator = navigator(page, this.tempArry);
       this.pages = newNavigator.pages;
       this.filterDatas = newNavigator.newArray;
+      this.now_page = this.pages.current_page;
     },
     updateProduct(data) {
       let { method, id } = this.apiInfo;
@@ -145,7 +148,7 @@ export default {
       }
       apiUpdateProducts(method, { data }, id).then((res) => {
         if (res.data.success) {
-          this.getProducts(this.pages.current_page);
+          this.getAllProducts(this.now_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
@@ -154,7 +157,7 @@ export default {
     deleteProduct(item) {
       apiDeleteProducts(item.id).then((res) => {
         if (res.data.success) {
-          this.getProducts();
+          this.getAllProducts(this.now_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
