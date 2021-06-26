@@ -171,6 +171,10 @@ export default {
   watch: {
     modalData() {
       this.datas = { ...this.modalData };
+      if (!this.datas.tag) {
+        this.datas.tag = [];
+      }
+      this.insertTag = '';
       console.log(this.datas);
     },
     datas: {

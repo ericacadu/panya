@@ -31,7 +31,7 @@
         v-for="item in articles" :key="item.id">
         <div class="col-2">{{ getDate(item.create_at) }}</div>
         <div class="col-4 text-start">{{ item.title }}</div>
-        <div class="col-3 text-start">{{ item.tag.toString().split(',').join('、') }}</div>
+        <div class="col-3 text-start">{{ item.tagstr }}</div>
         <div class="col-1 text-success">
           <span class="material-icons fs-5"
             v-if="item.isPublic"
@@ -56,15 +56,24 @@
         </div>
       </li>
     </ul>
+    <Pagination :pages="pages" @get-datas="getCoupons"></Pagination>
     <ArticleModal :modal-data="modalData" @update-data="updateArticle">
       <template #title>{{ modalTitle }}</template>
     </ArticleModal>
-    <DeleteModal></DeleteModal>
+    <DeleteModal :modalData="deleteData" @delete-data="deleteArticle">
+      <template #title>{{ modalTitle }}</template>
+      <template #default>
+        是否刪除
+        <span class="text-danger"> {{ deleteData.title }} </span>
+        文章
+        <small class="text-muted">(刪除後將無法恢復)</small>
+      </template>
+    </DeleteModal>
   </div>
 </template>
 
 <script>
-import { apiGetArticles, apiUpdateArticle } from '@/scripts/api';
+import { apiGetArticles, apiUpdateArticle, apiDeleteArticle } from '@/scripts/api';
 import { bsModal, getDate } from '@/scripts/methods';
 import ArticleModal from '@/components/articleModal.vue';
 import DeleteModal from '@/components/deleteModal.vue';
@@ -91,13 +100,22 @@ export default {
     };
   },
   methods: {
-    getArticles() {
-      apiGetArticles()
+    getArticles(page) {
+      apiGetArticles(page)
         .then((res) => {
           if (!res.data.success) {
             this.$pushMessage(res);
           }
           this.articles = res.data.articles;
+          this.pages = res.data.pagination;
+          this.articles.forEach((item) => {
+            const atc = item;
+            if (atc.tag) {
+              atc.tagstr = atc.tag.toString().split(',').join('、');
+            } else {
+              atc.tagstr = atc.tag;
+            }
+          });
         });
     },
     getDate(date) {
@@ -137,15 +155,22 @@ export default {
       } else {
         this.modal = bsModal('articleModal');
         this.modalData = {
-          tag: [],
           author: 'Erica',
           create_at: new Date().getTime(),
-          content: '',
           isPublic: false,
         };
         this.modalTitle = '新增文章';
       }
       this.modal.show();
+    },
+    deleteArticle(item) {
+      apiDeleteArticle(item.id).then((res) => {
+        if (res.data.success) {
+          this.getArticles();
+          this.modal.hide();
+        }
+        this.$pushMessage(res);
+      });
     },
   },
   created() {
