@@ -86,7 +86,7 @@ export default {
             this.$pushMessage(res);
           }
           this.order = JSON.parse(JSON.stringify(res.data.order));
-          this.order.time = `${getDate(this.order.create_at)} ${getTime(this.order.create_at)}`;
+          this.order.time = `${getDate(this.order.create_at * 1000)} ${getTime(this.order.create_at * 1000)}`;
           this.user = this.order.user;
         });
     },

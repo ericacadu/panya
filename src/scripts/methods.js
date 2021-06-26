@@ -17,11 +17,11 @@ export const scrollTop = () => {
   document.documentElement.scrollTop = 0;
 };
 export const getDate = (date) => {
-  const newDate = new Date(date * 1000);
+  const newDate = new Date(date);
   return newDate.toLocaleDateString();
 };
 export const getTime = (date) => {
-  const newDate = new Date(date * 1000);
+  const newDate = new Date(date);
   return newDate.toLocaleTimeString('it-IT');
 };
 

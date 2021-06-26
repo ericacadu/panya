@@ -297,7 +297,7 @@ export default {
     },
     edit_count(val) {
       if (val > 0) {
-        const now = Math.floor(Date.now() / 1000);
+        const now = Math.floor(Date.now());
         this.final_edit = `${getDate(now)} ${getTime(now)}`;
         this.datas.final_edit = this.final_edit;
       }

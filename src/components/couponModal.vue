@@ -56,7 +56,8 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="col">
                 <v-date-picker color="indigo" class="inline-block h-full"
-                  v-model="datas.start_date">
+                  v-model="datas.start_date"
+                  :model-config="modelConfig">
                   <template v-slot="{ inputValue, togglePopover }">
                     <div class="input-group">
                       <input class="form-control"
@@ -144,23 +145,9 @@ export default {
       },
     };
   },
-  methods: {
-    convertDate(date) {
-      const newTime = new Date(date);
-      const newDate = newTime.toLocaleDateString();
-      return newDate;
-    },
-  },
   watch: {
     modalData() {
       this.datas = { ...this.modalData };
-    },
-    datas: {
-      handler(val) {
-        this.datas.start_date = this.convertDate(val.start_date);
-        this.datas.end_date = this.convertDate(val.due_date);
-      },
-      deep: true,
     },
   },
 };

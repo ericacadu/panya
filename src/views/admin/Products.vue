@@ -104,7 +104,6 @@ export default {
       filterDatas: [],
       filterInput: 'all',
       tempArry: [],
-      now_page: '',
     };
   },
   methods: {
@@ -148,7 +147,7 @@ export default {
       }
       apiUpdateProducts(method, { data }, id).then((res) => {
         if (res.data.success) {
-          this.getAllProducts(this.now_page);
+          this.getAllProducts(this.pages.current_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
@@ -157,7 +156,7 @@ export default {
     deleteProduct(item) {
       apiDeleteProducts(item.id).then((res) => {
         if (res.data.success) {
-          this.getAllProducts(this.now_page);
+          this.getAllProducts(this.pages.current_page);
           this.modal.hide();
         }
         this.$pushMessage(res);

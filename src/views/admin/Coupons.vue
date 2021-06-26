@@ -22,10 +22,10 @@
         <div class="col-3 text-start">{{ item.title }}</div>
         <div class="col-2">{{ item.code }}</div>
         <div class="col-1">{{ item.percent }}</div>
-        <div class="col">{{ item.start_date }}</div>
-        <div class="col" :class="item.due_date < new Date() ? 'text-danger' : ''">
-          {{ item.end_date }}
-          <small class="d-block" v-if="item.due_date < new Date()">(已過期)</small>
+        <div class="col">{{ getDate(item.start_date) }}</div>
+        <div class="col" :class="item.due_date < today ? 'text-danger' : ''">
+          {{ getDate(item.due_date) }}
+          <small class="d-block" v-if="item.due_date < today">(已過期)</small>
         </div>
         <div class="col-1 text-success">
           <span class="material-icons fs-5" v-if="item.is_enabled"
@@ -91,6 +91,7 @@ export default {
         method: '',
         id: '',
       },
+      today: new Date(),
       pages: {},
     };
   },
@@ -103,6 +104,10 @@ export default {
         this.coupons = res.data.coupons;
         this.pages = res.data.pagination;
       });
+    },
+    getDate(date) {
+      const newDate = new Date(date);
+      return newDate.toLocaleDateString();
     },
     updateCoupons(data) {
       let { method, id } = this.apiInfo;
@@ -148,8 +153,8 @@ export default {
         this.modalData = {};
         this.modalTitle = '新增優惠券';
         this.modalData = {
-          start_date: new Date().getTime(),
-          due_date: new Date().getTime(),
+          start_date: this.today.getTime(),
+          due_date: this.today.getTime(),
           percent: 100,
         };
         this.isModal = '';

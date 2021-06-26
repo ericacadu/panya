@@ -160,11 +160,11 @@ export default {
     orderDatas(data) {
       data.forEach((item) => {
         const order = item;
-        order.create_date = getDate(item.create_at);
-        order.create_time = getTime(item.create_at);
+        order.create_date = getDate(item.create_at * 1000);
+        order.create_time = getTime(item.create_at * 1000);
         if (item.paid_date) {
-          order.paid_day = getDate(item.paid_date);
-          order.paid_time = getTime(item.paid_date);
+          order.paid_day = getDate(item.paid_date * 1000);
+          order.paid_time = getTime(item.paid_date * 1000);
         }
         order.qty = 0;
         Object.values(item.products).forEach((el) => {
