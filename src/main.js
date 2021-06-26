@@ -19,6 +19,7 @@ import emitter from '@/scripts/mitt';
 import router from '@/router';
 import App from '@/App.vue';
 import { pushMessageState } from '@/scripts/methods';
+import CKEditor from '@ckeditor/ckeditor5-vue';
 // import 'bootstrap/dist/js/bootstrap.esm';
 
 Object.keys(AllRules).forEach((rule) => {
@@ -42,6 +43,7 @@ app.component('ToastMessage', ToastMessage)
   .component('Field', Field)
   .component('ErrorMessage', ErrorMessage)
   .use(VCalendar, {})
+  .use(CKEditor)
   .use(fontawesome)
   .use(VueAxios, axios)
   .use(router)

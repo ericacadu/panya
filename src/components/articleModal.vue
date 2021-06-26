@@ -5,11 +5,7 @@
     data-bs-backdrop="static"
     data-bs-keyboard="false"
   >
-    <div
-      class="
-        modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable
-      "
-    >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content border-0">
         <div class="modal-header bg-dark p-3 text-light">
           <slot name="title"></slot>
@@ -19,71 +15,94 @@
         </div>
         <div class="modal-body">
           <!-- content start -->
-          <div class="row">
-            <div class="col-4">
-              <div id="list-example" class="list-group sticky-top">
-                <a
-                  class="list-group-item list-group-item-action"
-                  href="#list-item-1"
-                  >Item 1</a
-                >
-                <a
-                  class="list-group-item list-group-item-action"
-                  href="#list-item-2"
-                  >Item 2</a
-                >
-                <a
-                  class="list-group-item list-group-item-action"
-                  href="#list-item-3"
-                  >Item 3</a
-                >
-                <a
-                  class="list-group-item list-group-item-action"
-                  href="#list-item-4"
-                  >Item 4</a
-                >
-              </div>
-            </div>
+          <div class="row g-2" id="scrollspy-item-1">
             <div class="col-8">
-              <div
-                id="scrollspy"
-                data-bs-spy="scroll"
-                data-bs-target="#list-example"
-                data-bs-offset="0"
-                tabindex="0"
+              <label for="title" class="form-label">文章標題</label>
+              <input
+                type="text"
+                id="title"
+                class="form-control"
+                placeholder="輸入標題"
+                v-model="datas.title"
+              />
+            </div>
+            <div class="col-4">
+              <label for="author" class="form-label">作者名稱</label>
+              <input
+                type="text"
+                id="author"
+                class="form-control"
+                v-model="datas.author"
+              />
+            </div>
+            <div class="col-6">
+              <label for="tags" class="form-label">文章標籤</label>
+              <label for="tags" class="form-control input-tags"
+                :class="datas.tag > 0 ? 'p-1' : ''">
+                <div
+                  class="btn btn-sm alert-primary btn-tags"
+                  v-for="(item, key) in datas.tag"
+                  :key="key"
+                >
+                  <span>{{ item }}</span>
+                  <i class="material-icons fs-7" role="button"
+                    @click="removeTag(item, key)">
+                    clear
+                  </i>
+                </div>
+                <input
+                  type="text"
+                  id="tags"
+                  class="col"
+                  :placeholder="datas.tag.length > 0
+                    ? '': '輸入標籤，用 [ENTER] 新增' "
+                  v-model="insertTag"
+                  @keydown.enter="pushTags"
+                />
+              </label>
+            </div>
+            <div class="col-6">
+              <label for="date" class="form-label">發佈日期</label>
+              <v-date-picker
+                color="indigo"
+                class="inline-block h-full"
+                v-model="datas.create_at"
+                :model-config="modelConfig"
               >
-                <h4 id="list-item-1">Item 1</h4>
-                <p>
-                  This is some placeholder content for the scrollspy page. Note
-                  that as you scroll down the page, the appropriate navigation
-                  link is highlighted. It's repeated throughout the component
-                  example. We keep adding some more example copy here to
-                  emphasize the scrolling and highlighting.
-                </p>
-                <h4 id="list-item-2">Item 2</h4>
-                <p>
-                  This is some placeholder content for the scrollspy page. Note
-                  that as you scroll down the page, the appropriate navigation
-                  link is highlighted. It's repeated throughout the component
-                  example. We keep adding some more example copy here to
-                  emphasize the scrolling and highlighting.
-                </p>
-                <h4 id="list-item-3">Item 3</h4>
-                <p>
-                  This is some placeholder content for the scrollspy page. Note
-                  that as you scroll down the page, the appropriate navigation
-                  link is highlighted. It's repeated throughout the component
-                  example. We keep adding some more example copy here to
-                  emphasize the scrolling and highlighting.
-                </p>
-                <h4 id="list-item-4">Item 4</h4>
-                <p>
-                  This is some placeholder content for the scrollspy page. Note
-                  that as you scroll down the page, the appropriate navigation
-                  link is highlighted. It's repeated throughout the component
-                  example. We keep adding some more example copy here to
-                  emphasize the scrolling and highlighting.
-                </p>
+                <template v-slot="{ inputValue, togglePopover }">
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      id="date"
+                      :value="inputValue"
+                    />
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      @click="togglePopover()"
+                    >
+                      <i class="far fa-calendar-alt fa-lg"></i>
+                    </button>
+                  </div>
+                </template>
+              </v-date-picker>
+            </div>
+          </div>
+          <div class="row g-2 mt-3" id="scrollspy-item-2">
+            <h4 class="fs-5">編輯文章</h4>
+            <ckeditor
+              :editor="editor"
+              :config="editorConfig"
+              v-model="datas.content"
+            ></ckeditor>
+            <div class="col d-flex align-items-center mt-3">
+              <label class="form-label m-0" for="article-active"
+                >是否公開</label
+              >
+              <div class="switch-group ms-2">
+                <input type="checkbox" id="article-active" role="button"
+                  v-model="datas.isPublic"
+                  :checked="datas.isPublic"/>
+                <div class="ico_switch"></div>
               </div>
             </div>
           </div>
@@ -111,21 +130,62 @@
 </template>
 
 <script>
-import { bsScrollSpy } from '@/scripts/methods';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default {
   props: ['modalData'],
   data() {
     return {
+      datas: {
+        tag: [],
+      },
+      insertTag: '',
       scrollspy: {},
+      modelConfig: {
+        type: 'number',
+      },
+      editor: ClassicEditor,
+      editorData: '',
+      editorConfig: {
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'blockQuote', 'undo', 'redo',
+        ],
+      },
     };
+  },
+  methods: {
+    pushTags() {
+      if (this.insertTag.trim()) {
+        this.datas.tag.push(this.insertTag.trim());
+        this.insertTag = '';
+      }
+    },
+    removeTag(tag, key) {
+      const newArry = this.datas.tag.filter(
+        (item, index) => item !== tag && key !== index,
+      );
+      this.datas.tag = newArry;
+    },
   },
   watch: {
     modalData() {
-      this.scrollspy = bsScrollSpy('scrollspy');
-      console.log(this.scrollspy);
+      this.datas = { ...this.modalData };
+      console.log(this.datas);
+    },
+    datas: {
+      handler(val) {
+        console.log(val);
+      },
+      deep: true,
     },
   },
-  mounted() {},
 };
 </script>
+
+<style lang="sass">
+.ck.ck-editor
+  width: 100%
+  .ck-content
+    min-height: 30vh
+.ck.ck-balloon-panel
+  z-index: 2000
+</style>

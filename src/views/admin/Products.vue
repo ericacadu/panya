@@ -162,7 +162,7 @@ export default {
         this.$pushMessage(res);
       });
     },
-    openModal(isModal = 'add', item) {
+    openModal(isModal, item) {
       if (isModal === 'edit') {
         this.modal = bsModal('productModal');
         this.isModal = 'edit';
@@ -178,7 +178,6 @@ export default {
       } else {
         this.modal = bsModal('productModal');
         this.modalTitle = '新增商品';
-        this.isModal = 'add';
         this.modalData = {
           imagesUrl: [],
           category: '選擇類別',

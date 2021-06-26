@@ -70,7 +70,7 @@
 
 <script>
 import { apiGetCoupons, apiUpdateCoupon, apiDeleteCoupon } from '@/scripts/api';
-import { bsModal } from '@/scripts/methods';
+import { bsModal, getDate } from '@/scripts/methods';
 import CouponModal from '@/components/couponModal.vue';
 import DeleteModal from '@/components/deleteModal.vue';
 
@@ -106,8 +106,7 @@ export default {
       });
     },
     getDate(date) {
-      const newDate = new Date(date);
-      return newDate.toLocaleDateString();
+      return getDate(date);
     },
     updateCoupons(data) {
       let { method, id } = this.apiInfo;

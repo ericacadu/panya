@@ -54,10 +54,10 @@ export const apiDeleteOrders = () => axios.delete(
 export const apiGetArticles = (page = 1) => axios.get(
   `${api}/api/${path}/admin/articles?page=${page}`,
 );
-export const apiUpdateArticles = (method, data, id) => axios[method](
+export const apiUpdateArticle = (method, data, id) => axios[method](
   `${api}/api/${path}/admin/article/${id}`, data,
 );
-export const apiDeleteArticles = (id) => axios.delete(
+export const apiDeleteArticle = (id) => axios.delete(
   `${api}/api/${path}/admin/article/${id}`,
 );
 

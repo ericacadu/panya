@@ -16,8 +16,31 @@
     justify-content: center
     align-items: center
     text-align: center
-
   .dropdown-item
     &.active, &:active
       background: $gray-200
       color: $dark
+  .input-tags
+    display: flex
+    flex-flow: wrap
+    padding: .3rem
+    input
+      border: 0
+      min-width: 2rem
+      &:focus
+        outline: 0
+  .btn-tags
+    padding: 0
+    display: flex
+    align-items: center
+    color: $blue-500
+    margin: .15rem
+    span
+      padding: .1rem .5rem
+    i
+      display: flex
+      align-items: center
+      height: 100%
+      padding: 3px
+      border-left: 1px solid $blue-200
+    

@@ -22,23 +22,23 @@
     >
       <li class="col-2">日期</li>
       <li class="col-4 text-start">文章名稱</li>
-      <li class="col-2">標籤</li>
+      <li class="col-3 text-start">標籤</li>
       <li class="col-1">啟用</li>
-      <li class="col-3"></li>
+      <li class="col-2"></li>
     </ul>
     <ul class="list-group list-group-flush shadow-sm">
-      <li class="list-group-item p-2">
-        <!--  v-for="item in products" :key="item.id" -->
-        <div class="col-2">日期</div>
-        <div class="col-4 text-start">文章名稱</div>
-        <div class="col-2">標籤</div>
+      <li class="list-group-item p-2"
+        v-for="item in articles" :key="item.id">
+        <div class="col-2">{{ getDate(item.create_at) }}</div>
+        <div class="col-4 text-start">{{ item.title }}</div>
+        <div class="col-3 text-start">{{ item.tag.toString().split(',').join('、') }}</div>
         <div class="col-1 text-success">
-          <!--  v-if="item.is_enabled" -->
           <span class="material-icons fs-5"
+            v-if="item.isPublic"
             >check_circle</span
           >
         </div>
-        <div class="col-3 d-flex justify-content-center">
+        <div class="col-2 d-flex justify-content-center">
           <button
             class="btn btn-sm btn-outline-primary fs-7"
             type="button"
@@ -56,7 +56,7 @@
         </div>
       </li>
     </ul>
-    <ArticleModal :modalData="modalData">
+    <ArticleModal :modal-data="modalData" @update-data="updateArticle">
       <template #title>{{ modalTitle }}</template>
     </ArticleModal>
     <DeleteModal></DeleteModal>
@@ -64,8 +64,8 @@
 </template>
 
 <script>
-import { apiGetArticles } from '@/scripts/api';
-import { bsModal } from '@/scripts/methods';
+import { apiGetArticles, apiUpdateArticle } from '@/scripts/api';
+import { bsModal, getDate } from '@/scripts/methods';
 import ArticleModal from '@/components/articleModal.vue';
 import DeleteModal from '@/components/deleteModal.vue';
 
@@ -82,7 +82,12 @@ export default {
       modal: {},
       tags: [],
       pages: {},
+      isModal: '',
       modalTitle: '',
+      apiInfo: {
+        method: '',
+        id: '',
+      },
     };
   },
   methods: {
@@ -95,10 +100,51 @@ export default {
           this.articles = res.data.articles;
         });
     },
-    openModal() {
-      this.modal = bsModal('articleModal');
-      this.modalData = {};
-      this.modalTitle = '新增文章';
+    getDate(date) {
+      return getDate(date);
+    },
+    updateArticle(data) {
+      let { method, id } = this.apiInfo;
+      switch (this.isModal) {
+        case 'edit':
+          method = 'put';
+          id = data.id;
+          break;
+        default:
+          method = 'post';
+          id = '';
+          break;
+      }
+      apiUpdateArticle(method, { data }, id)
+        .then((res) => {
+          if (res.data.success) {
+            this.getArticles();
+            this.modal.hide();
+          }
+          this.$pushMessage(res);
+        });
+    },
+    openModal(isModal, item) {
+      if (isModal === 'edit') {
+        this.modal = bsModal('articleModal');
+        this.isModal = 'edit';
+        this.modalTitle = '編輯文章';
+        this.modalData = JSON.parse(JSON.stringify(item));
+      } else if (isModal === 'delete') {
+        this.modal = bsModal('deleteModal');
+        this.modalTitle = '刪除文章';
+        this.deleteData = item;
+      } else {
+        this.modal = bsModal('articleModal');
+        this.modalData = {
+          tag: [],
+          author: 'Erica',
+          create_at: new Date().getTime(),
+          content: '',
+          isPublic: false,
+        };
+        this.modalTitle = '新增文章';
+      }
       this.modal.show();
     },
   },

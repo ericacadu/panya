@@ -10,6 +10,8 @@
     "start": "npm run serve"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^28.0.0",
+    "@ckeditor/ckeditor5-vue": "^2.0.1",
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@popperjs/core": "^2.9.2",
     "@vee-validate/i18n": "^4.1.20",
