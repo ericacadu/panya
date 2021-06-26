@@ -1,17 +1,6 @@
 <template>
   <div class="container-fluid">
     <div class="d-flex justify-content-between mb-3">
-      <!-- <select
-        class="form-select mw-25"
-        v-model="filterInput"
-        @change="filterProducts(1)"
-      >
-        <option value="all" selected>全部文章</option>
-        <option v-for="(item, key) in tags" :key="key" :value="item">
-          {{ item }}
-        </option>
-      </select> -->
-
       <button class="btn btn-primary ms-auto" type="button" @click="openModal">
         <i class="material-icons me-1">add_circle_outline</i>
         新增文章
@@ -56,7 +45,7 @@
         </div>
       </li>
     </ul>
-    <Pagination :pages="pages" @get-datas="getCoupons"></Pagination>
+    <Pagination :pages="pages" @get-datas="getArticles"></Pagination>
     <ArticleModal :modal-data="modalData" @update-data="updateArticle">
       <template #title>{{ modalTitle }}</template>
     </ArticleModal>
@@ -116,6 +105,7 @@ export default {
               atc.tagstr = atc.tag;
             }
           });
+          this.$emit('change-status', false);
         });
     },
     getDate(date) {
@@ -133,6 +123,7 @@ export default {
           id = '';
           break;
       }
+      this.$emit('change-status', true);
       apiUpdateArticle(method, { data }, id)
         .then((res) => {
           if (res.data.success) {
@@ -140,6 +131,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
+          this.$emit('change-status', false);
         });
     },
     openModal(isModal, item) {
@@ -164,14 +156,19 @@ export default {
       this.modal.show();
     },
     deleteArticle(item) {
+      this.$emit('change-status', true);
       apiDeleteArticle(item.id).then((res) => {
         if (res.data.success) {
           this.getArticles();
           this.modal.hide();
         }
         this.$pushMessage(res);
+        this.$emit('change-status', false);
       });
     },
+  },
+  beforeCreate() {
+    this.$emit('change-status', true);
   },
   created() {
     this.getArticles();

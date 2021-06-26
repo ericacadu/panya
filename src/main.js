@@ -15,12 +15,13 @@ import ToastMessage from '@/components/ToastMessage.vue';
 import Pagination from '@/components/pagination.vue';
 import Logo from '@/components/logo.vue';
 import Cart from '@/components/bag.vue';
+import CKEditor from '@ckeditor/ckeditor5-vue';
+import Loading from '@/components/loading.vue';
+import PageLoading from '@/components/PageLoading.vue';
 import emitter from '@/scripts/mitt';
 import router from '@/router';
 import App from '@/App.vue';
 import { pushMessageState } from '@/scripts/methods';
-import CKEditor from '@ckeditor/ckeditor5-vue';
-// import 'bootstrap/dist/js/bootstrap.esm';
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
@@ -37,6 +38,8 @@ app.config.globalProperties.$pushMessage = pushMessageState;
 
 app.component('ToastMessage', ToastMessage)
   .component('Pagination', Pagination)
+  .component('Loading', Loading)
+  .component('PageLoading', PageLoading)
   .component('Logo', Logo)
   .component('Cart', Cart)
   .component('Form', Form)

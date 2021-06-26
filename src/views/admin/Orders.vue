@@ -155,6 +155,8 @@ export default {
           this.orderDatas(this.orders);
           this.pages = res.data.pagination;
           this.filterDatas = this.orders;
+          this.isLoading = false;
+          this.$emit('change-status', false);
         });
     },
     orderDatas(data) {
@@ -173,6 +175,7 @@ export default {
       });
     },
     updateOrder(data) {
+      this.$emit('change-status', true);
       apiUpdateOrder(data.id, { data })
         .then((res) => {
           if (res.data.success) {
@@ -180,6 +183,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
+          this.$emit('change-status', false);
         });
     },
     deleteOrder(item) {
@@ -189,6 +193,7 @@ export default {
       } else {
         func = () => apiDeleteOrder(item.id);
       }
+      this.$emit('change-status', true);
       func()
         .then((res) => {
           if (res.data.success) {
@@ -196,9 +201,10 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
+          this.$emit('change-status', false);
         });
     },
-    openModal(isModal = 'edit', item) {
+    openModal(isModal, item) {
       if (isModal === 'delete') {
         this.modal = bsModal('deleteModal');
         this.modalTitle = '刪除訂單';
@@ -242,6 +248,9 @@ export default {
   mounted() {
     this.placeholder = '輸入訂單編號';
     this.searchMode = 'searchOrder';
+  },
+  beforeCreate() {
+    this.$emit('change-status', true);
   },
   created() {
     this.getOrders();

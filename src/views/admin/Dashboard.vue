@@ -68,7 +68,8 @@
           登出
         </button>
       </nav>
-      <router-view class="p-3"></router-view>
+      <router-view class="p-3" @change-status="changeStatus"></router-view>
+      <PageLoading :is-loading="isLoading" />
     </div>
   </div>
 </template>
@@ -82,6 +83,7 @@ export default {
       path: '',
       page: '',
       status: '',
+      isLoading: true,
     };
   },
   watch: {
@@ -90,6 +92,9 @@ export default {
     },
   },
   methods: {
+    changeStatus(val) {
+      this.isLoading = val;
+    },
     checking() {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)panyaToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
       this.$http.defaults.headers.common.Authorization = token;

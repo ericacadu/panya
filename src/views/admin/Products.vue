@@ -118,6 +118,8 @@ export default {
           const newSet = new Set(arry);
           this.category = [...newSet];
           this.filterProducts(page);
+          this.isLoading = false;
+          this.$emit('change-status', false);
         });
     },
     filterProducts(page) {
@@ -145,21 +147,25 @@ export default {
           id = '';
           break;
       }
+      this.$emit('change-status', true);
       apiUpdateProducts(method, { data }, id).then((res) => {
         if (res.data.success) {
           this.getAllProducts(this.pages.current_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
+        this.$emit('change-status', false);
       });
     },
     deleteProduct(item) {
+      this.$emit('change-status', true);
       apiDeleteProducts(item.id).then((res) => {
         if (res.data.success) {
           this.getAllProducts(this.pages.current_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
+        this.$emit('change-status', false);
       });
     },
     openModal(isModal, item) {
@@ -186,6 +192,9 @@ export default {
       }
       this.modal.show();
     },
+  },
+  beforeCreate() {
+    this.$emit('change-status', true);
   },
   created() {
     this.getAllProducts();

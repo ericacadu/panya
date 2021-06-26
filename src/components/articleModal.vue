@@ -193,5 +193,5 @@ export default {
   .ck-content
     min-height: 30vh !important
 .ck.ck-balloon-panel
-  z-index: 2000 !important
+  z-index: 1500 !important
 </style>

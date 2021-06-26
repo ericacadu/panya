@@ -41,7 +41,7 @@ const routes = [
       title: '登入',
     },
   }, {
-    path: '/:matchPath(.*)*',
+    path: '/:pathMatch(.*)*',
     name: '404',
     component: () => import('@/views/404.vue'),
     meta: {

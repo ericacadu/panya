@@ -103,6 +103,7 @@ export default {
         }
         this.coupons = res.data.coupons;
         this.pages = res.data.pagination;
+        this.$emit('change-status', false);
       });
     },
     getDate(date) {
@@ -120,21 +121,25 @@ export default {
           id = '';
           break;
       }
+      this.$emit('change-status', true);
       apiUpdateCoupon(method, { data }, id).then((res) => {
         if (res.data.success) {
           this.getCoupons();
           this.modal.hide();
         }
         this.$pushMessage(res);
+        this.$emit('change-status', false);
       });
     },
     deleteCoupon(item) {
+      this.$emit('change-status', true);
       apiDeleteCoupon(item.id).then((res) => {
         if (res.data.success) {
           this.getCoupons();
           this.modal.hide();
         }
         this.$pushMessage(res);
+        this.$emit('change-status', false);
       });
     },
     openModal(isModal, item) {
@@ -160,6 +165,9 @@ export default {
       }
       this.modal.show();
     },
+  },
+  beforeCreate() {
+    this.$emit('change-status', true);
   },
   created() {
     this.getCoupons();
