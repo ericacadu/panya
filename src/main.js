@@ -19,7 +19,7 @@ import emitter from '@/scripts/mitt';
 import router from '@/router';
 import App from '@/App.vue';
 import { pushMessageState } from '@/scripts/methods';
-import 'bootstrap/dist/js/bootstrap.esm';
+// import 'bootstrap/dist/js/bootstrap.esm';
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);

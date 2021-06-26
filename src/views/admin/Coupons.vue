@@ -51,7 +51,7 @@
       </li>
     </ul>
     <Pagination :pages="pages" @get-datas="getCoupons"></Pagination>
-    <CouponModal :modalData="modalData" @update-coupon="updateCoupons">
+    <CouponModal :modalData="modalData" @update-data="updateCoupons">
       <template #title>
         {{ modalTitle }}
       </template>

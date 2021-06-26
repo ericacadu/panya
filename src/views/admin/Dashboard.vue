@@ -56,7 +56,8 @@
           </li>
           <li class="breadcrumb-item active">{{ page }}</li>
         </ol>
-        <span class="ms-auto me-3 text-secondary">
+        <span class="ms-auto me-3"
+          :class="status === '登入中' ? 'text-success' : 'text-danger'">
           {{ status }}
         </span>
         <button

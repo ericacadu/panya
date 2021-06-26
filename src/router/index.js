@@ -41,6 +41,13 @@ const routes = [
       title: '登入',
     },
   }, {
+    path: '/:matchPath(.*)*',
+    name: '404',
+    component: () => import('@/views/404.vue'),
+    meta: {
+      title: '404',
+    },
+  }, {
     path: '/admin',
     name: 'Admin',
     component: () => import('@/views/admin/Dashboard.vue'),

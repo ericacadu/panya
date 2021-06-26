@@ -50,6 +50,17 @@ export const apiDeleteOrders = () => axios.delete(
   `${api}/api/${path}/admin/orders/all`,
 );
 
+// 文章管理
+export const apiGetArticles = (page = 1) => axios.get(
+  `${api}/api/${path}/admin/articles?page=${page}`,
+);
+export const apiUpdateArticles = (method, data, id) => axios[method](
+  `${api}/api/${path}/admin/article/${id}`, data,
+);
+export const apiDeleteArticles = (id) => axios.delete(
+  `${api}/api/${path}/admin/article/${id}`,
+);
+
 // 前台相關
 
 // 商品
