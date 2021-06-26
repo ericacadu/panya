@@ -15,7 +15,7 @@
         </div>
         <div class="modal-body">
           <!-- content start -->
-          <div class="row g-2" id="scrollspy-item-1">
+          <div class="row g-2">
             <div class="col-8">
               <label for="title" class="form-label">文章標題</label>
               <input
@@ -87,13 +87,15 @@
               </v-date-picker>
             </div>
           </div>
-          <div class="row g-2 mt-3" id="scrollspy-item-2">
+          <div class="row g-2 mt-3">
             <h4 class="fs-5">編輯文章</h4>
             <ckeditor
               :editor="editor"
               :config="editorConfig"
               v-model="datas.content"
             ></ckeditor>
+          </div>
+          <div class="row g-2">
             <div class="col d-flex align-items-center mt-3">
               <label class="form-label m-0" for="article-active"
                 >是否公開</label
@@ -183,9 +185,9 @@ export default {
 
 <style lang="sass">
 .ck.ck-editor
-  width: 100%
+  width: 100% !important
   .ck-content
-    min-height: 30vh
+    min-height: 30vh !important
 .ck.ck-balloon-panel
-  z-index: 2000
+  z-index: 2000 !important
 </style>
