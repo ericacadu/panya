@@ -1,6 +1,7 @@
 <template>
   <router-view/>
   <ToastMessage></ToastMessage>
+  <PageLoading/>
 </template>
 
 <script>
@@ -19,5 +20,7 @@ export default {
 
 <style lang="sass">
 .toast.hide
+  display: none
+.loading
   display: none
 </style>

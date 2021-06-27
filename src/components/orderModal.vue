@@ -117,7 +117,7 @@
             <!-- 商品細項 -->
             <div class="col-md-6">
               <div class="d-flex align-items-center">
-                <h3 class="fs-5 m-0">商品細項</h3>
+                <h3 class="fs-5 m-0">商品內容</h3>
                 <button
                   type="button"
                   class="btn btn-sm ms-2"
@@ -166,6 +166,8 @@
                       數量：
                       <input
                         type="number"
+                        min="1"
+                        max="10"
                         class="form-control form-control-sm"
                         v-model.number="item.qty"
                         :disabled="!isEditProduct"
@@ -281,6 +283,20 @@ export default {
     },
     products: {
       handler(val) {
+        const num = Object.values(val).length;
+        if (num <= 0) {
+          this.$pushMessage(false, '訂單內不可清空商品');
+          this.products = this.datas.products;
+          return;
+        }
+        Object.values(val).forEach((item) => {
+          const elemt = item;
+          if ((num > 1 && item.qty < 1)
+              || (num <= 1 && item.qty <= 1)) {
+            elemt.qty = 1;
+            this.$pushMessage(false, '訂單內不可清空商品');
+          }
+        });
         this.updateTotal(val);
       },
       deep: true,

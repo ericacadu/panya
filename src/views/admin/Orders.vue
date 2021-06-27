@@ -116,7 +116,6 @@ import {
 } from '@/scripts/api';
 import {
   bsModal,
-  bsToast,
   getDate,
   getTime,
 } from '@/scripts/methods';
@@ -152,11 +151,18 @@ export default {
             this.$pushMessage(res);
           }
           this.orders = res.data.orders;
+          // 避免商品被刪光導致 null object 錯誤
+          this.orders.forEach((item) => {
+            if (!item.products) {
+              const obj = item;
+              obj.products = Object.assign('', {});
+            }
+          });
           this.orderDatas(this.orders);
           this.pages = res.data.pagination;
           this.filterDatas = this.orders;
           this.isLoading = false;
-          this.$emit('change-status', false);
+          this.$emitter.emit('change-status', false);
         });
     },
     orderDatas(data) {
@@ -175,7 +181,7 @@ export default {
       });
     },
     updateOrder(data) {
-      this.$emit('change-status', true);
+      this.$emitter.emit('change-status', true);
       apiUpdateOrder(data.id, { data })
         .then((res) => {
           if (res.data.success) {
@@ -183,7 +189,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
-          this.$emit('change-status', false);
+          this.$emitter.emit('change-status', false);
         });
     },
     deleteOrder(item) {
@@ -193,7 +199,7 @@ export default {
       } else {
         func = () => apiDeleteOrder(item.id);
       }
-      this.$emit('change-status', true);
+      this.$emitter.emit('change-status', true);
       func()
         .then((res) => {
           if (res.data.success) {
@@ -201,7 +207,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
-          this.$emit('change-status', false);
+          this.$emitter.emit('change-status', false);
         });
     },
     openModal(isModal, item) {
@@ -250,13 +256,10 @@ export default {
     this.searchMode = 'searchOrder';
   },
   beforeCreate() {
-    this.$emit('change-status', true);
+    this.$emitter.emit('change-status', true);
   },
   created() {
     this.getOrders();
-  },
-  unmounted() {
-    bsToast('toast').hide();
   },
 };
 </script>

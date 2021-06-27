@@ -130,12 +130,15 @@ export default {
       this.cart.carts.reverse();
     },
   },
-  mounted() {
-    this.$emit('close-cart');
+  beforeCreate() {
+    this.$emitter.emit('change-status', true);
   },
   created() {
     this.$emit('get-carts');
     this.cart = this.cartData;
+  },
+  mounted() {
+    this.$emit('close-cart');
   },
 };
 </script>

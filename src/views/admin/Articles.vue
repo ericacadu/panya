@@ -105,7 +105,7 @@ export default {
               atc.tagstr = atc.tag;
             }
           });
-          this.$emit('change-status', false);
+          this.$emitter.emit('change-status', false);
         });
     },
     getDate(date) {
@@ -123,7 +123,7 @@ export default {
           id = '';
           break;
       }
-      this.$emit('change-status', true);
+      this.$emitter.emit('change-status', true);
       apiUpdateArticle(method, { data }, id)
         .then((res) => {
           if (res.data.success) {
@@ -131,7 +131,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
-          this.$emit('change-status', false);
+          this.$emitter.emit('change-status', false);
         });
     },
     openModal(isModal, item) {
@@ -140,6 +140,7 @@ export default {
         this.isModal = 'edit';
         this.modalTitle = '編輯文章';
         this.modalData = JSON.parse(JSON.stringify(item));
+        this.$emitter.emit('change-status', true);
       } else if (isModal === 'delete') {
         this.modal = bsModal('deleteModal');
         this.modalTitle = '刪除文章';
@@ -156,19 +157,19 @@ export default {
       this.modal.show();
     },
     deleteArticle(item) {
-      this.$emit('change-status', true);
+      this.$emitter.emit('change-status', true);
       apiDeleteArticle(item.id).then((res) => {
         if (res.data.success) {
           this.getArticles();
           this.modal.hide();
         }
         this.$pushMessage(res);
-        this.$emit('change-status', false);
+        this.$emitter.emit('change-status', false);
       });
     },
   },
   beforeCreate() {
-    this.$emit('change-status', true);
+    this.$emitter.emit('change-status', true);
   },
   created() {
     this.getArticles();

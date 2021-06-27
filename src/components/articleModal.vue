@@ -37,16 +37,22 @@
             </div>
             <div class="col-6">
               <label for="tags" class="form-label">文章標籤</label>
-              <label for="tags" class="form-control input-tags"
-                :class="datas.tag > 0 ? 'p-1' : ''">
+              <label
+                for="tags"
+                class="form-control input-tags"
+                :class="datas.tag > 0 ? 'p-1' : ''"
+              >
                 <div
                   class="btn btn-sm alert-primary btn-tags"
                   v-for="(item, key) in datas.tag"
                   :key="key"
                 >
                   <span>{{ item }}</span>
-                  <i class="material-icons fs-7" role="button"
-                    @click="removeTag(item, key)">
+                  <i
+                    class="material-icons fs-7"
+                    role="button"
+                    @click="removeTag(item, key)"
+                  >
                     clear
                   </i>
                 </div>
@@ -54,8 +60,9 @@
                   type="text"
                   id="tags"
                   class="col"
-                  :placeholder="datas.tag.length > 0
-                    ? '': '輸入標籤，用 [ENTER] 新增' "
+                  :placeholder="
+                    datas.tag.length > 0 ? '' : '輸入標籤，用 [ENTER] 新增'
+                  "
                   v-model="insertTag"
                   @keydown.enter="pushTags"
                 />
@@ -71,11 +78,7 @@
               >
                 <template v-slot="{ inputValue, togglePopover }">
                   <div class="input-group">
-                    <input
-                      class="form-control"
-                      id="date"
-                      :value="inputValue"
-                    />
+                    <input class="form-control" id="date" :value="inputValue" />
                     <button
                       class="btn btn-sm btn-outline-primary"
                       @click="togglePopover()"
@@ -101,9 +104,13 @@
                 >是否公開</label
               >
               <div class="switch-group ms-2">
-                <input type="checkbox" id="article-active" role="button"
+                <input
+                  type="checkbox"
+                  id="article-active"
+                  role="button"
                   v-model="datas.isPublic"
-                  :checked="datas.isPublic"/>
+                  :checked="datas.isPublic"
+                />
                 <div class="ico_switch"></div>
               </div>
             </div>
@@ -133,6 +140,8 @@
 
 <script>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import UploadAdapter from '@/scripts/uploadAdapter';
+import { apiGetArticle } from '@/scripts/api';
 
 export default {
   props: ['modalData'],
@@ -149,12 +158,23 @@ export default {
       editor: ClassicEditor,
       editorData: '',
       editorConfig: {
-        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'blockQuote', 'undo', 'redo',
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'uploadImage', 'blockQuote', 'undo', 'redo',
         ],
+        extraPlugins: [this.uploader],
       },
     };
   },
   methods: {
+    getContent() {
+      apiGetArticle(this.datas.id)
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.datas.content = res.data.article.content;
+          this.$emitter.emit('change-status', false);
+        });
+    },
     pushTags() {
       if (this.insertTag.trim()) {
         this.datas.tag.push(this.insertTag.trim());
@@ -167,6 +187,10 @@ export default {
       );
       this.datas.tag = newArry;
     },
+    uploader(editor) {
+      const { plugins } = editor;
+      plugins.get('FileRepository').createUploadAdapter = (loader) => new UploadAdapter(loader);
+    },
   },
   watch: {
     modalData() {
@@ -175,7 +199,7 @@ export default {
         this.datas.tag = [];
       }
       this.insertTag = '';
-      console.log(this.datas);
+      this.getContent();
     },
     datas: {
       handler(val) {

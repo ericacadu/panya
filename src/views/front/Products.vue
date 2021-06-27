@@ -3,10 +3,10 @@
     <h1 class="py-3 fs-3 fw-normal text-center ls-3">PANYA 手感烘焙</h1>
     <ul class="category list-unstyled d-flex justify-content-center mt-4">
       <li
-        li
         class="btn btn-outline-primary p-0"
         :class="isActive === 'all' ? 'active' : ''"
         @click="filterProducts(1, 'all'), (isActive = 'all')"
+        v-if="products.length > 0"
       >
         <router-link
           class="px-4 py-1"
@@ -111,6 +111,7 @@ export default {
         const newSet = new Set(arry);
         this.category = [...newSet];
         this.filterProducts(this.path.page, this.path.category);
+        this.$emitter.emit('change-status', false);
       });
     },
     getPath() {
@@ -150,6 +151,9 @@ export default {
   },
   mounted() {
     this.$emit('close-cart');
+  },
+  beforeCreate() {
+    this.$emitter.emit('change-status', true);
   },
   created() {
     this.getPath();

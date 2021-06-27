@@ -6,7 +6,23 @@
   </div>
 </template>
 <script>
+import { bsToast } from '@/scripts/methods';
+
 export default {
-  props: ['isLoading'],
+  data() {
+    return {
+      isLoading: true,
+    };
+  },
+  mounted() {
+    this.$emitter.on('change-status', (val) => {
+      this.isLoading = val;
+    });
+  },
+  watch: {
+    isLoading() {
+      bsToast('toast').hide();
+    },
+  },
 };
 </script>

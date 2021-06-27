@@ -1,6 +1,6 @@
 <template>
   <div class="container px-3">
-    <div class="row g-0">
+    <div class="row g-0" v-if="order.id">
       <div class="col-md-6 p-3">
         <small class="path d-block mb-4">首頁 / 訂單結帳</small>
         <h2 class="fs-4 d-flex mb-4">
@@ -88,6 +88,9 @@ export default {
           this.order = JSON.parse(JSON.stringify(res.data.order));
           this.order.time = `${getDate(this.order.create_at * 1000)} ${getTime(this.order.create_at * 1000)}`;
           this.user = this.order.user;
+          if (this.order.id) {
+            this.$emitter.emit('change-status', false);
+          }
         });
     },
     payOrder() {
@@ -100,6 +103,9 @@ export default {
           this.$pushMessage(res);
         });
     },
+  },
+  beforeCreate() {
+    this.$emitter.emit('change-status', true);
   },
   created() {
     this.getOrder();

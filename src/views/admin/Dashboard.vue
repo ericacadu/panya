@@ -68,8 +68,7 @@
           登出
         </button>
       </nav>
-      <router-view class="p-3" @change-status="changeStatus"></router-view>
-      <PageLoading :is-loading="isLoading" />
+      <router-view class="p-3"></router-view>
     </div>
   </div>
 </template>
@@ -83,7 +82,6 @@ export default {
       path: '',
       page: '',
       status: '',
-      isLoading: true,
     };
   },
   watch: {
@@ -92,11 +90,11 @@ export default {
     },
   },
   methods: {
-    changeStatus(val) {
-      this.isLoading = val;
-    },
     checking() {
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)panyaToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      let token = document.cookie.replace(/(?:(?:^|.*;\s*)panyaToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      this.$emitter.on('upload-check', (val) => {
+        token = val;
+      });
       this.$http.defaults.headers.common.Authorization = token;
       apiUserCheck()
         .then((res) => {

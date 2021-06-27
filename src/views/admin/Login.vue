@@ -87,6 +87,9 @@ export default {
           console.log(err);
         });
     },
+    created() {
+      this.$emitter.emit('change-status', false);
+    },
   },
 };
 </script>

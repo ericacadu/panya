@@ -14,16 +14,18 @@
           <ul class="navbar-nav">
             <li class="navbar-itemdisabled">
               <router-link class="nav-link disabled" to="/"
+                @click="toggleNav = false"
               >關於panya</router-link>
             </li>
             <li class="navbar-item">
               <router-link class="nav-link" to="/products?category=all&page=1"
+                @click="toggleNav = false"
               >手感烘焙</router-link>
             </li>
             <li class="navbar-itemdisabled">
               <router-link class="nav-link disabled" to="/"
-                >售後服務</router-link
-              >
+                @click="toggleNav = false"
+              >售後服務</router-link>
             </li>
           </ul>
         </div>
@@ -132,6 +134,7 @@ export default {
           this.totalPrice = this.cart.final_total;
           this.getCartSum();
           this.isDisabled = '';
+          this.$emitter.emit('change-status', false);
         });
     },
     addCarts(item, qty = 1) {

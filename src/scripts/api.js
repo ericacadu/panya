@@ -54,6 +54,9 @@ export const apiDeleteOrders = () => axios.delete(
 export const apiGetArticles = (page = 1) => axios.get(
   `${api}/api/${path}/admin/articles?page=${page}`,
 );
+export const apiGetArticle = (id) => axios.get(
+  `${api}/api/${path}/admin/article/${id}`,
+);
 export const apiUpdateArticle = (method, data, id) => axios[method](
   `${api}/api/${path}/admin/article/${id}`, data,
 );

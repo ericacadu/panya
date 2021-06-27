@@ -42,6 +42,5 @@ export default {
   position: fixed
   right: 0
   top: 0
-  // transform: translateX(-50%)
-  z-index: 99999
+  z-index: 1500
 </style>

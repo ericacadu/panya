@@ -17,7 +17,7 @@
           <span :style="{ 'background-image': `url(${img})` }"></span>
         </div>
       </div>
-      <div class="product-content col text-center text-md-start">
+      <div class="product-content col text-center text-md-start" v-if="product.title">
         <small class="path d-block mb-4">首頁 / 手感烘焙 / {{ product.category }}</small>
         <h1>{{ product.title }}</h1>
         <p class="product-desc mb-5">{{ product.description }}</p>
@@ -63,7 +63,7 @@ export default {
   props: ['isDisabled'],
   data() {
     return {
-      product: [],
+      product: {},
       enterImage: '',
     };
   },
@@ -80,14 +80,18 @@ export default {
           const { 0: img } = this.product.imagesUrl;
           this.enterImage = img;
           document.title = `${this.product.title} - PANYA`;
+          this.$emitter.emit('change-status', false);
         });
     },
   },
-  mounted() {
-    this.$emit('close-cart');
+  beforeCreate() {
+    this.$emitter.emit('change-status', true);
   },
   created() {
     this.getProduct();
+  },
+  mounted() {
+    this.$emit('close-cart');
   },
 };
 </script>
