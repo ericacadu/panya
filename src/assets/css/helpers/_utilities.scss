@@ -481,6 +481,7 @@ $utilities: map-merge(
     ),
     "font-size": (
       rfs: true,
+      responsive: true,
       property: font-size,
       class: fs,
       values: $font-sizes

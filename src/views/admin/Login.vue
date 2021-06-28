@@ -55,6 +55,8 @@ import { apiUserLogin } from '@/scripts/api';
 export default {
   data() {
     return {
+      // imgUrl: '',
+      // stickyImg: '',
       imgUrl:
         'https://images.unsplash.com/photo-1447078806655-40579c2520d6?w=1080',
       stickyImg:
@@ -70,6 +72,7 @@ export default {
         username: this.username,
         password: this.password,
       };
+      this.$emitter.emit('change-status', true);
       apiUserLogin(data)
         .then((res) => {
           if (res.data.success) {
@@ -79,17 +82,16 @@ export default {
             )}`;
             this.$router.push('/admin/products');
           } else {
-            this.message = res.data.message;
+            this.$pushMessage(res);
           }
-        })
-        .catch((err) => {
-          // eslint-disable-next-line no-console
-          console.log(err);
         });
     },
-    created() {
-      this.$emitter.emit('change-status', false);
-    },
+  },
+  beforeMount() {
+    this.$emitter.emit('change-status', true);
+  },
+  mounted() {
+    this.$emitter.emit('change-status', false);
   },
 };
 </script>

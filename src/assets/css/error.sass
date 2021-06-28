@@ -1,0 +1,95 @@
+@import './mixin'
+*
+  // outline: 1px solid red
+$default: 3rem
+
+.error
+  background: $gray-400
+  .container
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    flex-flow: column
+    padding-top: 20vh
+
+.pacmaneat
+  position: relative
+  display: flex
+  justify-content: center
+  align-items: center
+  overflow: hidden
+  color: $gray-500
+  .cookie
+    width: $default
+    height: $default
+    display: flex
+    justify-content: center
+    align-items: center
+  .path
+    position: absolute
+    z-index: 2
+    top: 50%
+    right: 0
+    display: flex
+    animation: pathmove 5s linear infinite
+    .cover
+      width: $default * 4
+      height: $default
+      background: $gray-400
+      position: absolute
+      z-index: 1
+      animation: cover 5s steps(1) infinite
+    
+.pacman
+  position: relative
+  z-index: 2
+  width: $default
+  height: $default
+  background-image: linear-gradient(to right, transparent 0%, transparent 50%, $yellow 51%, $yellow 100%)
+  overflow: hidden
+  border-radius: 100%
+  animation: spin 5s steps(1) infinite
+  .top, .bottom
+    position: absolute
+    width: 100%
+    height: 50%
+    background: $yellow
+  .top
+    animation: top .35s steps(2) infinite
+  .bottom
+    bottom: 0
+    animation: bottom .35s steps(2) infinite
+
+@keyframes pathmove
+  0%, 100%
+    transform: translate(0, -50%)
+  50%
+    transform: translate(-400%, -50%)
+
+@keyframes cover
+  0%, 100%
+    right: auto
+    left: 100%
+    box-shadow: -2px 0 0 $gray-400
+  50%
+    left: auto
+    right: 100%
+    box-shadow: 2px 0 0 $gray-400
+
+@keyframes spin
+  0%, 100%
+    transform: rotate(0)
+  50%
+    transform: rotate(-180deg)
+
+@keyframes top
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(72deg)
+
+@keyframes bottom
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(-72deg)

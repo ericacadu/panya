@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic/';
 import UploadAdapter from '@/scripts/uploadAdapter';
 import { apiGetArticle } from '@/scripts/api';
 
@@ -156,10 +156,8 @@ export default {
         type: 'number',
       },
       editor: ClassicEditor,
-      editorData: '',
       editorConfig: {
-        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'uploadImage', 'blockQuote', 'undo', 'redo',
-        ],
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', 'numberedList', 'bulletedList', '|', 'uploadImage', 'blockQuote', 'undo', 'redo'],
         extraPlugins: [this.uploader],
       },
     };
@@ -200,12 +198,6 @@ export default {
       }
       this.insertTag = '';
       this.getContent();
-    },
-    datas: {
-      handler(val) {
-        console.log(val);
-      },
-      deep: true,
     },
   },
 };

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^28.0.0",
+    "@ckeditor/ckeditor5-editor-classic": "^28.0.0",
+    "@ckeditor/ckeditor5-image": "^28.0.0",
     "@ckeditor/ckeditor5-vue": "^2.0.1",
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@popperjs/core": "^2.9.2",

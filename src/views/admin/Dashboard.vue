@@ -108,6 +108,7 @@ export default {
         });
     },
     logout() {
+      this.$emitter.emit('change-status', true);
       apiUserLogout().then((res) => {
         document.cookie = `panyaToken= ; expires=${new Date()}`;
         this.$router.push('/login');
@@ -124,7 +125,7 @@ export default {
 </script>
 
 <style scope lang="sass">
-@import '@/assets/css/admin.sass'
+@import '@/assets/css/admin'
 .navbar-brand
   letter-spacing: .5rem
 .navbar-toggler:not(.collapsed)

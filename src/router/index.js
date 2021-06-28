@@ -43,9 +43,9 @@ const routes = [
   }, {
     path: '/:pathMatch(.*)*',
     name: '404',
-    component: () => import('@/views/404.vue'),
+    component: () => import('@/views/error.vue'),
     meta: {
-      title: '404',
+      title: '404 Not Found',
     },
   }, {
     path: '/admin',

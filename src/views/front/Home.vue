@@ -194,5 +194,5 @@ export default {
 };
 </script>
 <style scope lang="sass">
-@import '@/assets/css/front.sass'
+@import '@/assets/css/front'
 </style>
