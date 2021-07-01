@@ -103,7 +103,7 @@ export default {
         }
         this.coupons = res.data.coupons;
         this.pages = res.data.pagination;
-        this.$emitter.emit('change-status', false);
+        this.$emitter.emit('page-loading', false);
       });
     },
     getDate(date) {
@@ -121,25 +121,25 @@ export default {
           id = '';
           break;
       }
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiUpdateCoupon(method, { data }, id).then((res) => {
         if (res.data.success) {
           this.getCoupons();
           this.modal.hide();
         }
         this.$pushMessage(res);
-        this.$emitter.emit('change-status', false);
+        this.$emitter.emit('page-loading', false);
       });
     },
     deleteCoupon(item) {
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiDeleteCoupon(item.id).then((res) => {
         if (res.data.success) {
           this.getCoupons();
           this.modal.hide();
         }
         this.$pushMessage(res);
-        this.$emitter.emit('change-status', false);
+        this.$emitter.emit('page-loading', false);
       });
     },
     openModal(isModal, item) {
@@ -167,7 +167,7 @@ export default {
     },
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.getCoupons();

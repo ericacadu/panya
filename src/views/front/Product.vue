@@ -80,12 +80,12 @@ export default {
           const { 0: img } = this.product.imagesUrl;
           this.enterImage = img;
           document.title = `${this.product.title} - PANYA`;
-          this.$emitter.emit('change-status', false);
+          this.$emitter.emit('page-loading', false);
         });
     },
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.getProduct();

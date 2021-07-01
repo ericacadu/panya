@@ -21,20 +21,26 @@
       class="row g-0 list-unstyled rounded p-2 products-list-header text-nowrap"
     >
       <li class="col-1 d-none d-md-block">分類</li>
-      <li class="col-4 text-start">商品名稱</li>
+      <li class="col-3 text-start">商品名稱</li>
       <li class="col-2">原價</li>
       <li class="col-2">售價</li>
       <li class="col-1">啟用</li>
+      <li class="col-1">推薦</li>
       <li class="col-3 col-md-2"></li>
     </ul>
     <ul class="list-group list-group-flush shadow-sm">
       <li class="list-group-item p-2" v-for="item in filterDatas" :key="item.id">
         <div class="col-1 d-none d-md-block">{{ item.category }}</div>
-        <div class="col-4 text-start">{{ item.title }}</div>
+        <div class="col-3 text-start">{{ item.title }}</div>
         <div class="col-2">{{ item.origin_price }}</div>
         <div class="col-2">{{ item.price }}</div>
         <div class="col-1 text-success">
           <span class="material-icons fs-5" v-if="item.is_enabled"
+            >check_circle</span
+          >
+        </div>
+        <div class="col-1 text-warning">
+          <span class="material-icons fs-5" v-if="item.is_promote"
             >check_circle</span
           >
         </div>
@@ -118,7 +124,7 @@ export default {
           const newSet = new Set(arry);
           this.category = [...newSet];
           this.filterProducts(page);
-          this.$emitter.emit('change-status', false);
+          this.$emitter.emit('page-loading', false);
         });
     },
     filterProducts(page) {
@@ -146,25 +152,25 @@ export default {
           id = '';
           break;
       }
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiUpdateProducts(method, { data }, id).then((res) => {
         if (res.data.success) {
           this.getAllProducts(this.pages.current_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
-        this.$emitter.emit('change-status', false);
+        this.$emitter.emit('page-loading', false);
       });
     },
     deleteProduct(item) {
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiDeleteProducts(item.id).then((res) => {
         if (res.data.success) {
           this.getAllProducts(this.pages.current_page);
           this.modal.hide();
         }
         this.$pushMessage(res);
-        this.$emitter.emit('change-status', false);
+        this.$emitter.emit('page-loading', false);
       });
     },
     openModal(isModal, item) {
@@ -176,6 +182,11 @@ export default {
         if (!this.modalData.imagesUrl) {
           this.modalData.imagesUrl = [];
         }
+        if (!this.modalData.relative) {
+          this.modalData.relative = [];
+        }
+        // this.modalData.relative = []; // 清除關聯商品
+        this.$emitter.emit('page-loading', true);
       } else if (isModal === 'delete') {
         this.modal = bsModal('deleteModal');
         this.modalTitle = '刪除商品';
@@ -187,13 +198,14 @@ export default {
           imagesUrl: [],
           category: '選擇類別',
           unit: '選擇單位',
+          relative: [],
         };
       }
       this.modal.show();
     },
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.getAllProducts();

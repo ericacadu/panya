@@ -131,7 +131,7 @@ export default {
     },
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.$emit('get-carts');

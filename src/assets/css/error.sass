@@ -4,7 +4,7 @@
 $default: 3rem
 
 .error
-  background: $gray-400
+  background: $warm
   .container
     display: flex
     justify-content: flex-start
@@ -18,7 +18,7 @@ $default: 3rem
   justify-content: center
   align-items: center
   overflow: hidden
-  color: $gray-500
+  color: lighten($brown, 50%)
   .cookie
     width: $default
     height: $default
@@ -35,7 +35,7 @@ $default: 3rem
     .cover
       width: $default * 4
       height: $default
-      background: $gray-400
+      background: $warm
       position: absolute
       z-index: 1
       animation: cover 5s steps(1) infinite
@@ -70,11 +70,11 @@ $default: 3rem
   0%, 100%
     right: auto
     left: 100%
-    box-shadow: -2px 0 0 $gray-400
+    box-shadow: -2px 0 0 $warm
   50%
     left: auto
     right: 100%
-    box-shadow: 2px 0 0 $gray-400
+    box-shadow: 2px 0 0 $warm
 
 @keyframes spin
   0%, 100%

@@ -15,7 +15,7 @@ export default {
     };
   },
   mounted() {
-    this.$emitter.on('change-status', (val) => {
+    this.$emitter.on('page-loading', (val) => {
       this.isLoading = val;
     });
   },

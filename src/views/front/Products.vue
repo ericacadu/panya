@@ -111,7 +111,7 @@ export default {
         const newSet = new Set(arry);
         this.category = [...newSet];
         this.filterProducts(this.path.page, this.path.category);
-        this.$emitter.emit('change-status', false);
+        this.$emitter.emit('page-loading', false);
       });
     },
     getPath() {
@@ -153,7 +153,7 @@ export default {
     this.$emit('close-cart');
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.getPath();

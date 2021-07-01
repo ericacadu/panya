@@ -57,6 +57,18 @@
                 商品圖片
               </button>
             </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="pills-relative-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#pills-relative"
+                type="button"
+                role="tab"
+              >
+                關聯商品
+              </button>
+            </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -66,7 +78,7 @@
             >
               <!-- 商品資訊 -->
               <div class="row g-2">
-                <div class="col-6">
+                <div class="col-8">
                   <label class="form-label" for="product-title">商品名稱</label>
                   <input
                     type="text"
@@ -76,7 +88,7 @@
                     v-model="datas.title"
                   />
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                   <label class="form-label" for="product-category"
                     >商品類別</label
                   >
@@ -119,7 +131,7 @@
                     v-model.number="datas.price"
                   />
                 </div>
-                <div class="col-4 ps-2 mt-2">
+                <div class="col-4 mt-2">
                   <label class="form-label" for="product-unit">單位</label>
                   <select
                     id="product-unit"
@@ -132,10 +144,10 @@
                     </option>
                   </select>
                 </div>
-                <hr class="my-4" />
-                <div class="col d-flex align-items-center">
+                <hr class="mt-4" />
+                <div class="col-4 d-flex align-items-center">
                   <label class="form-label m-0" for="product-active"
-                    >是否啟用</label
+                    >啟用商品</label
                   >
                   <div class="switch-group ms-2">
                     <input
@@ -144,6 +156,21 @@
                       role="button"
                       v-model="datas.is_enabled"
                       :checked="datas.is_enabled"
+                    />
+                    <div class="ico_switch"></div>
+                  </div>
+                </div>
+                <div class="col-4 d-flex align-items-center">
+                  <label class="form-label m-0" for="product-promote"
+                    >啟用推薦</label
+                  >
+                  <div class="switch-group ms-2">
+                    <input
+                      type="checkbox"
+                      id="product-promote"
+                      role="button"
+                      v-model="datas.is_promote"
+                      :checked="datas.is_promote"
                     />
                     <div class="ico_switch"></div>
                   </div>
@@ -163,18 +190,16 @@
                     v-model="datas.description"
                   />
                 </div>
-                <!-- <div class="col-12 mt-2">
+                <div class="col-12 mt-2">
                   <label class="form-label" for="product-content"
                     >商品內容</label
                   >
-                  <textarea
-                    id="product-content"
+                  <input type="text"
                     class="form-control"
+                    id="product-content"
                     placeholder="輸入商品內容"
-                    row="3"
-                    v-model="datas.content"
-                  />
-                </div> -->
+                    v-model="datas.content" />
+                </div>
               </div>
             </div>
             <div class="tab-pane fade" id="pills-photo" role="tabpanel">
@@ -198,7 +223,7 @@
                     v-for="(img, i) in datas.imagesUrl"
                     :key="i"
                     :class="datas.imageUrl == img ? 'active' : ''"
-                    :style="{'background-image': `url(${img})`}"
+                    :style="{ 'background-image': `url(${img})` }"
                   >
                     <span
                       class="btn-close m-2 p-2"
@@ -269,6 +294,37 @@
                 </div>
               </div>
             </div>
+            <div class="tab-pane fade" id="pills-relative" role="tabpanel">
+              <!-- 關聯商品 -->
+              <div class="col-12">
+                <label class="form-label" for="relative-products"
+                  >選擇關聯商品</label
+                >
+                <div
+                  class="form-control overflow-scroll"
+                  style="max-height: 10rem;"
+                >
+                  <div
+                    class="form-check"
+                    v-for="(item, i) in products"
+                    :key="i"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      :id="item.id"
+                      :checked="item.is_relativ"
+                      v-model="item.is_relativ"
+                      @click="item.is_relativ = !item.is_relativ,
+                              toggleProduct(item)"
+                    />
+                    <label class="form-check-label" :for="item.id">
+                      {{ item.title }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -293,17 +349,19 @@
 </template>
 
 <script>
-import { apiUploadFile } from '@/scripts/api';
+import { apiUploadFile, apiGetAllProducts } from '@/scripts/api';
 
 export default {
   props: ['modalData'],
   data() {
     return {
+      products: [],
       datas: {
         imageUrl: '',
         imagesUrl: [],
         category: '選擇類別',
         unit: '選擇單位',
+        relative: [],
       },
       category: ['麵包', '蛋糕', '餅乾'],
       unit: ['個', '袋', '片', '盒'],
@@ -312,6 +370,36 @@ export default {
     };
   },
   methods: {
+    getProducts() {
+      apiGetAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        const all = Object.values(res.data.products).reverse();
+        this.products = all.filter((item) => item.id !== this.datas.id);
+        this.filterSelected();
+        this.$emitter.emit('page-loading', false);
+      });
+    },
+    filterSelected() {
+      this.products.forEach((item) => {
+        const status = item;
+        const isExist = this.datas.relative.filter((val) => val.indexOf(item.id) !== -1);
+        if (isExist.length > 0) {
+          status.is_relativ = true;
+        } else {
+          status.is_relativ = false;
+        }
+      });
+    },
+    toggleProduct(item) {
+      const isExist = this.datas.relative.filter((val) => val.indexOf(item) !== -1);
+      if (isExist.length <= 0 && item.is_relativ) {
+        this.datas.relative.push(item.id);
+      } else {
+        this.datas.relative.splice(item.id, 1);
+      }
+    },
     uploadImage() {
       const isImage = this.tempUrl.trim();
       const isRepeat = this.datas.imagesUrl.find((item) => item === isImage);
@@ -337,15 +425,14 @@ export default {
         this.$pushMessage(false, '沒有選擇檔案');
         return;
       }
-      apiUploadFile(formData)
-        .then((res) => {
-          if (res.data.success) {
-            this.datas.imagesUrl.push(res.data.imageUrl);
-            this.$refs['upload-file'].value = '';
-            this.uploadData = '';
-          }
-          this.$pushMessage(res, res.data.message || '上傳成功');
-        });
+      apiUploadFile(formData).then((res) => {
+        if (res.data.success) {
+          this.datas.imagesUrl.push(res.data.imageUrl);
+          this.$refs['upload-file'].value = '';
+          this.uploadData = '';
+        }
+        this.$pushMessage(res, res.data.message || '上傳成功');
+      });
     },
     removeImage(item) {
       const result = this.datas.imagesUrl.filter((img) => item !== img);
@@ -374,6 +461,7 @@ export default {
     modalData() {
       this.datas = this.modalData;
       this.updateTabs();
+      this.getProducts();
     },
     datas: {
       handler(val) {

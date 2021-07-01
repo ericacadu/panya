@@ -162,7 +162,7 @@ export default {
           this.pages = res.data.pagination;
           this.filterDatas = this.orders;
           this.isLoading = false;
-          this.$emitter.emit('change-status', false);
+          this.$emitter.emit('page-loading', false);
         });
     },
     orderDatas(data) {
@@ -181,7 +181,7 @@ export default {
       });
     },
     updateOrder(data) {
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiUpdateOrder(data.id, { data })
         .then((res) => {
           if (res.data.success) {
@@ -189,7 +189,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
-          this.$emitter.emit('change-status', false);
+          this.$emitter.emit('page-loading', false);
         });
     },
     deleteOrder(item) {
@@ -199,7 +199,7 @@ export default {
       } else {
         func = () => apiDeleteOrder(item.id);
       }
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       func()
         .then((res) => {
           if (res.data.success) {
@@ -207,7 +207,7 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
-          this.$emitter.emit('change-status', false);
+          this.$emitter.emit('page-loading', false);
         });
     },
     openModal(isModal, item) {
@@ -256,7 +256,7 @@ export default {
     this.searchMode = 'searchOrder';
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.getOrders();

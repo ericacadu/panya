@@ -3,10 +3,31 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/front/Home.vue'),
+    name: 'Index',
+    component: () => import('@/views/front/Index.vue'),
     children: [
       {
+        path: '/',
+        name: 'Home',
+        component: () => import('@/views/front/Home.vue'),
+        meta: {
+          title: '首頁',
+        },
+      }, {
+        path: '/about',
+        name: 'About',
+        component: () => import('@/views/front/About.vue'),
+        meta: {
+          title: '關於PANYA',
+        },
+      }, {
+        path: '/service',
+        name: 'Service',
+        component: () => import('@/views/front/Service.vue'),
+        meta: {
+          title: '售後服務',
+        },
+      }, {
         path: '/products',
         name: 'Products',
         component: () => import('@/views/front/Products.vue'),

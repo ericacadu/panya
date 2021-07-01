@@ -108,7 +108,7 @@ export default {
         });
     },
     logout() {
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiUserLogout().then((res) => {
         document.cookie = `panyaToken= ; expires=${new Date()}`;
         this.$router.push('/login');

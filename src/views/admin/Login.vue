@@ -55,8 +55,6 @@ import { apiUserLogin } from '@/scripts/api';
 export default {
   data() {
     return {
-      // imgUrl: '',
-      // stickyImg: '',
       imgUrl:
         'https://images.unsplash.com/photo-1447078806655-40579c2520d6?w=1080',
       stickyImg:
@@ -72,7 +70,7 @@ export default {
         username: this.username,
         password: this.password,
       };
-      this.$emitter.emit('change-status', true);
+      this.$emitter.emit('page-loading', true);
       apiUserLogin(data)
         .then((res) => {
           if (res.data.success) {
@@ -88,10 +86,10 @@ export default {
     },
   },
   beforeMount() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   mounted() {
-    this.$emitter.emit('change-status', false);
+    this.$emitter.emit('page-loading', false);
   },
 };
 </script>

@@ -170,7 +170,7 @@ export default {
             this.$pushMessage(res);
           }
           this.datas.content = res.data.article.content;
-          this.$emitter.emit('change-status', false);
+          this.$emitter.emit('page-loading', false);
         });
     },
     pushTags() {

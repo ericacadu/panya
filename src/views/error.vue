@@ -39,7 +39,7 @@
 <script>
 export default {
   mounted() {
-    this.$emitter.emit('change-status', false);
+    this.$emitter.emit('page-loading', false);
   },
 };
 </script>

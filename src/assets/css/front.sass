@@ -11,7 +11,7 @@
   position: relative
 
 .front
-  background: $gray-400
+  background: $warm
 
 .front .form-control
   background: transparent
@@ -60,4 +60,22 @@
     opacity: .6
     cursor: default
 
-      
+.banner
+  background: url('https://images.pexels.com/photos/1963999/pexels-photo-1963999.jpeg') no-repeat center center
+  background-size: cover
+  background-attachment: fixed
+  position: relative
+  & > *
+    z-index: 2
+  &::after
+    content: ''
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    background: linear-gradient(180deg, $warm 0%, $brown 100%)
+    opacity: .2
+    z-index: 1
+  h1
+    text-shadow: 0 1px 3px rgba($brown, .3)

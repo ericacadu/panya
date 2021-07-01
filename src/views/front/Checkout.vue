@@ -89,7 +89,7 @@ export default {
           this.order.time = `${getDate(this.order.create_at * 1000)} ${getTime(this.order.create_at * 1000)}`;
           this.user = this.order.user;
           if (this.order.id) {
-            this.$emitter.emit('change-status', false);
+            this.$emitter.emit('page-loading', false);
           }
         });
     },
@@ -105,7 +105,7 @@ export default {
     },
   },
   beforeCreate() {
-    this.$emitter.emit('change-status', true);
+    this.$emitter.emit('page-loading', true);
   },
   created() {
     this.getOrder();
