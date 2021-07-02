@@ -251,7 +251,24 @@ export default {
       this.products = Object.values(this.products).filter(
         (elemt) => elemt.id !== item.id,
       );
+      this.checkProducts();
       Array.from(document.querySelectorAll('.tooltip')).forEach((node) => node.remove());
+    },
+    checkProducts() {
+      const num = Object.values(this.products).length;
+      if (num <= 0) {
+        this.$pushMessage(false, '訂單內不可清空商品');
+        this.products = this.datas.products;
+        return;
+      }
+      Object.values(this.products).forEach((val) => {
+        const elemt = val;
+        if ((num > 1 && val.qty < 1) || (num <= 1 && val.qty < 1)) {
+          elemt.qty = 1;
+          this.$pushMessage(false, '訂單內不可清空商品');
+        }
+      });
+      this.updateTotal(this.products);
     },
     updateOrder() {
       if (!this.isEditInfo && !this.isEditProduct) {
@@ -281,21 +298,8 @@ export default {
       deep: true,
     },
     products: {
-      handler(val) {
-        const num = Object.values(val).length;
-        if (num <= 0) {
-          this.$pushMessage(false, '訂單內不可清空商品');
-          this.products = this.datas.products;
-          return;
-        }
-        Object.values(val).forEach((item) => {
-          const elemt = item;
-          if ((num > 1 && item.qty < 1) || (num <= 1 && item.qty <= 1)) {
-            elemt.qty = 1;
-            this.$pushMessage(false, '訂單內不可清空商品');
-          }
-        });
-        this.updateTotal(val);
+      handler() {
+
       },
       deep: true,
     },
@@ -306,6 +310,7 @@ export default {
     },
     isEditProduct(val) {
       if (!val) {
+        this.checkProducts();
         this.edit_count += 1;
       }
     },
