@@ -40,7 +40,8 @@
           <button
             class="btn btn-primary col-12 col-md-7 ms-md-2 p-3 mt-3 mt-md-0"
             type="button"
-            @click="$emit('add-carts', product, product.qty)"
+            @click="$emitter.emit('add-cart', { item: product, qty: product.qty })"
+
             :disabled="isDisabled === product.id"
           >
             加入購物車

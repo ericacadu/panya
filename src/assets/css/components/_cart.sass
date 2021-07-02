@@ -16,6 +16,26 @@
     opacity: 1
     transform: translateX(0)
 
+.overlay
+  position: fixed
+  right: 0
+  top: 0
+  width: 0
+  height: 100vh
+  background: rgba($dark, .9)
+  opacity: 0
+  transition: opacity .3s linear
+  &-inner
+    position: absolute
+    left: 0
+    top: 0
+    width: 100vw
+    height: 100vh
+    z-index: 1
+  &.show
+    opacity: 1
+    width: 100vw
+
 .cart-header
   border-bottom: 1px solid rgba($light, .1)
   color: $secondary

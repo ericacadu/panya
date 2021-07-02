@@ -7,7 +7,7 @@
           確認訂單內容
           <button class="btn btn-sm btn-outline-primary ms-2"
             type="button"
-            @click="$emit('open-cart')"
+            @click="$emitter.emit('toggle-cart', true)"
           >修改品項</button>
         </h2>
         <ul class="list-unstyled">
@@ -33,7 +33,7 @@
           總計金額：$ <span class="fs-4">{{ totalPrice }}</span> NTD
         </p>
       </div>
-      <div class="col p-5 bg-light min-vh-50">
+      <div class="col p-5 bg-white min-vh-50">
         <h2 class="fs-4 mb-4">填寫訂購資訊</h2>
         <Form ref="order" v-slot="{ errors }" @submit="onSubmit">
           <ul class="list-unstyled">
@@ -94,7 +94,6 @@
 import { apiCheckout } from '@/scripts/api';
 
 export default {
-  props: ['cartData', 'totalPrice', 'isDisabled'],
   data() {
     return {
       cart: [],
@@ -105,9 +104,18 @@ export default {
         address: '',
       },
       message: '',
+      totalPrice: '',
     };
   },
   methods: {
+    getCarts() {
+      this.$emitter.on('get-cart', (val) => {
+        const { cart, total } = val;
+        this.cart = cart;
+        this.totalPrice = total;
+        this.$emitter.emit('page-loading', false);
+      });
+    },
     isPhone(val) {
       const phoneNumber = /^(09)[0-9]{8}$/;
       return phoneNumber.test(val) ? true : '請輸入正確的電話號碼';
@@ -116,7 +124,7 @@ export default {
       apiCheckout({ data: { user: this.user, message: this.message } })
         .then((res) => {
           if (res.data.success) {
-            this.$emit('get-carts');
+            this.$emitter.emit('update-cart');
             this.$refs.order.resetForm();
             this.$router.push(`/checkout/${res.data.orderId}`);
           }
@@ -124,21 +132,16 @@ export default {
         });
     },
   },
-  watch: {
-    cartData() {
-      this.cart = this.cartData;
-      this.cart.carts.reverse();
-    },
-  },
   beforeCreate() {
     this.$emitter.emit('page-loading', true);
   },
   created() {
-    this.$emit('get-carts');
-    this.cart = this.cartData;
-  },
-  mounted() {
-    this.$emit('close-cart');
+    this.$emitter.on('get-cart', (val) => {
+      const { cart, total } = val;
+      this.cart = cart;
+      this.totalPrice = total;
+      this.$emitter.emit('page-loading', false);
+    });
   },
 };
 </script>

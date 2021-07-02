@@ -41,6 +41,6 @@ export default {
 .toast
   position: fixed
   right: 0
-  top: 0
+  top: 3rem
   z-index: 1500
 </style>

@@ -67,7 +67,7 @@
             type="button"
             class="btn btn-sm btn-outline-primary mx-auto"
             :disabled="isDisabled === item.id"
-            @click="$emit('add-carts', item)"
+            @click="$emitter.emit('add-cart', { item, qty: 1 })"
           >
             加入購物車
           </button>
@@ -148,9 +148,6 @@ export default {
       },
       deep: true,
     },
-  },
-  mounted() {
-    this.$emit('close-cart');
   },
   beforeCreate() {
     this.$emitter.emit('page-loading', true);
