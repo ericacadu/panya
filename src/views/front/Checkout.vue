@@ -16,9 +16,10 @@
             v-for="item in order.products"
             :key="item"
           >
-            <div class="cart-img">
-              <img :src="item.product.imageUrl" />
-            </div>
+            <div
+              class="cart-img"
+              :style="{ 'background-image': `url(${item.product.imageUrl})` }"
+            ></div>
             <div class="cart-cont col px-3 d-flex">
               <div class="col-6">
                 <p class="m-0">{{ item.product.title }}</p>
@@ -33,7 +34,7 @@
           訂單金額：$ <span class="fs-4">{{ order.total }}</span> NTD
         </p>
       </div>
-      <div class="col p-5 bg-light">
+      <div class="col p-5 bg-white">
         <h2 class="fs-4 d-flex mb-4">訂購資訊</h2>
         <ul class="list-unstyled">
           <li class="d-flex">

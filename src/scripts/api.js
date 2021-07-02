@@ -78,16 +78,16 @@ export const apiGetProduct = (id) => axios.get(
 );
 
 // 購物車
-export const apiCarts = () => axios.get(
+export const apiGetCart = () => axios.get(
   `${api}/api/${path}/cart`,
 );
 export const apiAddCart = (data) => axios.post(
   `${api}/api/${path}/cart`, data,
 );
-export const apiUpdateCarts = (id, data) => axios.put(
+export const apiUpdateCart = (id, data) => axios.put(
   `${api}/api/${path}/cart/${id}`, data,
 );
-export const apiClearCarts = () => axios.delete(
+export const apiClearCart = () => axios.delete(
   `${api}/api/${path}/carts`,
 );
 export const apiDeleteCart = (id) => axios.delete(

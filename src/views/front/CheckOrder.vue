@@ -13,12 +13,13 @@
         <ul class="list-unstyled">
           <li
             class="d-flex align-items-center mb-4"
-            v-for="item in cart.carts"
+            v-for="item in datas.cart.carts"
             :key="item"
           >
-            <div class="cart-img">
-              <img :src="item.product.imageUrl" />
-            </div>
+            <div
+              class="cart-img"
+              :style="{ 'background-image': `url(${item.product.imageUrl})` }"
+            ></div>
             <div class="cart-cont col px-3 d-flex">
               <div class="col-6">
                 <p class="m-0">{{ item.product.title }}</p>
@@ -30,7 +31,7 @@
         </ul>
         <hr>
         <p>
-          總計金額：$ <span class="fs-4">{{ totalPrice }}</span> NTD
+          總計金額：$ <span class="fs-4">{{ datas.total }}</span> NTD
         </p>
       </div>
       <div class="col p-5 bg-white min-vh-50">
@@ -62,7 +63,7 @@
               <Field type="tel" id="tel" name="電話"
                 class="form-control panya-input"
                 :class="{ 'is-invalid': errors['電話'] }"
-                placeholder="請輸入電話"
+                placeholder="請輸入手機號碼"
                 :rules="isPhone"
                 v-model="user.tel"></Field>
               <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
@@ -94,9 +95,9 @@
 import { apiCheckout } from '@/scripts/api';
 
 export default {
+  props: ['datas'],
   data() {
     return {
-      cart: [],
       user: {
         email: '',
         name: '',
@@ -104,27 +105,18 @@ export default {
         address: '',
       },
       message: '',
-      totalPrice: '',
     };
   },
   methods: {
-    getCarts() {
-      this.$emitter.on('get-cart', (val) => {
-        const { cart, total } = val;
-        this.cart = cart;
-        this.totalPrice = total;
-        this.$emitter.emit('page-loading', false);
-      });
-    },
     isPhone(val) {
       const phoneNumber = /^(09)[0-9]{8}$/;
-      return phoneNumber.test(val) ? true : '請輸入正確的電話號碼';
+      return phoneNumber.test(val) ? true : '請輸入正確的手機號碼';
     },
     onSubmit() {
       apiCheckout({ data: { user: this.user, message: this.message } })
         .then((res) => {
           if (res.data.success) {
-            this.$emitter.emit('update-cart');
+            this.$emitter.emit('get-cart');
             this.$refs.order.resetForm();
             this.$router.push(`/checkout/${res.data.orderId}`);
           }
@@ -136,12 +128,7 @@ export default {
     this.$emitter.emit('page-loading', true);
   },
   created() {
-    this.$emitter.on('get-cart', (val) => {
-      const { cart, total } = val;
-      this.cart = cart;
-      this.totalPrice = total;
-      this.$emitter.emit('page-loading', false);
-    });
+    this.$emitter.emit('page-loading', false);
   },
 };
 </script>

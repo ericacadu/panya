@@ -26,7 +26,7 @@
             justify-content-center
             text-secondary
           "
-          v-if="!totalPrice"
+          v-if="!total"
         >
           <span class="material-icons mb-2 fs-2"> announcement </span>
           <p class="fs-7" style="letter-spacing: 2px">購物車內沒有商品</p>
@@ -43,9 +43,10 @@
             v-for="item in cart.carts"
             :key="item"
           >
-            <div class="cart-img">
-              <img :src="item.product.imageUrl" />
-            </div>
+            <div
+              class="cart-img"
+              :style="{ 'background-image': `url(${item.product.imageUrl})` }"
+            ></div>
             <div class="cart-cont col px-3">
               <p class="m-0">{{ item.product.title }}</p>
               <span class="d-block" style="letter-spacing: 1px"
@@ -65,16 +66,16 @@
                 max="10"
                 class="form-control"
                 v-model.number="item.qty"
-                @blur="updateCarts(item, item.qty)"
+                @blur="updateCart(item, item.qty)"
               />
             </div>
           </li>
         </ul>
       </div>
-      <div class="cart-footer" v-if="totalPrice">
+      <div class="cart-footer" v-if="total">
         <p class="cart-count d-flex justify-content-between p-4">
           <span>總計</span>
-          <span>$ {{ totalPrice }} NTD</span>
+          <span>$ {{ total }} NTD</span>
         </p>
         <p class="p-4 pt-0 text-center">
           <button
@@ -87,7 +88,7 @@
           <button
             class="btn btn-outline-secondary mx-auto mt-3 fs-7"
             type="button"
-            @click="clearCarts"
+            @click="clearCart"
           >
             清空購物車
           </button>
@@ -99,13 +100,13 @@
 </template>
 
 <script>
-import { apiUpdateCarts, apiClearCarts, apiDeleteCart } from '@/scripts/api';
+import { apiUpdateCart, apiClearCart, apiDeleteCart } from '@/scripts/api';
 
 export default {
   data() {
     return {
       cart: {},
-      totalPrice: '',
+      total: '',
       toggleCart: '',
     };
   },
@@ -117,7 +118,7 @@ export default {
       this.$router.push('/checkorder');
       this.toggleCart = false;
     },
-    updateCarts(item, qty) {
+    updateCart(item, qty) {
       const data = {
         product_id: item.product_id,
         qty,
@@ -126,9 +127,9 @@ export default {
         this.$pushMessage(false, '商品數量不可為0');
         return;
       }
-      apiUpdateCarts(item.id, { data }).then((res) => {
+      apiUpdateCart(item.id, { data }).then((res) => {
         if (res.data.success) {
-          this.$emitter.emit('update-cart');
+          this.$emitter.emit('get-cart');
         }
         this.$pushMessage(res);
       });
@@ -136,30 +137,25 @@ export default {
     deleteCart(id) {
       apiDeleteCart(id).then((res) => {
         if (res.data.success) {
-          this.$emitter.emit('update-cart');
+          this.$emitter.emit('get-cart');
         }
         this.$pushMessage(res);
       });
     },
-    clearCarts() {
-      apiClearCarts().then((res) => {
+    clearCart() {
+      apiClearCart().then((res) => {
         if (res.data.success) {
-          this.$emitter.emit('update-cart');
+          this.$emitter.emit('get-cart');
         }
         this.$pushMessage(res);
       });
-    },
-  },
-  watch: {
-    cartData() {
-      this.cart.carts.reverse();
     },
   },
   mounted() {
-    this.$emitter.on('get-cart', (val) => {
+    this.$emitter.on('send-cart', (val) => {
       const { cart, total } = val;
       this.cart = cart;
-      this.totalPrice = total;
+      this.total = total;
     });
     this.$emitter.on('toggle-cart', (val) => {
       if (val) {

@@ -144,8 +144,8 @@ export default {
     };
   },
   methods: {
-    getOrders() {
-      apiGetOrders()
+    getOrders(page) {
+      apiGetOrders(page)
         .then((res) => {
           if (!res.data.success) {
             this.$pushMessage(res);

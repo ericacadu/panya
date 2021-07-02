@@ -154,9 +154,12 @@
                   v-for="item in products"
                   :key="item"
                 >
-                  <div class="cart-img">
-                    <img :src="item.product.imageUrl" />
-                  </div>
+                  <div
+                    class="cart-img"
+                    :style="{
+                      'background-image': `url(${item.product.imageUrl})`,
+                    }"
+                  ></div>
                   <div class="cart-cont col px-3 d-flex">
                     <div class="col-5">
                       <p class="m-0">{{ item.product.title }}</p>
@@ -218,9 +221,7 @@
 </template>
 
 <script>
-import {
-  getDate, getTime, bsTooltip,
-} from '@/scripts/methods';
+import { getDate, getTime, bsTooltip } from '@/scripts/methods';
 
 export default {
   props: ['modalData'],
@@ -250,9 +251,7 @@ export default {
       this.products = Object.values(this.products).filter(
         (elemt) => elemt.id !== item.id,
       );
-      Array.from(document
-        .querySelectorAll('.tooltip'))
-        .forEach((node) => node.remove());
+      Array.from(document.querySelectorAll('.tooltip')).forEach((node) => node.remove());
     },
     updateOrder() {
       if (!this.isEditInfo && !this.isEditProduct) {
@@ -291,8 +290,7 @@ export default {
         }
         Object.values(val).forEach((item) => {
           const elemt = item;
-          if ((num > 1 && item.qty < 1)
-              || (num <= 1 && item.qty <= 1)) {
+          if ((num > 1 && item.qty < 1) || (num <= 1 && item.qty <= 1)) {
             elemt.qty = 1;
             this.$pushMessage(false, '訂單內不可清空商品');
           }

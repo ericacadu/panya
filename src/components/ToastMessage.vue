@@ -3,7 +3,7 @@
     class="toast mw-60 mw-md-auto p-1 m-3 fade"
     id="toast"
     :class="data.style ? `toast-${data.style} text-${data.style}` : 'hide'"
-    data-bs-delay="2500"
+    data-bs-delay="1000"
   >
     <div class="d-flex">
       <div class="toast-body">{{ data.content }}</div>
