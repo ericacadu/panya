@@ -1,19 +1,42 @@
 <template>
   <div class="container px-3">
-    <div class="row g-0">
-      <div class="col-md-6 p-3">
-        <small class="path d-block mb-4">首頁 / 確認訂單</small>
+    <div
+      class="
+        min-vh-50
+        d-flex
+        flex-column
+        align-items-center
+        justify-content-center
+        text-secondary
+      "
+      v-if="!datas.total"
+    >
+      <span class="material-icons mb-2 fs-2"> announcement </span>
+      <p class="fs-7" style="letter-spacing: 2px">購物車內沒有商品</p>
+      <router-link
+        class="btn btn-primary py-2 px-4"
+        to="/products?category=all&page=1"
+        >挑選商品</router-link
+      >
+    </div>
+    <div class="row g-0" v-else>
+      <div class="col-md-6 p-3 m-0">
+        <p class="path d-block mb-4 fs-7 d-flex text-muted">
+          <span>購物車</span>
+          &nbsp;/&nbsp;
+          <span class="text-primary">{{ this.$route.meta.title }}</span>
+        </p>
         <h2 class="fs-4 d-flex mb-4">
           確認訂單內容
           <button class="btn btn-sm btn-outline-primary ms-2"
             type="button"
             @click="$emitter.emit('toggle-cart', true)"
-          >修改品項</button>
+          >修改內容</button>
         </h2>
         <ul class="list-unstyled">
           <li
             class="d-flex align-items-center mb-4"
-            v-for="item in datas.cart.carts"
+            v-for="item in datas.carts"
             :key="item"
           >
             <div
@@ -30,9 +53,29 @@
           </li>
         </ul>
         <hr>
-        <p>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control panya-input p-2"
+          placeholder="輸入優惠碼"
+          v-model="code"
+          :disabled="isDiscount">
+          <button type="button" class="btn btn-sm btn-primary px-3"
+          :disabled="isDiscount"
+          @click="useCoupon">
+            套用優惠券
+            <Spinner :spin-item="code"/>
+          </button>
+        </div>
+        <p class="text-primary" v-if="!isDiscount">
           總計金額：$ <span class="fs-4">{{ datas.total }}</span> NTD
         </p>
+        <div v-else>
+          <small class="fs-7 text-muted">
+            小計：$ {{ datas.total }} NTD
+          </small>
+          <p class="text-primary">
+            總計金額：$ <span class="fs-4">{{ Math.round(datas.final_total) }}</span> NTD
+          </p>
+        </div>
       </div>
       <div class="col p-5 bg-white min-vh-50">
         <h2 class="fs-4 mb-4">填寫訂購資訊</h2>
@@ -84,7 +127,9 @@
                 v-model="message"></textarea>
             </li>
           </ul>
-          <button type="submit" class="btn btn-primary w-100 py-3">送出訂單</button>
+          <button type="submit" class="btn btn-primary w-100 py-3">
+            送出訂單
+          </button>
         </Form>
       </div>
     </div>
@@ -92,7 +137,7 @@
 </template>
 
 <script>
-import { apiCheckout } from '@/scripts/api';
+import { apiCheckout, apiPostCoupon } from '@/scripts/api';
 
 export default {
   props: ['datas'],
@@ -105,14 +150,31 @@ export default {
         address: '',
       },
       message: '',
+      code: 'panyaonline70',
+      carts: '',
+      isDiscount: true,
     };
   },
   methods: {
+    useCoupon() {
+      const data = {
+        code: this.code,
+      };
+      this.$emitter.emit('toggle-spinner', this.code);
+      apiPostCoupon({ data })
+        .then((res) => {
+          this.$pushMessage(res);
+          this.$emitter.emit('get-cart');
+          this.isDiscount = true;
+          this.$emitter.emit('toggle-spinner', false);
+        });
+    },
     isPhone(val) {
       const phoneNumber = /^(09)[0-9]{8}$/;
       return phoneNumber.test(val) ? true : '請輸入正確的手機號碼';
     },
     onSubmit() {
+      this.$emitter.emit('page-loading', true);
       apiCheckout({ data: { user: this.user, message: this.message } })
         .then((res) => {
           if (res.data.success) {
@@ -121,14 +183,28 @@ export default {
             this.$router.push(`/checkout/${res.data.orderId}`);
           }
           this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
         });
+    },
+  },
+  watch: {
+    datas(val) {
+      if (val.final_total !== val.total) {
+        this.isDiscount = true;
+        this.$emitter.emit('send-cart', {
+          ...this.datas,
+          code: this.code,
+        });
+      } else {
+        this.isDiscount = false;
+      }
     },
   },
   beforeCreate() {
     this.$emitter.emit('page-loading', true);
   },
   created() {
-    this.$emitter.emit('page-loading', false);
+    this.$emit('get-cart');
   },
 };
 </script>

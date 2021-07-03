@@ -10,6 +10,11 @@
   max-width: 940px
   position: relative
 
+.min-height
+  min-height: calc(100vh - 136px)
+  +media-breakpoint-up(md)
+    min-height: calc(100vh - 72px - 136px)
+
 .front
   background: $warm
 
@@ -56,9 +61,6 @@
       background: $primary
       border-color: $primary
       color: $white
-  &.disabled
-    opacity: .6
-    cursor: default
 
 .banner
   background: url('https://images.pexels.com/photos/1963999/pexels-photo-1963999.jpeg') no-repeat center center

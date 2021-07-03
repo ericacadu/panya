@@ -107,6 +107,7 @@
                     ? (datas.is_enabled = 1)
                     : (datas.is_enabled = 0)
                 "
+                :disabled="datas.due_date < today"
               />
               <div class="ico_switch"></div>
             </div>
@@ -143,11 +144,24 @@ export default {
       modelConfig: {
         type: 'number',
       },
+      today: new Date(),
     };
   },
   watch: {
     modalData() {
       this.datas = { ...this.modalData };
+    },
+    datas: {
+      handler(val, oldVal) {
+        if (val.due_date < this.today) {
+          this.datas.is_enabled = 0;
+        }
+        if (val.due_date < val.start_date) {
+          this.$pushMessage(false, '截止日不可小於起始日');
+          this.datas.due_date = oldVal.due_date;
+        }
+      },
+      deep: true,
     },
   },
 };

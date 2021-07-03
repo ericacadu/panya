@@ -124,7 +124,7 @@ export default {
 };
 </script>
 
-<style scope lang="sass">
+<style lang="sass" scope>
 @import '@/assets/css/admin'
 .navbar-brand
   letter-spacing: .5rem

@@ -128,6 +128,7 @@
                   <span v-if="!isEditProduct">修改</span>
                   <span v-else>完成</span>
                 </button>
+                <small class="text-danger ms-auto" v-if="code">優惠碼：{{ code }}</small>
               </div>
               <div
                 class="
@@ -144,7 +145,7 @@
                 <p class="m-0">
                   訂單金額：
                   <span class="fs-5 fw-bold text-danger">{{
-                    datas.total
+                    Math.round(datas.total)
                   }}</span>
                 </p>
               </div>
@@ -163,7 +164,8 @@
                   <div class="cart-cont col px-3 d-flex">
                     <div class="col-5">
                       <p class="m-0">{{ item.product.title }}</p>
-                      <small>$ {{ item.product.price }} NTD</small>
+                      <!-- <small>$ {{ item.product.price }} NTD</small> -->
+                      <small>$ {{ Math.round(item.final_total) }} NTD</small>
                     </div>
                     <div class="col-5 d-flex align-items-center text-nowrap">
                       數量：
@@ -234,6 +236,8 @@ export default {
       isEditProduct: false,
       edit_count: 0,
       final_edit: '',
+      code: '',
+      percent: 100,
     };
   },
   methods: {
@@ -242,7 +246,7 @@ export default {
       this.datas.qty = 0;
       Object.values(data).forEach((item) => {
         const newPrice = item;
-        newPrice.final_total = item.product.price * item.qty;
+        newPrice.final_total = item.product.price * item.qty * (this.percent / 100);
         this.datas.total += item.final_total;
         this.datas.qty += item.qty;
       });
@@ -286,6 +290,14 @@ export default {
       this.isEditInfo = false;
       this.isEditProduct = false;
       this.edit_count = 0;
+      const { coupon } = Object.values(this.products)[0];
+      if (Object.values(this.products)[0].coupon) {
+        this.code = coupon.code;
+        this.percent = coupon.percent;
+      } else {
+        this.code = '';
+        this.percent = 100;
+      }
       setTimeout(() => {
         bsTooltip();
       }, 100);
@@ -294,12 +306,6 @@ export default {
       handler() {
         this.datas.products = this.products;
         this.datas.user = this.user;
-      },
-      deep: true,
-    },
-    products: {
-      handler() {
-
       },
       deep: true,
     },

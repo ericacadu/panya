@@ -31,48 +31,7 @@
       </li>
     </ul>
     <ul class="products row g-0 g-md-3 p-0 mt-5">
-      <li
-        class="products-item col-10 col-md-4 mx-auto mx-md-0 mb-5 list-unstyled"
-        v-for="item in filterDatas"
-        :key="item.id"
-      >
-        <div
-          class="products-img px-3"
-          :style="{ 'background-image': `url(${item.imageUrl})` }"
-          role="button"
-          @click="goToProduct(item.id)"
-        >
-          <span class="sale" v-if="item.price < item.origin_price"
-            >On Sale</span
-          >
-          <small>查看內容</small>
-        </div>
-        <div class="products-body p-3">
-          <p
-            class="products-title m-0"
-            role="button"
-            @click="goToProduct(item.id)"
-          >
-            {{ item.title }}
-          </p>
-          <p class="products-price mt-1">
-            <span v-if="item.price < item.origin_price"
-              >${{ item.price }}&nbsp;</span
-            >
-            <small :class="item.price < item.origin_price ? 'del' : ''"
-              >${{ item.origin_price }} NTD</small
-            >
-          </p>
-          <button
-            type="button"
-            class="btn btn-sm btn-outline-primary mx-auto"
-            :disabled="isDisabled === item.id"
-            @click="$emitter.emit('add-cart', { item, qty: 1 })"
-          >
-            加入購物車
-          </button>
-        </div>
-      </li>
+      <Product :filter-datas="filterDatas" :is-disabled="isDisabled"/>
     </ul>
     <Pagination
       :pages="pages"
@@ -83,9 +42,13 @@
 <script>
 import { apiAllProducts } from '@/scripts/api';
 import { navigator } from '@/scripts/methods';
+import Product from '@/components/FrontProduct.vue';
 
 export default {
   props: ['isDisabled'],
+  components: {
+    Product,
+  },
   data() {
     return {
       products: [],
@@ -134,9 +97,6 @@ export default {
       this.$router.push(
         `./products?category=${this.path.category}&page=${page}`,
       );
-    },
-    goToProduct(id) {
-      this.$router.push(`/product/${id}`);
     },
   },
   watch: {

@@ -103,6 +103,12 @@ export default {
         }
         this.coupons = res.data.coupons;
         this.pages = res.data.pagination;
+        this.coupons.forEach((item) => {
+          const newItem = item;
+          if (item.due_date < this.today) {
+            newItem.is_enabled = 0;
+          }
+        });
         this.$emitter.emit('page-loading', false);
       });
     },

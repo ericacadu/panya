@@ -3,8 +3,10 @@
     <Navbar
       :datas="datas"
     />
-    <router-view class="min-vh-100"
+    <router-view class="min-height"
       :datas="datas"
+      :is-disabled="isDisabled"
+      @get-cart="getCart"
     />
     <div class="bg-dark py-5 min-vh-25 text-light">
       <div class="container">
@@ -26,11 +28,8 @@ export default {
   },
   data() {
     return {
-      datas: {
-        cart: {},
-        sum: '',
-        total: '',
-      },
+      datas: {},
+      isDisabled: '',
     };
   },
   methods: {
@@ -39,19 +38,17 @@ export default {
         if (!res.data.success) {
           this.$pushMessage(res);
         }
-        this.datas.cart = res.data.data;
-        this.datas.total = this.datas.cart.final_total;
+        this.datas = res.data.data;
+        this.isDisabled = '';
         this.getCartum();
-        this.$emitter.emit('send-cart', {
-          cart: this.datas.cart,
-          total: this.datas.cart.final_total,
-        });
+        this.$emitter.emit('send-cart', this.datas);
         this.$emitter.emit('page-loading', false);
+        this.$emitter.emit('toggle-spinner', false);
       });
     },
     getCartum() {
       this.datas.sum = 0;
-      this.datas.cart.carts.forEach((item) => {
+      this.datas.carts.forEach((item) => {
         this.datas.sum += item.qty;
       });
       const num = document.getElementById('cart-num');
@@ -65,6 +62,7 @@ export default {
         product_id: item.id,
         qty,
       };
+      this.isDisabled = item.id;
       apiAddCart({ data }).then((res) => {
         if (res.data.success) {
           this.getCart();
@@ -87,6 +85,6 @@ export default {
   },
 };
 </script>
-<style scope lang="sass">
+<style lang="sass" scope>
 @import '@/assets/css/front'
 </style>

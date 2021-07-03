@@ -94,7 +94,7 @@ export default {
 };
 </script>
 
-<style lang="sass" scope>
+<style lang="sass">
 @import '@/assets/css/admin.sass'
 .login
   position: relative

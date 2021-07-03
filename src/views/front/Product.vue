@@ -40,11 +40,11 @@
           <button
             class="btn btn-primary col-12 col-md-7 ms-md-2 p-3 mt-3 mt-md-0"
             type="button"
-            @click="$emitter.emit('add-cart', { item: product, qty: product.qty })"
-
             :disabled="isDisabled === product.id"
+            @click="addToCart(product, product.qty)"
           >
             加入購物車
+            <Spinner :spin-item="product.id"/>
           </button>
         </div>
       </div>
@@ -83,6 +83,10 @@ export default {
           document.title = `${this.product.title} - PANYA`;
           this.$emitter.emit('page-loading', false);
         });
+    },
+    addToCart(item, qty) {
+      this.$emitter.emit('add-cart', { item, qty });
+      this.$emitter.emit('toggle-spinner', { id: item.id });
     },
   },
   beforeCreate() {

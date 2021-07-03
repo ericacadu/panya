@@ -16,7 +16,7 @@ import Pagination from '@/components/pagination.vue';
 import Logo from '@/components/logo.vue';
 import Cart from '@/components/bag.vue';
 import CKEditor from '@ckeditor/ckeditor5-vue';
-import Loading from '@/components/loading.vue';
+import Spinner from '@/components/Spinner.vue';
 import PageLoading from '@/components/PageLoading.vue';
 import emitter from '@/scripts/mitt';
 import router from '@/router';
@@ -38,7 +38,7 @@ app.config.globalProperties.$pushMessage = pushMessageState;
 
 app.component('ToastMessage', ToastMessage)
   .component('Pagination', Pagination)
-  .component('Loading', Loading)
+  .component('Spinner', Spinner)
   .component('PageLoading', PageLoading)
   .component('Logo', Logo)
   .component('Cart', Cart)

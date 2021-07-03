@@ -104,3 +104,8 @@ export const apiGetOrder = (id) => axios.get(
 export const apiPayOrder = (id) => axios.post(
   `${api}/api/${path}/pay/${id}`,
 );
+
+// 優惠券
+export const apiPostCoupon = (data) => axios.post(
+  `${api}/api/${path}/coupon`, data,
+);

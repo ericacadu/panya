@@ -2,7 +2,13 @@
   <div class="container px-3">
     <div class="row g-0" v-if="order.id">
       <div class="col-md-6 p-3">
-        <small class="path d-block mb-4">首頁 / 訂單結帳</small>
+        <p class="path d-block mb-4 fs-7 d-flex text-muted">
+          <span>購物車</span>
+          &nbsp;/&nbsp;
+          <span>確認訂單</span>
+          &nbsp;/&nbsp;
+          <span class="text-primary">{{ this.$route.meta.title }}</span>
+        </p>
         <h2 class="fs-4 d-flex mb-4">
           訂單內容&nbsp;
           <span class="text-danger" v-if="!order.is_paid">(未付款)</span>
@@ -30,8 +36,9 @@
           </li>
         </ul>
         <hr>
-        <p>
-          訂單金額：$ <span class="fs-4">{{ order.total }}</span> NTD
+        <p class="text-muted m-0" v-if="code">優惠券代碼：{{ code }}</p>
+        <p class="text-primary">
+          訂單金額：$ <span class="fs-4">{{ Math.round(order.total) }}</span> NTD
         </p>
       </div>
       <div class="col p-5 bg-white">
@@ -76,6 +83,7 @@ export default {
     return {
       order: {},
       user: {},
+      code: '',
     };
   },
   methods: {
@@ -86,9 +94,15 @@ export default {
           if (!res.data.success) {
             this.$pushMessage(res);
           }
-          this.order = JSON.parse(JSON.stringify(res.data.order));
+          this.order = res.data.order;
           this.order.time = `${getDate(this.order.create_at * 1000)} ${getTime(this.order.create_at * 1000)}`;
           this.user = this.order.user;
+          const { coupon } = Object.values(this.order.products)[0];
+          if (Object.values(this.order.products)[0].coupon) {
+            this.code = coupon.code;
+          } else {
+            this.code = '';
+          }
           if (this.order.id) {
             this.$emitter.emit('page-loading', false);
           }
@@ -96,12 +110,14 @@ export default {
     },
     payOrder() {
       const { id } = this.$route.params;
+      this.$emitter.emit('page-loading', true);
       apiPayOrder(id)
         .then((res) => {
           if (res.data.success) {
             this.getOrder();
           }
           this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
         });
     },
   },

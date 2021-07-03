@@ -46,12 +46,43 @@
         </div>
       </div>
       <h2 class="fs-4 text-center p-5">熱銷商品</h2>
+      <ul class="products row g-0 g-md-3 p-0 mt-5">
+        <Product :filter-datas="promote" :is-disabled="isDisabled"/>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { apiAllProducts } from '@/scripts/api';
+import Product from '@/components/FrontProduct.vue';
+
 export default {
+  props: ['isDisabled'],
+  components: {
+    Product,
+  },
+  data() {
+    return {
+      products: [],
+      promote: [],
+    };
+  },
+  methods: {
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = res.data.products.reverse();
+        this.promote = this.products.filter((item) => item.is_promote);
+        this.$emitter.emit('page-loading', false);
+      });
+    },
+  },
+  created() {
+    this.getAllProducts();
+  },
   beforeMount() {
     this.$emitter.emit('page-loading', true);
   },

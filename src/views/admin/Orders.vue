@@ -57,7 +57,7 @@
         </div>
         <div class="col-3 overflow-hidden text-start">{{ item.id }}</div>
         <div class="col-1">{{ item.qty }}</div>
-        <div class="col-1">{{ item.total }}</div>
+        <div class="col-1">{{ Math.round(item.total) }}</div>
         <div class="col-1 text-success">
           <span class="d-block text-success" v-if="item.is_paid">已付款</span>
           <span class="text-danger" v-else>未付款</span>
