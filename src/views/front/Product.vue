@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="product container d-md-flex px-3 pb-5">
-      <div class="product-photos col-md-5 d-flex flex-wrap p-3 p-md-0">
+      <div class="product-photos col d-flex flex-wrap p-3 p-md-0">
         <div class="photo-lg col-12">
           <span :style="{ 'background-image': `url(${enterImage})` }"></span>
         </div>
@@ -17,7 +17,7 @@
           <span :style="{ 'background-image': `url(${img})` }"></span>
         </div>
       </div>
-      <div class="product-content col text-center text-md-start" v-if="product.title">
+      <div class="product-content col-md-6 text-center text-md-start" v-if="product.title">
         <small class="path d-block mb-4">首頁 / 手感烘焙 / {{ product.category }}</small>
         <h1>{{ product.title }}</h1>
         <p class="product-desc mb-5">{{ product.description }}</p>

@@ -1,4 +1,5 @@
 @import './mixin'
+@import '~swiper/swiper'
 @import './components/front-nav'
 @import './components/cart'
 @import './components/front-products'
@@ -7,8 +8,9 @@
   // outline: 1px solid red
 
 .container
-  max-width: 940px
   position: relative
+  +media-breakpoint-up(md)
+    max-width: 1040px
 
 .min-height
   min-height: calc(100vh - 136px)

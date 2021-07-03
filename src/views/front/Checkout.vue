@@ -97,12 +97,6 @@ export default {
           this.order = res.data.order;
           this.order.time = `${getDate(this.order.create_at * 1000)} ${getTime(this.order.create_at * 1000)}`;
           this.user = this.order.user;
-          const { coupon } = Object.values(this.order.products)[0];
-          if (Object.values(this.order.products)[0].coupon) {
-            this.code = coupon.code;
-          } else {
-            this.code = '';
-          }
           if (this.order.id) {
             this.$emitter.emit('page-loading', false);
           }

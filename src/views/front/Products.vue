@@ -30,7 +30,7 @@
         </router-link>
       </li>
     </ul>
-    <ul class="products row g-0 g-md-3 p-0 mt-5">
+    <ul class="products row g-0 g-md-3 p-0 mt-5 list-unstyled">
       <Product :filter-datas="filterDatas" :is-disabled="isDisabled"/>
     </ul>
     <Pagination

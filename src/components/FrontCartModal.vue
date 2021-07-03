@@ -92,7 +92,7 @@
           </p>
           <small class="d-block text-muted"
             v-if="datas.code"
-          >已套用優惠代碼：{{ datas.code }}</small>
+          >優惠代碼：{{ datas.code }}</small>
         </div>
         <p class="p-4 pt-0 text-center">
           <button
