@@ -64,11 +64,16 @@
       border-color: $primary
       color: $white
 
-.banner
-  background: url('https://images.pexels.com/photos/1963999/pexels-photo-1963999.jpeg') no-repeat center center
+.bg-cover
+  background-repeat: no-repeat
+  background-position: center center
   background-size: cover
-  background-attachment: fixed
   position: relative
+  display: flex
+  align-items: center
+  justify-content: center
+  +media-breakpoint-up(md)
+    background-attachment: fixed
   & > *
     z-index: 2
   &::after
@@ -78,8 +83,23 @@
     height: 100%
     top: 0
     left: 0
+    z-index: 1
+
+.banner
+  background-image: url('https://images.pexels.com/photos/1963999/pexels-photo-1963999.jpeg') 
+  &::after
     background: linear-gradient(180deg, $warm 0%, $brown 100%)
     opacity: .2
-    z-index: 1
   h1
     text-shadow: 0 1px 3px rgba($brown, .3)
+
+.booking
+  background-image: url('https://images.pexels.com/photos/6287221/pexels-photo-6287221.jpeg')
+  .form-control
+    border-color: rgba($white, .5)
+  &::after
+    background: $dark
+    opacity: .5
+
+.cookie
+  color: lighten($brown, 50%)

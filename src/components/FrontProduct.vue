@@ -1,6 +1,6 @@
 <template>
   <li
-    class="products-item col-10 col-md-4 mx-auto mx-md-0 mb-5 list-unstyled"
+    class="products-item col-10 col-md-4 mx-auto mx-md-0 mb-5"
     v-for="item in filterDatas"
     :key="item.id"
   >

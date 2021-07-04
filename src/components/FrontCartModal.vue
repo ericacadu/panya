@@ -58,8 +58,7 @@
                 :disabled="isDisabled === item.id"
                 @click="deleteCart(item.id)"
                 >刪除商品
-                </small
-              >
+              </small>
             </div>
             <div class="cart-qty col-2">
               <input
@@ -73,26 +72,26 @@
               />
             </div>
             <div class="col-12">
-              <Spinner :spin-item="item.id"/>
+              <Spinner :spin-item="item.id" />
             </div>
           </li>
         </ul>
       </div>
       <div class="cart-footer" v-if="datas.total">
-        <p class="cart-count text-end p-4"
-          v-if="datas.final_total === datas.total">
+        <p
+          class="cart-count text-end p-4"
+          v-if="datas.final_total === datas.total"
+        >
           總計金額：$ {{ datas.total }} NTD
         </p>
         <div class="cart-count text-end p-4" v-else>
-          <del class="fs-7 text-muted">
-            小計：$ {{ datas.total }} NTD
-          </del>
+          <del class="fs-7 text-muted"> 總計金額：$ {{ datas.total }} NTD </del>
           <p class="m-0">
-            總計金額：$ {{ Math.round(datas.final_total) }} NTD
+            折扣後金額：$ {{ Math.round(datas.final_total) }} NTD
           </p>
-          <small class="d-block text-muted"
-            v-if="datas.code"
-          >優惠代碼：{{ datas.code }}</small>
+          <small class="d-block text-muted" v-if="datas.code"
+            >優惠代碼：{{ datas.code }}</small
+          >
         </div>
         <p class="p-4 pt-0 text-center">
           <button
@@ -109,7 +108,7 @@
             @click="clearCart"
           >
             清空購物車
-            <Spinner spin-item="clear"/>
+            <Spinner spin-item="clear" />
           </button>
         </p>
       </div>
@@ -188,6 +187,14 @@ export default {
       const { carts } = val;
       this.datas = val;
       this.cart = carts;
+      if (this.cart.length > 0) {
+        const { coupon } = this.cart[0];
+        if (coupon) {
+          this.datas.code = coupon.code;
+        } else {
+          this.datas.code = '';
+        }
+      }
     });
     this.$emitter.on('toggle-cart', (val) => {
       if (val) {

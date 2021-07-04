@@ -31,11 +31,9 @@
       </li>
     </ul>
     <ul class="products row g-0 g-md-3 p-0 mt-5 list-unstyled">
-      <Product :filter-datas="filterDatas" :is-disabled="isDisabled"/>
+      <Product :filter-datas="filterDatas" :is-disabled="isDisabled" />
     </ul>
-    <Pagination
-      :pages="pages"
-      @get-datas="filterProducts"></Pagination>
+    <Pagination :pages="pages" @get-datas="filterProducts"></Pagination>
   </div>
 </template>
 
@@ -115,6 +113,7 @@ export default {
   created() {
     this.getPath();
     this.getAllProducts();
+    this.$emit('get-cart');
   },
 };
 </script>

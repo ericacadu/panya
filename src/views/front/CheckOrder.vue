@@ -70,10 +70,10 @@
         </p>
         <div v-else>
           <small class="fs-7 text-muted">
-            小計：$ {{ datas.total }} NTD
+            總計金額：$ {{ datas.total }} NTD
           </small>
           <p class="text-primary">
-            總計金額：$ <span class="fs-4">{{ Math.round(datas.final_total) }}</span> NTD
+            折扣後金額：$ <span class="fs-4">{{ Math.round(datas.final_total) }}</span> NTD
           </p>
         </div>
       </div>
@@ -191,10 +191,6 @@ export default {
     datas(val) {
       if (val.final_total !== val.total) {
         this.isDiscount = true;
-        this.$emitter.emit('send-cart', {
-          ...this.datas,
-          code: this.code,
-        });
       } else {
         this.isDiscount = false;
       }
