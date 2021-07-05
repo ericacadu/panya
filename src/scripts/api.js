@@ -109,3 +109,12 @@ export const apiPayOrder = (id) => axios.post(
 export const apiPostCoupon = (data) => axios.post(
   `${api}/api/${path}/coupon`, data,
 );
+
+// 文章
+export const apiGetAllArticles = (page = 1) => axios.get(
+  `${api}/api/${path}/articles?page=${page}`,
+);
+
+export const apiGetArticleContent = (id) => axios.get(
+  `${api}/api/${path}/article/${id}`,
+);

@@ -7,8 +7,6 @@
   </div>
 </template>
 <script>
-import { bsToast } from '@/scripts/methods';
-
 export default {
   props: ['spinItem'],
   data() {
@@ -27,11 +25,6 @@ export default {
         this.isLoading = false;
       }
     });
-  },
-  watch: {
-    isLoading() {
-      bsToast('toast').hide();
-    },
   },
 };
 </script>

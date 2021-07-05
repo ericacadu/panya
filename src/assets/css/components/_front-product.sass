@@ -56,8 +56,9 @@ $img-size-md: calc(30vw - 2em)
     padding: 0 5rem
 
 .product-desc
-  color: $gray-700
-  font-weight: 300
+  color: $secondary
+  font-weight: 350
+  line-height: $line-height-lg
 
 .product-price
   span
@@ -71,4 +72,24 @@ $img-size-md: calc(30vw - 2em)
       color: $secondary
       font-size: 1rem
       text-decoration: line-through
+
+.product-info
+  background: rgba(lighten($brown, 60%), .6)
+  position: relative
+
+.bg-service
+  background-position: center 65%
+  background-repeat: no-repeat
+  background-size: cover
+  position: absolute
+  right: 0
+  &::after
+    content: ''
+    display: block
+    position: absolute
+    width: 100%
+    height: 100%
+    background: $brown
+    opacity: .3
+    
   

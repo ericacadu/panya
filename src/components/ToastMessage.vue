@@ -37,10 +37,3 @@ export default {
   },
 };
 </script>
-<style lang="sass">
-.toast
-  position: fixed
-  right: 0
-  top: 3rem
-  z-index: 1500
-</style>

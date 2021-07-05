@@ -147,10 +147,12 @@ export default {
         this.deleteData = item;
       } else {
         this.modal = bsModal('articleModal');
+        this.isModal = 'add';
         this.modalData = {
           author: 'Erica',
           create_at: new Date().getTime(),
           isPublic: false,
+          content: '',
         };
         this.modalTitle = '新增文章';
       }

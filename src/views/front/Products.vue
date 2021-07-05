@@ -1,6 +1,6 @@
 <template>
   <div class="container px-3">
-    <h1 class="py-3 fs-3 fw-normal text-center ls-3">PANYA 手感烘焙</h1>
+    <h1 class="fs-4 text-center py-3">PANYA 手感烘焙</h1>
     <ul class="category list-unstyled d-flex justify-content-center mt-4">
       <li
         class="btn btn-outline-primary p-0"
@@ -33,6 +33,7 @@
     <ul class="products row g-0 g-md-3 p-0 mt-5 list-unstyled">
       <Product :filter-datas="filterDatas" :is-disabled="isDisabled" />
     </ul>
+    <div id="target" class="position-fixed vw-100 bottom-0"></div>
     <Pagination :pages="pages" @get-datas="filterProducts"></Pagination>
   </div>
 </template>
@@ -73,11 +74,12 @@ export default {
         this.category = [...newSet];
         this.filterProducts(this.path.page, this.path.category);
         this.$emitter.emit('page-loading', false);
+        this.fadeInEvent();
       });
     },
     getPath() {
-      this.path.category = this.$route.query.category;
-      this.path.page = this.$route.query.page;
+      this.path.category = this.$route.query.category || 'all';
+      this.path.page = this.$route.query.page || 1;
       this.isActive = this.path.category;
     },
     filterProducts(page) {
@@ -96,12 +98,27 @@ export default {
         `./products?category=${this.path.category}&page=${page}`,
       );
     },
+    fadeInEvent() {
+      const all = document.querySelectorAll('.fade-out');
+      const targetPos = document.getElementById('target').offsetTop;
+      const { innerHeight, scrollY } = window;
+      all.forEach((item) => {
+        if (
+          item.offsetTop <= innerHeight - targetPos
+          || scrollY + targetPos - item.offsetTop >= innerHeight - targetPos
+        ) {
+          item.classList.add('fade-in');
+        } else {
+          item.classList.remove('fade-in');
+        }
+      });
+    },
   },
   watch: {
     $route: {
       handler(val) {
         if (val.name === 'Products') {
-          this.filterProducts(val.query.page, val.query.category);
+          this.filterProducts(val.query.page || 1, val.query.category || 'all');
         }
       },
       deep: true,
@@ -114,6 +131,15 @@ export default {
     this.getPath();
     this.getAllProducts();
     this.$emit('get-cart');
+  },
+  updated() {
+    this.fadeInEvent();
+  },
+  mounted() {
+    window.addEventListener('scroll', this.fadeInEvent);
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.fadeInEvent);
   },
 };
 </script>

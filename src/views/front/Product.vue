@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="product container d-md-flex px-3 pb-5">
+    <div class="product container d-md-flex px-3 pb-5 fade-out">
       <div class="product-photos col d-flex flex-wrap p-3 p-md-0">
         <div class="photo-lg col-12">
           <span :style="{ 'background-image': `url(${enterImage})` }"></span>
@@ -18,18 +18,26 @@
         </div>
       </div>
       <div class="product-content col-md-6 text-center text-md-start" v-if="product.title">
-        <small class="path d-block mb-4">首頁 / 手感烘焙 / {{ product.category }}</small>
+        <small class="path d-block mb-4">
+          <router-link to="/">首頁</router-link>
+          &nbsp;/&nbsp;
+          <router-link to="/products">手感烘焙</router-link>
+          &nbsp;/&nbsp;{{ product.category }}
+          </small>
         <h1>{{ product.title }}</h1>
-        <p class="product-desc mb-5">{{ product.description }}</p>
-        <p class="product-price">
-            <span v-if="product.price < product.origin_price"
-              >${{ product.price }}</span
-            >
-            <small :class="product.price < product.origin_price ? 'del' : ''"
-              >$&nbsp;{{ product.origin_price }}&nbsp;NTD</small
-            >
-            <small class="fs-7 ms-2 text-secondary">/ {{ product.unit }}</small>
-          </p>
+        <p class="product-desc">{{ product.description }}</p>
+        <p class="text-secondary m-0" v-if="product.content">
+          重量：{{ product.content }}
+        </p>
+        <p class="product-price mt-4">
+          <span v-if="product.price < product.origin_price"
+            >${{ product.price }}</span
+          >
+          <small :class="product.price < product.origin_price ? 'del' : ''"
+            >$&nbsp;{{ product.origin_price }}&nbsp;NTD</small
+          >
+          <small class="fs-7 ms-2 text-secondary">/ {{ product.unit }}</small>
+        </p>
         <div class="product-btns col-md-9 d-md-flex">
           <input
             type="number"
@@ -49,26 +57,52 @@
         </div>
       </div>
     </div>
-    <div class="product-info bg-light">
-      <div class="container p-3 p-md-5">
-        <h2 class="fs-4">常見問題</h2>
+    <div class="product-info row g-0 fade-out">
+      <div class="container min-vh-60 p-5">
+        <h2 class="fs-5 text-primary">售後服務</h2>
+      </div>
+      <div class="bg-service col-5 min-vh-60" style="background-image: url('https://images.pexels.com/photos/2930966/pexels-photo-2930966.jpeg?w=1280')">
       </div>
     </div>
+    <div class="container">
+      <FrontSwiper
+        :datas="promote"
+        :is-disabled="isDisabled"
+        title="相關商品"
+      />
+    </div>
+    <div id="target" class="position-fixed vw-100 bottom-10 border border-danger"></div>
   </div>
 </template>
 
 <script>
-import { apiGetProduct } from '@/scripts/api';
+import { apiAllProducts, apiGetProduct } from '@/scripts/api';
+import FrontSwiper from '@/components/FrontSwiper.vue';
 
 export default {
   props: ['isDisabled'],
+  components: {
+    FrontSwiper,
+  },
   data() {
     return {
+      products: [],
       product: {},
+      promote: [],
       enterImage: '',
     };
   },
   methods: {
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = res.data.products.reverse();
+        this.promote = this.products.filter((item) => item.is_promote);
+        this.$emitter.emit('page-loading', false);
+      });
+    },
     getProduct() {
       const { id } = this.$route.params;
       apiGetProduct(id)
@@ -81,12 +115,30 @@ export default {
           const { 0: img } = this.product.imagesUrl;
           this.enterImage = img;
           document.title = `${this.product.title} - PANYA`;
-          this.$emitter.emit('page-loading', false);
+          // this.$emitter.emit('page-loading', false);
         });
     },
     addToCart(item, qty) {
       this.$emitter.emit('add-cart', { item, qty });
       this.$emitter.emit('toggle-spinner', { id: item.id });
+    },
+    fadeInEvent() {
+      const all = document.querySelectorAll('.fade-out');
+      const { innerHeight } = window;
+      return {
+        onLoad: () => {
+          all[0].classList.add('fade-in');
+        },
+        onScroll: () => {
+          const targetPos = document.getElementById('target').offsetTop;
+          const windowY = window.scrollY;
+          all.forEach((item) => {
+            if (windowY + targetPos - item.offsetTop >= innerHeight - targetPos) {
+              item.classList.add('fade-in');
+            }
+          });
+        },
+      };
     },
   },
   beforeCreate() {
@@ -94,9 +146,21 @@ export default {
   },
   created() {
     this.getProduct();
+    this.getAllProducts();
+  },
+  updated() {
+    this.fadeInEvent().onLoad();
   },
   mounted() {
-    this.$emit('close-cart');
+    window.addEventListener('scroll', this.fadeInEvent().onScroll);
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.fadeInEvent().onScroll);
   },
 };
 </script>
+
+<style lang="sass" scoped>
+*
+  // outline: 1px solid red
+</style>

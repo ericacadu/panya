@@ -7,7 +7,7 @@
     >
       <div class="container py-2 px-3 text-secondary">
         <router-link to="/">
-          <Logo class="nav-brand col-3 col-md-1 me-5" role="button"></Logo>
+          <Logo class="nav-brand me-5" role="button"></Logo>
         </router-link>
         <div class="collapse navbar-collapse" :class="toggleNav ? 'show' : ''">
           <ul class="navbar-nav">
@@ -22,7 +22,7 @@
             <li class="navbar-item">
               <router-link
                 class="nav-link"
-                to="/products?category=all&page=1"
+                to="/products"
                 @click="toggleNav = fale"
                 >手感烘焙</router-link
               >

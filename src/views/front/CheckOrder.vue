@@ -15,7 +15,7 @@
       <p class="fs-7" style="letter-spacing: 2px">購物車內沒有商品</p>
       <router-link
         class="btn btn-primary py-2 px-4"
-        to="/products?category=all&page=1"
+        to="/products"
         >挑選商品</router-link
       >
     </div>
@@ -196,11 +196,14 @@ export default {
       }
     },
   },
-  beforeCreate() {
-    this.$emitter.emit('page-loading', true);
-  },
   created() {
     this.$emit('get-cart');
+  },
+  mounted() {
+    this.$emitter.emit('page-loading', true);
+  },
+  updated() {
+    this.$emitter.emit('page-loading', false);
   },
 };
 </script>

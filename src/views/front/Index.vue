@@ -1,7 +1,12 @@
 <template>
   <div class="front container-fluid g-0 min-vh-100 text-dark">
     <Navbar :datas="datas" />
-    <router-view class="min-height" :datas="datas" :is-disabled="isDisabled" @get-cart="getCart"/>
+    <router-view
+      class="min-height"
+      :datas="datas"
+      :is-disabled="isDisabled"
+      @get-cart="getCart"
+    />
     <div class="bg-dark py-5 min-vh-25 text-light">
       <div class="container">
         <router-link class="nav-link d-inline-block" to="/login"
@@ -37,7 +42,6 @@ export default {
         this.isDisabled = '';
         this.getCartum();
         this.$emitter.emit('send-cart', this.datas);
-        this.$emitter.emit('page-loading', false);
         this.$emitter.emit('toggle-spinner', false);
       });
     },

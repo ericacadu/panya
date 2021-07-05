@@ -18,7 +18,7 @@ const routes = [
         name: 'About',
         component: () => import('@/views/front/About.vue'),
         meta: {
-          title: '關於PANYA',
+          title: '關於',
         },
       }, {
         path: '/service',

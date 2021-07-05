@@ -149,6 +149,7 @@ export default {
     return {
       datas: {
         tag: [],
+        id: '',
       },
       insertTag: '',
       scrollspy: {},
@@ -164,6 +165,7 @@ export default {
   },
   methods: {
     getContent() {
+      if (!this.datas.id) { return; }
       apiGetArticle(this.datas.id)
         .then((res) => {
           if (!res.data.success) {
@@ -195,6 +197,9 @@ export default {
       this.datas = { ...this.modalData };
       if (!this.datas.tag) {
         this.datas.tag = [];
+      }
+      if (!this.datas.id) {
+        this.datas.id = '';
       }
       this.insertTag = '';
       this.getContent();

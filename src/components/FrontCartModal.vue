@@ -32,7 +32,7 @@
           <p class="fs-7" style="letter-spacing: 2px">購物車內沒有商品</p>
           <router-link
             class="btn btn-primary py-2 px-4"
-            to="/products?category=all&page=1"
+            to="/products"
             @click="closeCart"
             >挑選商品</router-link
           >

@@ -14,9 +14,8 @@
     </div>
     <div class="container px-3">
       <h2 class="fs-4 text-center p-5">只有用心，才能暖心</h2>
-      <div class="row g-3 mb-5">
-        <div class="col-12
-            col-md-6">
+      <div class="row g-3 mb-5 fade-out">
+        <div class="col-12 col-md-6">
           <img
             class="img-fluid"
             src="https://images.pexels.com/photos/6489624/pexels-photo-6489624.jpeg?h=500"
@@ -25,10 +24,8 @@
         </div>
         <div
           class="
-            col-12
-            col-md-6
-            p-3
-            p-md-5
+            col-12 col-md-6
+            p-3 p-md-5
             d-flex
             justify-content-center
             align-items-center
@@ -50,28 +47,28 @@
           </p>
         </div>
       </div>
-      <div class="row g-3 mb-5 flex-md-row-reverse">
-        <div class="col-12
-            col-md-6">
+      <div class="row g-3 mb-5 flex-md-row-reverse fade-out">
+        <div class="col-12 col-md-6">
           <img
             class="img-fluid"
             src="https://images.pexels.com/photos/5545923/pexels-photo-5545923.jpeg?h=500"
             alt=""
           />
         </div>
-        <div class="
-            col-12
-            col-md-6
-            p-3
-            p-md-5
+        <div
+          class="
+            col-12 col-md-6
+            p-3 p-md-5
             d-flex
             justify-content-center
             align-items-center
             flex-column
             text-center
-            lh-lg">
+            lh-lg
+          "
+        >
           <h4 class="fs-5 text-primary">沒有負擔的美味</h4>
-          選用低卡奶油，嚴格把關麵包熱量
+          使用低卡奶油，嚴格把關麵包熱量
           <br />
           尋找健康食材替代高熱量原料
           <br />
@@ -83,12 +80,25 @@
           </p>
         </div>
       </div>
-      <h2 class="fs-4 text-center p-5">熱銷商品</h2>
-      <FrontSwiper :datas="promote" :is-disabled="isDisabled" />
+      <FrontSwiper
+        :datas="promote"
+        :is-disabled="isDisabled"
+        title="熱銷商品"
+      />
     </div>
     <div class="bg-cover booking min-vh-50 text-light flex-column">
       <h3 class="fs-5 ls-2 fw-normal mb-4">訂閱最新消息</h3>
-      <div class="container row g-2 g-md-0 px-5 w-md-50 d-md-flex justify-content-md-center">
+      <div
+        class="
+          container
+          row
+          g-2 g-md-0
+          px-5
+          w-md-50
+          d-md-flex
+          justify-content-md-center
+        "
+      >
         <span class="col-12 col-md-8 col-lg-7 m-0 me-md-2">
           <input
             type="email"
@@ -101,6 +111,10 @@
         </button>
       </div>
     </div>
+    <div
+      id="target"
+      class="position-fixed vw-100 bottom-50 border border-danger"
+    ></div>
   </div>
 </template>
 
@@ -130,6 +144,24 @@ export default {
         this.$emitter.emit('page-loading', false);
       });
     },
+    fadeInEvent() {
+      const all = document.querySelectorAll('.fade-out');
+      const targetPos = document.getElementById('target').offsetTop;
+      const { innerHeight } = window;
+      return {
+        onLoad: () => {
+          all[0].classList.add('fade-in');
+        },
+        onScroll: () => {
+          const windowY = window.scrollY;
+          all.forEach((item) => {
+            if (windowY + targetPos - item.offsetTop >= innerHeight - targetPos) {
+              item.classList.add('fade-in');
+            }
+          });
+        },
+      };
+    },
   },
   created() {
     this.getAllProducts();
@@ -137,10 +169,14 @@ export default {
   beforeMount() {
     this.$emitter.emit('page-loading', true);
   },
+  updated() {
+    this.fadeInEvent().onLoad();
+  },
+  mounted() {
+    window.addEventListener('scroll', this.fadeInEvent().onScroll);
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.fadeInEvent().onScroll);
+  },
 };
 </script>
-
-<style lang="sass" scoped>
-*
-  // outline: 1px solid red
-</style>
