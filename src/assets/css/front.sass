@@ -53,11 +53,18 @@
 .front .panya-input
   border: 1px solid $gray-500
   color: $blue-400
-  font-weight: 600
+  font-weight: 500
   padding: 1rem
   &:focus, &:hover
     color: $primary
     border-color: $primary
+
+.front input:disabled
+  color: $blue-300
+  border-color: $gray-500
+  &:focus, &:hover
+    color: $blue-300
+    border-color: $gray-500
 
 .front form .panya-input
   text-align: left
@@ -116,16 +123,15 @@
 
 .header
   background: rgba(lighten($brown, 60%), .6)
-  padding: 3rem 0 7.5rem
+  padding: 3rem 0 0
   text-align: center
   position: relative
-  +media-breakpoint-up(lg)
+  +media-breakpoint-up(md)
     padding: 5rem 5rem 7.5rem
   &-img
     width: 100%
     height: 10rem
-    margin-top: 3.5rem
-    margin-bottom: -10rem
+    margin-top: 2.5rem
     background-position: center 35%
     background-size: cover
     background-repeat: no-repeat
@@ -137,7 +143,7 @@
       height: 17.5rem
       margin-bottom: -17.5rem
   & + .container
-    margin-top: 5rem
+    margin-top: 2.5rem
     +media-breakpoint-up(md)
       margin-top: 12.5rem
       padding: 0 10rem
@@ -148,7 +154,6 @@ article
   transform: translateY(10%)
   &.fade-in
     animation: fade-in 1s forwards linear
-    animation-delay: .3s
   h2
     font-size: $h5-font-size
     color: $primary
@@ -162,3 +167,21 @@ article
   100%
     opacity: 1
     transform: translateY(0%)
+
+.steps
+  li
+    width: calc((100% - 2rem) / 3)
+    background: rgba(lighten($brown, 60%), .6)
+    padding: 1rem
+    text-align: center
+    color: $secondary
+    & + li
+      margin-left: 1rem
+    &.active
+      background: $primary
+      color: $white
+  small
+    display: block
+  span
+    display: block
+    

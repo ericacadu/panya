@@ -297,9 +297,10 @@
             <div class="tab-pane fade" id="pills-relative" role="tabpanel">
               <!-- 關聯商品 -->
               <div class="col-12">
-                <label class="form-label" for="relative-products"
-                  >選擇關聯商品</label
-                >
+                <label class="form-label" for="relative-products">
+                  選擇關聯商品
+                  <small class="text-muted">( 前台用隨機商品代替 )</small>
+                </label>
                 <div
                   class="form-control overflow-scroll"
                   style="max-height: 10rem;"

@@ -1,8 +1,8 @@
 <template>
-  <div class="fade-out">
-    <h2 class="fs-4 text-center p-5">{{ title }}</h2>
+  <div class="">
+    <h2 class="fs-4 text-center my-5">{{ title }}</h2>
     <swiper
-      class="products p-0 mb-5 fade-out"
+      class="products p-0 mb-5 "
       ref="swiper"
       :breakpoints="{
         '640': {

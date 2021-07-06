@@ -113,7 +113,7 @@
     </div>
     <div
       id="target"
-      class="position-fixed vw-100 bottom-50 border border-danger"
+      class="position-fixed vw-100 bottom-50"
     ></div>
   </div>
 </template>

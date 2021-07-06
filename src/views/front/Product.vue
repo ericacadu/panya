@@ -1,7 +1,8 @@
 <template>
   <div class="container-fluid">
-    <div class="product container d-md-flex px-3 pb-5 fade-out">
-      <div class="product-photos col d-flex flex-wrap p-3 p-md-0">
+    <div class="product container row g-0 px-3 mx-auto fade-in"
+      v-show="filterDatas.length > 0">
+      <div class="product-photos col-md-6 row g-0 align-self-start p-3 p-md-0">
         <div class="photo-lg col-12">
           <span :style="{ 'background-image': `url(${enterImage})` }"></span>
         </div>
@@ -17,13 +18,14 @@
           <span :style="{ 'background-image': `url(${img})` }"></span>
         </div>
       </div>
-      <div class="product-content col-md-6 text-center text-md-start" v-if="product.title">
+      <div
+        class="product-content col-md-6 text-center text-md-start">
         <small class="path d-block mb-4">
           <router-link to="/">首頁</router-link>
           &nbsp;/&nbsp;
-          <router-link to="/products">手感烘焙</router-link>
+          <router-link to="/products?category=all&page=1">手感烘焙</router-link>
           &nbsp;/&nbsp;{{ product.category }}
-          </small>
+        </small>
         <h1>{{ product.title }}</h1>
         <p class="product-desc">{{ product.description }}</p>
         <p class="text-secondary m-0" v-if="product.content">
@@ -52,26 +54,86 @@
             @click="addToCart(product, product.qty)"
           >
             加入購物車
-            <Spinner :spin-item="product.id"/>
+            <Spinner :spin-item="product.id" />
           </button>
         </div>
       </div>
-    </div>
-    <div class="product-info row g-0 fade-out">
-      <div class="container min-vh-60 p-5">
-        <h2 class="fs-5 text-primary">售後服務</h2>
+      <div
+        class="product-page row g-0 justify-content-between py-4 px-3 px-md-0 fade-in"
+      >
+        <button
+          class="col-5 col-md-2 btn btn-outline-secondary fs-7"
+          type="button"
+          @click="goToProduct(prev_product)"
+        >
+          <i class="material-icons fs-6">west</i>
+          &nbsp;{{ prev_product.title }}
+        </button>
+        <button
+          class="col-5 col-md-2 btn btn-outline-secondary fs-7"
+          type="button"
+          @click="goToProduct(next_product)"
+        >
+          {{ next_product.title }}&nbsp;
+          <i class="material-icons fs-6">east</i>
+        </button>
       </div>
-      <div class="bg-service col-5 min-vh-60" style="background-image: url('https://images.pexels.com/photos/2930966/pexels-photo-2930966.jpeg?w=1280')">
+    </div>
+    <div class="product-info row g-0 fade-in" v-show="filterDatas.length > 0">
+      <div class="container p-3 py-md-0">
+        <div class="col-md-6 p-3 px-md-0 py-md-5 lh-lg">
+          <h2 class="fs-5 text-primary">注意事項</h2>
+          <p class="mb-4">
+            PANYA
+            選用在地天然食材，每日手工製作，若您無法於購買後食用完畢，請依照以下建議保存方式保存，超過建議食用期限請勿食用。
+          </p>
+          <ul class="list-unstyled fa-ul m-0 mt-3 ps-4">
+            <li>
+              <span class="fa-li">
+                <i class="fas fa fa-cookie cookie"></i>
+              </span>
+              麵包類：常溫保存1日、冷藏保存2日、冷凍保存1週。
+            </li>
+            <li>
+              <span class="fa-li">
+                <i class="fas fa fa-cookie-bite cookie"></i>
+              </span>
+              蛋糕類：冷藏保存2日、冷凍保存5日。
+            </li>
+            <li>
+              <span class="fa-li">
+                <i class="fas fa fa-cookie cookie"></i>
+              </span>
+              舒芙蕾：請於購買後即刻食用完畢，隔餐請勿食用。
+            </li>
+            <li>
+              <span class="fa-li">
+                <i class="fas fa fa-cookie-bite cookie"></i>
+              </span>
+              餅乾類：常溫保存1週、冷藏保存2週、冷凍保存1個月。
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="bg-notice col-6">
+        <span
+          style="
+            background-image: url('https://images.pexels.com/photos/2930966/pexels-photo-2930966.jpeg?w=1280');
+          "
+        ></span>
       </div>
     </div>
-    <div class="container">
+    <div class="container px-3 fade-in" v-show="filterDatas.length > 0">
       <FrontSwiper
-        :datas="promote"
+        :datas="filterDatas"
         :is-disabled="isDisabled"
         title="相關商品"
       />
     </div>
-    <div id="target" class="position-fixed vw-100 bottom-10 border border-danger"></div>
+    <div
+      id="target"
+      class="position-fixed vw-100 bottom-10"
+    ></div>
   </div>
 </template>
 
@@ -86,10 +148,16 @@ export default {
   },
   data() {
     return {
+      id: '',
+      category: '',
       products: [],
       product: {},
       promote: [],
       enterImage: '',
+      prev_product: {},
+      next_product: {},
+      filterDatas: [],
+      fnIn: {},
     };
   },
   methods: {
@@ -100,62 +168,121 @@ export default {
         }
         this.products = res.data.products.reverse();
         this.promote = this.products.filter((item) => item.is_promote);
-        this.$emitter.emit('page-loading', false);
+        this.getSiblingProduct(this.products);
+        this.filterProducts();
+        this.$emitter.emit('toggle-spinner', false);
+        // setTimeout(() => {
+        //   // this.fnIn = this.fadeInEvent();
+        //   this.fnIn.onLoad();
+        // }, 0);
       });
     },
     getProduct() {
-      const { id } = this.$route.params;
-      apiGetProduct(id)
-        .then((res) => {
-          if (!res.data.success) {
-            this.$pushMessage(res);
-          }
-          this.product = res.data.product;
-          this.product.qty = 1;
-          const { 0: img } = this.product.imagesUrl;
-          this.enterImage = img;
-          document.title = `${this.product.title} - PANYA`;
-          // this.$emitter.emit('page-loading', false);
-        });
+      apiGetProduct(this.id).then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+          this.$router.push('/error');
+        }
+        this.product = res.data.product;
+        this.product.qty = 1;
+        this.category = this.product.category;
+        const { 0: img } = this.product.imagesUrl;
+        this.enterImage = img;
+        document.title = `${this.product.title} - PANYA`;
+        this.getAllProducts();
+      });
+    },
+    // 取得同類別隨機商品
+    filterProducts() {
+      const { category, id } = this.product;
+      const arrFilter = this.products.filter(
+        (item) => item.category === category && item.id !== id,
+      );
+      const maxSize = arrFilter.length < 6 ? arrFilter.length : 6;
+      const arrSet = new Set([]);
+      for (let i = 0; arrSet.size < maxSize; i + 1) {
+        const num = Math.floor(Math.random() * arrFilter.length);
+        arrSet.add(num);
+      }
+      this.filterDatas = [];
+      arrSet.forEach((i) => {
+        this.filterDatas.push(arrFilter[i]);
+      });
+      this.$emitter.emit('page-loading', false);
+    },
+    getSiblingProduct(datas) {
+      datas.forEach((item, idx) => {
+        const { id } = item;
+        if (id === this.id) {
+          const prev = datas[idx - 1] || datas[datas.length - 1];
+          const next = datas[idx + 1] || datas[0];
+          this.prev_product = prev ? { id: prev.id, title: prev.title } : false;
+          this.next_product = next ? { id: next.id, title: next.title } : false;
+        }
+      });
     },
     addToCart(item, qty) {
       this.$emitter.emit('add-cart', { item, qty });
       this.$emitter.emit('toggle-spinner', { id: item.id });
     },
+    goToProduct(item) {
+      if (!item.id) {
+        return;
+      }
+      this.$router.push(`./${item.id}`);
+    },
     fadeInEvent() {
-      const all = document.querySelectorAll('.fade-out');
+      const all = document.querySelectorAll('.fade-in');
+      const targetPos = document.getElementById('target').offsetTop;
       const { innerHeight } = window;
       return {
         onLoad: () => {
-          all[0].classList.add('fade-in');
+          all.forEach((item) => {
+            item.classList.remove('fade-in');
+            if (innerHeight - item.offsetTop >= innerHeight - targetPos) {
+              item.classList.add('fade-in');
+            }
+          });
         },
         onScroll: () => {
-          const targetPos = document.getElementById('target').offsetTop;
           const windowY = window.scrollY;
           all.forEach((item) => {
             if (windowY + targetPos - item.offsetTop >= innerHeight - targetPos) {
               item.classList.add('fade-in');
+            } else {
+              item.classList.remove('fade-in');
             }
           });
         },
       };
     },
   },
+  watch: {
+    $route: {
+      handler(val) {
+        if (val.name === 'Product') {
+          this.$emitter.emit('page-loading', true);
+          this.id = this.$route.params.id;
+          this.getProduct();
+        }
+      },
+      deep: true,
+    },
+  },
   beforeCreate() {
     this.$emitter.emit('page-loading', true);
   },
   created() {
+    this.id = this.$route.params.id;
     this.getProduct();
-    this.getAllProducts();
-  },
-  updated() {
-    this.fadeInEvent().onLoad();
   },
   mounted() {
-    window.addEventListener('scroll', this.fadeInEvent().onScroll);
+    // this.fnIn = this.fadeInEvent();
+    // this.fnIn.onLoad();
+    // window.addEventListener('scroll', this.fnIn.onScroll);
   },
   unmounted() {
-    window.removeEventListener('scroll', this.fadeInEvent().onScroll);
+    // window.removeEventListener('scroll', this.fnIn.onScroll);
   },
 };
 </script>

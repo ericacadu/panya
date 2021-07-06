@@ -151,7 +151,7 @@ export default {
         this.modalData = {
           author: 'Erica',
           create_at: new Date().getTime(),
-          isPublic: false,
+          isPublic: true,
           content: '',
         };
         this.modalTitle = '新增文章';

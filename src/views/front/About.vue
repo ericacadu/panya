@@ -23,6 +23,7 @@ export default {
     return {
       articles: [],
       content: '',
+      fadeIn: {},
     };
   },
   methods: {
@@ -35,13 +36,14 @@ export default {
     getContent(data) {
       apiGetArticleContent(data.id).then((res) => {
         this.content = res.data.article.content;
-        this.$emitter.emit('page-loading', false);
-        const all = document.querySelectorAll('.fade-out');
-        all.forEach((item) => item.classList.add('fade-in'));
-        // 這裡取不到 a 連結的 dom
-        const links = document.querySelectorAll('article a');
-        links.forEach((item) => item.setAttribute('target', '_blank'));
-        // console.log(links);
+        this.fadeIn = () => {
+          const all = document.querySelectorAll('.fade-out');
+          all.forEach((item) => item.classList.add('fade-in'));
+          const links = document.querySelectorAll('article a');
+          links.forEach((item) => item.setAttribute('target', '_blank'));
+          this.$emitter.emit('page-loading', false);
+        };
+        setTimeout(this.fadeIn, 1000);
       });
     },
   },
@@ -50,6 +52,9 @@ export default {
   },
   mounted() {
     this.$emitter.emit('page-loading', true);
+  },
+  unmounted() {
+    clearTimeout(this.fadeIn);
   },
 };
 </script>
