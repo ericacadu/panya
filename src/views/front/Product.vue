@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="product container row g-0 px-3 mx-auto fade-out"
+    <div class="product container row g-0 px-md-3 mx-auto fade-out"
       v-show="filterDatas.length > 0">
       <div class="product-photos col-md-6 row g-0 align-self-start p-3 p-md-0">
         <div class="photo-lg col-12">
@@ -20,23 +20,24 @@
       </div>
       <div
         class="product-content col-md-6 text-center text-md-start">
-        <small class="path d-block mb-4">
+        <span class="path d-block mb-4 fs-7">
           <router-link to="/">首頁</router-link>
           &nbsp;/&nbsp;
           <router-link to="/products?category=all&page=1">手感烘焙</router-link>
-          &nbsp;/&nbsp;{{ product.category }}
-        </small>
+          &nbsp;/&nbsp;
+          <span class="active">{{ product.category }}</span>
+        </span>
         <h1>{{ product.title }}</h1>
         <p class="product-desc">{{ product.description }}</p>
         <p class="text-secondary m-0" v-if="product.content">
           重量：{{ product.content }}
         </p>
-        <p class="product-price mt-4">
+        <p class="product-price mt-4" v-if="product.price">
           <span v-if="product.price < product.origin_price"
-            >${{ product.price }}</span
+            >${{ $cash(product.price) }}</span
           >
           <small :class="product.price < product.origin_price ? 'del' : ''"
-            >$&nbsp;{{ product.origin_price }}&nbsp;NTD</small
+            >$ {{ $cash(product.origin_price) }} NTD</small
           >
           <small class="fs-7 ms-2 text-secondary">/ {{ product.unit }}</small>
         </p>
@@ -44,8 +45,12 @@
           <input
             type="number"
             min="1"
+            max="10"
             class="form-control panya-input text-center text-md-start"
             v-model.number="product.qty"
+            inputmode="numeric"
+            maxlength="2"
+            pattern="[0-9]{2}"
           />
           <button
             class="btn btn-primary col-12 col-md-7 ms-md-2 p-3 mt-3 mt-md-0"
@@ -62,19 +67,29 @@
         class="product-page row g-0 justify-content-between py-4 px-3 px-md-0 fade-out"
       >
         <button
-          class="col-5 col-md-2 btn btn-outline-secondary fs-7"
+          class="col-6 col-md-2 btn btn-outline-secondary fs-6"
           type="button"
           @click="goToProduct(prev_product)"
         >
           <i class="material-icons fs-6">west</i>
-          &nbsp;{{ prev_product.title }}
+          {{ prev_product.title }}
         </button>
         <button
-          class="col-5 col-md-2 btn btn-outline-secondary fs-7"
+          class="col-6 col-md-2 btn btn-outline-secondary fs-6
+          border-start-0 d-md-none"
           type="button"
           @click="goToProduct(next_product)"
         >
-          {{ next_product.title }}&nbsp;
+          {{ next_product.title }}
+          <i class="material-icons fs-6">east</i>
+        </button>
+        <button
+          class="col-6 col-md-2 btn btn-outline-secondary fs-6
+          d-none d-md-block"
+          type="button"
+          @click="goToProduct(next_product)"
+        >
+          {{ next_product.title }}
           <i class="material-icons fs-6">east</i>
         </button>
       </div>

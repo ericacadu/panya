@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-3">
+  <div class="container">
     <div
       class="
         min-vh-50
@@ -53,11 +53,11 @@
               :style="{ 'background-image': `url(${item.product.imageUrl})` }"
             ></div>
             <div class="cart-cont col px-3 d-flex">
-              <div class="col-6">
+              <div class="col-7 pe-2">
                 <p class="m-0">{{ item.product.title }}</p>
                 <small>數量：{{ item.qty }}</small>
               </div>
-              <div class="col-6 ls-1">$ {{ item.product.price }} NTD</div>
+              <div class="col-5 ls-1 text-end">$ {{ $cash(item.product.price) }} NTD</div>
             </div>
           </li>
         </ul>
@@ -78,14 +78,14 @@
           </button>
         </div>
         <p class="text-primary" v-if="!isDiscount">
-          總計金額：$ <span class="fs-4">{{ datas.total }}</span> NTD
+          總計金額：$ <span class="fs-4">{{ $cash(datas.total) }}</span> NTD
         </p>
         <div v-else>
           <small class="fs-7 text-muted">
-            總計金額：$ {{ datas.total }} NTD
+            總計金額：$ {{ $cash(datas.total) }} NTD
           </small>
           <p class="text-primary">
-            折扣後金額：$ <span class="fs-4">{{ Math.round(datas.final_total) }}</span> NTD
+            折扣後金額：$ <span class="fs-4">{{ $cash(Math.round(datas.final_total)) }}</span> NTD
           </p>
         </div>
       </div>

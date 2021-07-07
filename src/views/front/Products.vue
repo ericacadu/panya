@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-3">
+  <div class="container px-3 pb-5">
     <h1 class="fs-4 text-center py-3">PANYA 手感烘焙</h1>
     <ul class="category list-unstyled d-flex justify-content-center mt-4">
       <li

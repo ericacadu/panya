@@ -50,7 +50,7 @@
             <div class="cart-cont col px-3">
               <p class="m-0">{{ item.product.title }}</p>
               <span class="d-block" style="letter-spacing: 1px"
-                >$ {{ item.product.price }} NTD</span
+                >$ {{ $cash(item.product.price) }} NTD</span
               >
               <small
                 class="text-muted fs-7"
@@ -67,6 +67,9 @@
                 max="10"
                 class="form-control"
                 v-model.number="item.qty"
+                inputmode="numeric"
+                maxlength="2"
+                pattern="[0-9]{2}"
                 :disabled="isDisabled === item.id"
                 @blur="updateCart(item, item.qty)"
               />
@@ -82,12 +85,12 @@
           class="cart-count text-end p-4"
           v-if="datas.final_total === datas.total"
         >
-          總計金額：$ {{ datas.total }} NTD
+          總計金額：$ {{ $cash(datas.total) }} NTD
         </p>
         <div class="cart-count text-end p-4" v-else>
-          <del class="fs-7 text-muted"> 總計金額：$ {{ datas.total }} NTD </del>
+          <del class="fs-7 text-muted"> 總計金額：$ {{ $cash(datas.total) }} NTD </del>
           <p class="m-0">
-            折扣後金額：$ {{ Math.round(datas.final_total) }} NTD
+            折扣後金額：$ {{ $cash(Math.round(datas.final_total)) }} NTD
           </p>
           <small class="d-block text-muted" v-if="datas.code"
             >優惠代碼：{{ datas.code }}</small

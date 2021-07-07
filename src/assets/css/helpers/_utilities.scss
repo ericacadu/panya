@@ -88,6 +88,7 @@ $utilities: map-merge(
     // scss-docs-start utils-borders
     "border": (
       property: border,
+      responsive: true,
       values: (
         null: $border-width solid $border-color,
         0: 0,

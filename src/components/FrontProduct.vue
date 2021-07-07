@@ -19,15 +19,15 @@
       </p>
       <p class="products-price mt-1">
         <span v-if="item.price < item.origin_price"
-          >${{ item.price }}&nbsp;</span
+          >${{ $cash(item.price) }}&nbsp;</span
         >
         <small :class="item.price < item.origin_price ? 'del' : ''"
-          >${{ item.origin_price }} NTD</small
+          >${{ $cash(item.origin_price) }} NTD</small
         >
       </p>
       <button
         type="button"
-        class="btn btn-sm btn-outline-primary mx-auto"
+        class="btn btn-sm btn-outline-primary mx-auto fs-6"
         :disabled="isDisabled === item.id"
         @click="addToCart(item)"
       >

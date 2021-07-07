@@ -31,9 +31,20 @@
     left: 0
     transform: translateX(0%)
 
-
 .nav-brand
   width: 100px
+  color: $primary
+
+.front
+  .nav-link
+    text-transform: uppercase
+    letter-spacing: 1px
+    color: $secondary
+    &.disabled
+      color: $secondary
+    &.active
+      font-weight: 500
+      color: $gray-800 !important
 
 .nav-cart
   display: flex
@@ -68,9 +79,4 @@
   50%
     transform: translateY(-20%) scale(.9, 1.1)
 
-.nav-link
-  text-transform: uppercase
-  letter-spacing: 1px
-  color: $secondary
-  &.disabled
-    color: $secondary
+  

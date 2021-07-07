@@ -1,5 +1,5 @@
 <template>
-  <div class="container px-3">
+  <div class="container">
     <div class="row g-0" v-if="order.id">
       <div class="col-md-6 px-3">
         <ul class="steps row g-0 list-unstyled mb-4">
@@ -32,27 +32,27 @@
               :style="{ 'background-image': `url(${item.product.imageUrl})` }"
             ></div>
             <div class="cart-cont col px-3 d-flex">
-              <div class="col-6">
+              <div class="col-7 pe-2">
                 <p class="m-0">{{ item.product.title }}</p>
                 <small>數量：{{ item.qty }}</small>
               </div>
-              <div class="col-6 ls-1">$ {{ item.product.price }} NTD</div>
+              <div class="col-5 ls-1 text-end">$ {{ $cash(item.product.price) }} NTD</div>
             </div>
           </li>
         </ul>
       </div>
-      <div class="col p-5 bg-white">
+      <div class="col p-4 py-5 p-md-5 bg-white">
         <h2 class="fs-4 d-flex mb-4">訂購資訊</h2>
         <ul class="list-unstyled">
           <li class="d-flex">
             <p class="col-4">訂單金額：</p>
-            <p class="col fw-bold"
+            <p class="col"
             :class="order.is_paid ? 'text-success' : 'text-danger'">
-              {{ Math.round(order.total) }}
+              $ <b class="fs-5">{{ $cash(Math.round(order.total)) }}</b> NTD
             </p>
           </li>
           <li class="d-flex">
-            <p class="col-4">訂單編號：</p>
+            <p class="col-4 text-nowrap">訂單編號：</p>
             <p class="col">{{ order.id }}</p>
           </li>
           <li class="d-flex">

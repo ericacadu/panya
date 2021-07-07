@@ -22,7 +22,7 @@
             <li class="navbar-item">
               <router-link
                 class="nav-link"
-                to="/products"
+                to="/products?category=all&page=1"
                 @click="toggleNav = fale"
                 >手感烘焙</router-link
               >
@@ -32,7 +32,7 @@
                 class="nav-link"
                 to="/service"
                 @click="toggleNav = fale"
-                >售後服務</router-link
+                >常見問題</router-link
               >
             </li>
           </ul>

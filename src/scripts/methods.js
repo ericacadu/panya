@@ -68,3 +68,8 @@ export const navigator = (page, data) => {
     newArray,
   };
 };
+
+export const cash = (x) => {
+  const str = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return `${str}`;
+};

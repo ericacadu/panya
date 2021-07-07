@@ -4,13 +4,22 @@
   align-items: center
   white-space: nowrap
   transition: all .2s
+  &-outline-light:hover
+    color: $primary
   &-primary
     .bounceball span
       background: $light
   &.disabled
     opacity: .6
     cursor: default
-    
+
+a
+  text-decoration: none
+  color: $secondary
+  transition: all .1s
+  &:hover
+    color: lighten($primary, 30%)
+
 .loading
   color: $light
   text-transform: uppercase

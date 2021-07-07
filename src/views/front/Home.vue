@@ -7,8 +7,8 @@
         >
           用天然食材，做出溫暖人心的麵包
         </h1>
-        <a href="#" class="col-2 btn btn-outline-light px-5 mx-auto mt-3"
-          >探索美味</a
+        <router-link to="/products" class="col-2 btn btn-outline-light px-5 mx-auto mt-3"
+          >探索美味</router-link
         >
       </div>
     </div>
@@ -18,7 +18,7 @@
         <div class="col-12 col-md-6">
           <img
             class="img-fluid"
-            src="https://images.pexels.com/photos/6489624/pexels-photo-6489624.jpeg?h=500"
+            src="https://images.pexels.com/photos/6489624/pexels-photo-6489624.jpeg?w=1280"
             alt=""
           />
         </div>
@@ -89,28 +89,31 @@
     </div>
     <div class="bg-cover booking min-vh-50 text-light flex-column">
       <h3 class="fs-5 ls-2 fw-normal mb-4">訂閱最新消息</h3>
-      <div
-        class="
-          container
-          row
-          g-2 g-md-0
-          px-5
-          w-md-50
-          d-md-flex
-          justify-content-md-center
-        "
-      >
-        <span class="col-12 col-md-8 col-lg-7 m-0 me-md-2">
-          <input
-            type="email"
+        <Form class="container row g-2 g-md-0 px-5 w-md-50
+          d-md-flex justify-content-md-center"
+          :class="show ? '' : 'd-none d-md-none'"
+          v-slot="{ errors }" @submit="onSubmit" id="subscribe">
+          <span class="col-12 col-md-8 col-lg-7 m-0 me-md-2">
+            <Field type="email" id="email" name="Email"
             class="form-control ls-2"
+            :class="{ 'is-invalid': errors['Email'] }"
+            :disabled="idDisabled"
             placeholder="customer@panya.io"
-          />
-        </span>
-        <button type="button" class="btn btn-primary col-12 col-md-3">
+            rules="email|required"
+            v-model="email"></Field>
+          <ErrorMessage name="Email" class="invalid-feedback position-md-absolute">
+          </ErrorMessage>
+          </span>
+          <button type="submit" class="btn btn-primary col-12 col-md-3"
+          :disabled="idDisabled"
+          @submit="onSubmit">
           訂閱
+          <Spinner :spin-item="email" />
         </button>
-      </div>
+      </Form>
+      <p class="text-warning ls-2 fade" v-if="email" ref="done">
+        {{ email }} 已訂閱電子報 <i class="far fa-check-circle"></i>
+      </p>
     </div>
     <div
       id="target"
@@ -133,6 +136,9 @@ export default {
     return {
       products: [],
       promote: [],
+      email: '',
+      idDisabled: false,
+      show: true,
     };
   },
   mixins: [fadeInMix],
@@ -144,11 +150,21 @@ export default {
         }
         this.products = res.data.products.reverse();
         this.promote = this.products.filter((item) => item.is_promote);
-        this.$emitter.emit('page-loading', false);
         setTimeout(() => {
+          this.$emitter.emit('page-loading', false);
           this.fadeInOnLoad();
         }, 0);
       });
+    },
+    onSubmit() {
+      this.idDisabled = true;
+      this.$emitter.emit('toggle-spinner', this.email);
+      setTimeout(() => {
+        this.idDisabled = false;
+        this.$emitter.emit('toggle-spinner', false);
+        this.$refs.done.classList.add('show');
+        this.show = false;
+      }, 1500);
     },
   },
   created() {

@@ -21,7 +21,7 @@ import PageLoading from '@/components/PageLoading.vue';
 import emitter from '@/scripts/mitt';
 import router from '@/router';
 import App from '@/App.vue';
-import { pushMessageState } from '@/scripts/methods';
+import { pushMessageState, cash } from '@/scripts/methods';
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
@@ -34,6 +34,7 @@ setLocale('zh_TW');
 
 const app = createApp(App);
 app.config.globalProperties.$emitter = emitter;
+app.config.globalProperties.$cash = cash;
 app.config.globalProperties.$pushMessage = pushMessageState;
 
 app.component('ToastMessage', ToastMessage)

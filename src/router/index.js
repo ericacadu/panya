@@ -11,7 +11,7 @@ const routes = [
         name: 'Home',
         component: () => import('@/views/front/Home.vue'),
         meta: {
-          title: '首頁',
+          // title: '首頁',
         },
       }, {
         path: '/about',
@@ -25,7 +25,7 @@ const routes = [
         name: 'Service',
         component: () => import('@/views/front/Service.vue'),
         meta: {
-          title: '售後服務',
+          title: '常見問題',
         },
       }, {
         path: '/products',
@@ -112,6 +112,7 @@ const router = createRouter({
   scrollBehavior() {
     return {
       top: 0,
+      behavior: 'smooth',
     };
   },
 });
