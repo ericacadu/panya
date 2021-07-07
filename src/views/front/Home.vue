@@ -81,6 +81,7 @@
         </div>
       </div>
       <FrontSwiper
+        class="fade-out"
         :datas="promote"
         :is-disabled="isDisabled"
         title="熱銷商品"
@@ -121,6 +122,7 @@
 <script>
 import { apiAllProducts } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
+import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
   props: ['isDisabled'],
@@ -133,6 +135,7 @@ export default {
       promote: [],
     };
   },
+  mixins: [fadeInMix],
   methods: {
     getAllProducts() {
       apiAllProducts().then((res) => {
@@ -142,25 +145,10 @@ export default {
         this.products = res.data.products.reverse();
         this.promote = this.products.filter((item) => item.is_promote);
         this.$emitter.emit('page-loading', false);
+        setTimeout(() => {
+          this.fadeInOnLoad();
+        }, 0);
       });
-    },
-    fadeInEvent() {
-      const all = document.querySelectorAll('.fade-out');
-      const targetPos = document.getElementById('target').offsetTop;
-      const { innerHeight } = window;
-      return {
-        onLoad: () => {
-          all[0].classList.add('fade-in');
-        },
-        onScroll: () => {
-          const windowY = window.scrollY;
-          all.forEach((item) => {
-            if (windowY + targetPos - item.offsetTop >= innerHeight - targetPos) {
-              item.classList.add('fade-in');
-            }
-          });
-        },
-      };
     },
   },
   created() {
@@ -168,15 +156,6 @@ export default {
   },
   beforeMount() {
     this.$emitter.emit('page-loading', true);
-  },
-  updated() {
-    this.fadeInEvent().onLoad();
-  },
-  mounted() {
-    window.addEventListener('scroll', this.fadeInEvent().onScroll);
-  },
-  unmounted() {
-    window.removeEventListener('scroll', this.fadeInEvent().onScroll);
   },
 };
 </script>

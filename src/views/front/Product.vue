@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="product container row g-0 px-3 mx-auto fade-in"
+    <div class="product container row g-0 px-3 mx-auto fade-out"
       v-show="filterDatas.length > 0">
       <div class="product-photos col-md-6 row g-0 align-self-start p-3 p-md-0">
         <div class="photo-lg col-12">
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div
-        class="product-page row g-0 justify-content-between py-4 px-3 px-md-0 fade-in"
+        class="product-page row g-0 justify-content-between py-4 px-3 px-md-0 fade-out"
       >
         <button
           class="col-5 col-md-2 btn btn-outline-secondary fs-7"
@@ -79,7 +79,7 @@
         </button>
       </div>
     </div>
-    <div class="product-info row g-0 fade-in" v-show="filterDatas.length > 0">
+    <div class="product-info row g-0 fade-out" v-show="filterDatas.length > 0">
       <div class="container p-3 py-md-0">
         <div class="col-md-6 p-3 px-md-0 py-md-5 lh-lg">
           <h2 class="fs-5 text-primary">注意事項</h2>
@@ -123,7 +123,7 @@
         ></span>
       </div>
     </div>
-    <div class="container px-3 fade-in" v-show="filterDatas.length > 0">
+    <div class="container px-3 fade-out" v-show="filterDatas.length > 0">
       <FrontSwiper
         :datas="filterDatas"
         :is-disabled="isDisabled"
@@ -140,6 +140,7 @@
 <script>
 import { apiAllProducts, apiGetProduct } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
+import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
   props: ['isDisabled'],
@@ -152,7 +153,6 @@ export default {
       category: '',
       products: [],
       product: {},
-      promote: [],
       enterImage: '',
       prev_product: {},
       next_product: {},
@@ -160,6 +160,7 @@ export default {
       fnIn: {},
     };
   },
+  mixins: [fadeInMix],
   methods: {
     getAllProducts() {
       apiAllProducts().then((res) => {
@@ -167,14 +168,12 @@ export default {
           this.$pushMessage(res);
         }
         this.products = res.data.products.reverse();
-        this.promote = this.products.filter((item) => item.is_promote);
         this.getSiblingProduct(this.products);
         this.filterProducts();
         this.$emitter.emit('toggle-spinner', false);
-        // setTimeout(() => {
-        //   // this.fnIn = this.fadeInEvent();
-        //   this.fnIn.onLoad();
-        // }, 0);
+        setTimeout(() => {
+          this.fadeInOnLoad();
+        }, 0);
       });
     },
     getProduct() {
@@ -231,31 +230,6 @@ export default {
       }
       this.$router.push(`./${item.id}`);
     },
-    fadeInEvent() {
-      const all = document.querySelectorAll('.fade-in');
-      const targetPos = document.getElementById('target').offsetTop;
-      const { innerHeight } = window;
-      return {
-        onLoad: () => {
-          all.forEach((item) => {
-            item.classList.remove('fade-in');
-            if (innerHeight - item.offsetTop >= innerHeight - targetPos) {
-              item.classList.add('fade-in');
-            }
-          });
-        },
-        onScroll: () => {
-          const windowY = window.scrollY;
-          all.forEach((item) => {
-            if (windowY + targetPos - item.offsetTop >= innerHeight - targetPos) {
-              item.classList.add('fade-in');
-            } else {
-              item.classList.remove('fade-in');
-            }
-          });
-        },
-      };
-    },
   },
   watch: {
     $route: {
@@ -276,18 +250,5 @@ export default {
     this.id = this.$route.params.id;
     this.getProduct();
   },
-  mounted() {
-    // this.fnIn = this.fadeInEvent();
-    // this.fnIn.onLoad();
-    // window.addEventListener('scroll', this.fnIn.onScroll);
-  },
-  unmounted() {
-    // window.removeEventListener('scroll', this.fnIn.onScroll);
-  },
 };
 </script>
-
-<style lang="sass" scoped>
-*
-  // outline: 1px solid red
-</style>

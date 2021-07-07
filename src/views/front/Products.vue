@@ -42,6 +42,7 @@
 import { apiAllProducts } from '@/scripts/api';
 import { navigator } from '@/scripts/methods';
 import Product from '@/components/FrontProduct.vue';
+import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
   props: ['isDisabled'],
@@ -62,6 +63,7 @@ export default {
       },
     };
   },
+  mixins: [fadeInMix],
   methods: {
     getAllProducts() {
       apiAllProducts().then((res) => {
@@ -74,7 +76,6 @@ export default {
         this.category = [...newSet];
         this.filterProducts(this.path.page, this.path.category);
         this.$emitter.emit('page-loading', false);
-        this.fadeInEvent();
       });
     },
     getPath() {
@@ -97,21 +98,9 @@ export default {
       this.$router.push(
         `./products?category=${this.path.category}&page=${page}`,
       );
-    },
-    fadeInEvent() {
-      const all = document.querySelectorAll('.fade-out');
-      const targetPos = document.getElementById('target').offsetTop;
-      const { innerHeight, scrollY } = window;
-      all.forEach((item) => {
-        if (
-          item.offsetTop <= innerHeight - targetPos
-          || scrollY + targetPos - item.offsetTop >= innerHeight - targetPos
-        ) {
-          item.classList.add('fade-in');
-        } else {
-          item.classList.remove('fade-in');
-        }
-      });
+      setTimeout(() => {
+        this.fadeInOnLoad();
+      }, 0);
     },
   },
   watch: {
@@ -131,15 +120,6 @@ export default {
     this.getPath();
     this.getAllProducts();
     this.$emit('get-cart');
-  },
-  updated() {
-    this.fadeInEvent();
-  },
-  mounted() {
-    window.addEventListener('scroll', this.fadeInEvent);
-  },
-  unmounted() {
-    window.removeEventListener('scroll', this.fadeInEvent);
   },
 };
 </script>
