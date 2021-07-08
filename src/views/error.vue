@@ -43,7 +43,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass" scope>
-@import '@/assets/css/error'
-</style>

@@ -7,7 +7,8 @@
         >
           用天然食材，做出溫暖人心的麵包
         </h1>
-        <router-link to="/products" class="col-2 btn btn-outline-light px-5 mx-auto mt-3"
+        <router-link to="/products?category=all&page=1"
+          class="col-2 btn btn-outline-light px-5 mx-auto mt-3"
           >探索美味</router-link
         >
       </div>
@@ -100,6 +101,7 @@
             :disabled="idDisabled"
             placeholder="customer@panya.io"
             rules="email|required"
+            inputmode="email"
             v-model="email"></Field>
           <ErrorMessage name="Email" class="invalid-feedback position-md-absolute">
           </ErrorMessage>

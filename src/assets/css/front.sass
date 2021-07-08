@@ -88,6 +88,22 @@
   .active
     color: $primary
 
+.front .footer
+  #logo
+    width: 80px
+  li a
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 2.5rem
+    height: 2.5rem
+    border: 1px solid rgba($secondary, .5)
+    border-radius: 50%
+    &:hover
+      border: 1px solid rgba($secondary, 1)
+  li + li
+    margin-left: .5rem
+
 .bg-cover
   background-repeat: no-repeat
   background-position: center center

@@ -1,12 +1,12 @@
 <template>
   <div
-    class="toast mw-60 mw-md-auto p-1 m-3 fade"
+    class="toast mw-60 mw-md-auto p-1 fade"
     id="toast"
-    :class="data.style ? `toast-${data.style} text-${data.style}` : 'hide'"
-    data-bs-delay="1000"
+    :class="data.style ? `toast-${data.style}` : 'hide'"
+    data-bs-delay="2500"
   >
     <div class="d-flex">
-      <div class="toast-body">{{ data.content }}</div>
+      <div class="toast-body" v-html="data.content"></div>
       <button
         type="button"
         class="btn-close me-2 m-auto"

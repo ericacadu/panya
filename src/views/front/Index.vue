@@ -1,9 +1,9 @@
 <template>
   <div class="front container-fluid g-0 min-vh-100 text-dark">
-    <Navbar :datas="datas" />
+    <Navbar :datas="cart" />
     <router-view
       class="min-height"
-      :datas="datas"
+      :datas="cart"
       :is-disabled="isDisabled"
       @get-cart="getCart"
     />
@@ -17,25 +17,25 @@
           <small class="d-block mt-1">PANYA &copy; 2021 copyright</small>
         </p>
         <ul class="list-unstyled d-flex justify-content-center m-0">
-          <li class="px-2 fs-6">
+          <li class="fs-7">
             <a href="https://www.facebook.com/" target="_blank">
-              <i class="fab fa-lg fa-facebook-square"></i>
+              <i class="fab fa-lg fa-facebook-f"></i>
             </a>
           </li>
-          <li class="px-2 fs-6">
+          <li class="fs-7">
             <a href="mailto:erica.du0916@gmail.com" target="_blank">
-              <i class="fas fa-lg fa-envelope"></i>
+              <i class="far fa-lg fa-envelope"></i>
             </a>
           </li>
-          <li class="px-2 fs-6">
+          <li class="fs-7">
             <a href="tel:0800000000" target="_blank">
-              <i class="fas fa-lg fa-phone"></i>
+              <i class="fas fa-phone-alt"></i>
             </a>
           </li>
         </ul>
       </div>
     </div>
-    <div id="scrollTop" role="button" class="p-2 rounded-1 fade-out" ref="scrollTop"
+    <div id="scrollTop" role="button" class="p-2 rounded-1 fade d-none" ref="scrollTop"
       @click="scrollToTop">
       <span class="material-icons">
         arrow_drop_up
@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      datas: [],
+      cart: [],
       isDisabled: '',
       code: '',
     };
@@ -65,17 +65,17 @@ export default {
         if (!res.data.success) {
           this.$pushMessage(res);
         }
-        this.datas = res.data.data;
+        this.cart = res.data.data;
         this.isDisabled = '';
         this.getCartum();
-        this.$emitter.emit('send-cart', this.datas);
+        this.$emitter.emit('send-cart', this.cart);
         this.$emitter.emit('toggle-spinner', false);
       });
     },
     getCartum() {
-      this.datas.sum = 0;
-      this.datas.carts.forEach((item) => {
-        this.datas.sum += item.qty;
+      this.cart.sum = 0;
+      this.cart.carts.forEach((item) => {
+        this.cart.sum += item.qty;
       });
       const num = document.getElementById('cart-num');
       num.classList.add('active');
@@ -99,12 +99,17 @@ export default {
     scrollBtnPos() {
       const half = this.$refs.footer.offsetWidth / 2;
       this.$refs.scrollTop.style.marginRight = `-${half - 16}px`;
+      this.showScrollBtn();
     },
     showScrollBtn() {
-      if (window.scrollY > 100) {
-        this.$refs.scrollTop.classList.add('fade-in');
+      if (window.pageYOffset > 0 || window.scrollY > 0) {
+        this.$refs.scrollTop.classList.remove('d-none');
+        this.$refs.scrollTop.classList.add('show');
       } else {
-        this.$refs.scrollTop.classList.remove('fade-in');
+        this.$refs.scrollTop.classList.remove('show');
+        setTimeout(() => {
+          this.$refs.scrollTop.classList.add('d-none');
+        }, 100);
       }
     },
     scrollToTop() {
@@ -137,6 +142,4 @@ export default {
 </script>
 <style lang="sass" scope>
 @import '@/assets/css/front'
-*
-  // outline: 1px solid red
 </style>

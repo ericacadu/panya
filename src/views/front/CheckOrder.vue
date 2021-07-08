@@ -103,6 +103,7 @@
                 :class="{ 'is-invalid': errors['Email'] }"
                 placeholder="請輸入 Email"
                 rules="email|required"
+                inputmode="email"
                 v-model="user.email"></Field>
               <ErrorMessage name="Email" class="invalid-feedback"></ErrorMessage>
             </li>
@@ -129,6 +130,7 @@
                 :class="{ 'is-invalid': errors['電話'] }"
                 placeholder="請輸入手機號碼"
                 :rules="isPhone"
+                inputmode="tel"
                 v-model="user.tel"></Field>
               <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
             </li>

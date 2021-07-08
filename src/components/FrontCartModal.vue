@@ -4,30 +4,14 @@
       class="cart col-12 col-md-4 flex-column justify-content-start"
       :class="toggleCart"
     >
-      <div
-        class="
-          cart-header
-          p-4
-          d-flex
-          justify-content-between
-          align-items-center
-        "
-      >
+      <div class="cart-header p-4 d-flex justify-content-between align-items-center">
         <small class="ls-5">購物車</small>
         <div class="close-btn" role="button" @click="closeCart"></div>
       </div>
       <div class="cart-body p-4">
-        <div
-          class="
-            min-vh-50
-            d-flex
-            flex-column
-            align-items-center
-            justify-content-center
-            text-secondary
-          "
-          v-if="!datas.total"
-        >
+        <div class="min-vh-50 text-secondary
+          d-flex flex-column align-items-center justify-content-center"
+          v-if="!datas.total">
           <span class="material-icons mb-2 fs-2"> announcement </span>
           <p class="fs-7" style="letter-spacing: 2px">購物車內沒有商品</p>
           <router-link
@@ -64,14 +48,13 @@
               <input
                 type="number"
                 min="1"
-                max="10"
+                max="30"
                 class="form-control"
                 v-model.number="item.qty"
                 inputmode="numeric"
-                maxlength="2"
-                pattern="[0-9]{2}"
                 :disabled="isDisabled === item.id"
-                @blur="updateCart(item, item.qty)"
+                @focus="focusInput(item)"
+                @blur="updateCart(item)"
               />
             </div>
             <div class="col-12">
@@ -130,6 +113,7 @@ export default {
       cart: {},
       toggleCart: '',
       isDisabled: '',
+      tempNum: '',
     };
   },
   methods: {
@@ -140,17 +124,22 @@ export default {
       this.$router.push('/checkorder');
       this.toggleCart = false;
     },
-    updateCart(item, qty) {
+    focusInput(item) {
+      this.tempNum = item;
+    },
+    updateCart(item) {
+      let newItem = item;
+      newItem = this.tempNum;
+      this.tempNum = '';
+      if (item.qty < 1) {
+        newItem.qty = 1;
+      }
       const data = {
         product_id: item.product_id,
-        qty,
+        qty: newItem.qty,
       };
       this.isDisabled = item.id;
       this.$emitter.emit('toggle-spinner', { id: item.id });
-      if (qty <= 0) {
-        this.$pushMessage(false, '商品數量不可為0');
-        return;
-      }
       apiUpdateCart(item.id, { data }).then((res) => {
         if (res.data.success) {
           this.$emitter.emit('get-cart');
@@ -183,6 +172,24 @@ export default {
         this.$pushMessage(res);
         this.$emitter.emit('toggle-spinner', false);
       });
+    },
+  },
+  watch: {
+    tempNum: {
+      handler(val) {
+        const { qty } = val;
+        const newItem = val;
+        const oldVal = val.qty;
+        if (qty <= 30) {
+          newItem.qty = oldVal;
+        } else if (qty > 30) {
+          newItem.qty = 30;
+        }
+        if (qty < 1) {
+          newItem.qty = '';
+        }
+      },
+      deep: true,
     },
   },
   mounted() {

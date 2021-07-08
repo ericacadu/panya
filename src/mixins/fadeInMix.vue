@@ -6,7 +6,7 @@ export default {
       const targetPos = document.getElementById('target').offsetTop;
       const { innerHeight } = window;
       all.forEach((item) => {
-        item.classList.remove('fade-in');
+        // item.classList.remove('fade-in');
         if (innerHeight - item.offsetTop >= innerHeight - targetPos) {
           item.classList.add('fade-in');
         }

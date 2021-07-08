@@ -12,6 +12,8 @@
   color: $gray-300
   transform: translateX(100%)
   transition: all .3s linear
+  +media-breakpoint-up(md)
+    min-width: 400px
   &.show
     opacity: 1
     transform: translateX(0)

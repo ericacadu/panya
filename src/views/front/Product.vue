@@ -45,23 +45,25 @@
           <input
             type="number"
             min="1"
-            max="10"
+            :max="maxNum"
             class="form-control panya-input text-center text-md-start"
             v-model.number="product.qty"
             inputmode="numeric"
-            maxlength="2"
-            pattern="[0-9]{2}"
+            :disabled="isDisabled === product.id || isMax"
+            @focus="focusInput(product)"
+            @blur="blurInput"
           />
           <button
             class="btn btn-primary col-12 col-md-7 ms-md-2 p-3 mt-3 mt-md-0"
             type="button"
-            :disabled="isDisabled === product.id"
+            :disabled="isDisabled === product.id || isMax"
             @click="addToCart(product, product.qty)"
           >
             加入購物車
             <Spinner :spin-item="product.id" />
           </button>
         </div>
+        <small class="d-block text-danger mt-1" v-if="isMax">已達可購買最大數量</small>
       </div>
       <div
         class="product-page row g-0 justify-content-between py-4 px-3 px-md-0 fade-out"
@@ -158,7 +160,7 @@ import FrontSwiper from '@/components/FrontSwiper.vue';
 import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
-  props: ['isDisabled'],
+  props: ['isDisabled', 'datas'],
   components: {
     FrontSwiper,
   },
@@ -172,7 +174,10 @@ export default {
       prev_product: {},
       next_product: {},
       filterDatas: [],
-      fnIn: {},
+      propsData: {},
+      tempNum: '',
+      maxNum: 0,
+      isMax: false,
     };
   },
   mixins: [fadeInMix],
@@ -203,7 +208,9 @@ export default {
         const { 0: img } = this.product.imagesUrl;
         this.enterImage = img;
         document.title = `${this.product.title} - PANYA`;
+        this.propsData = this.datas;
         this.getAllProducts();
+        this.getMaxNum();
       });
     },
     // 取得同類別隨機商品
@@ -224,6 +231,7 @@ export default {
       });
       this.$emitter.emit('page-loading', false);
     },
+    // 取得前後一筆商品
     getSiblingProduct(datas) {
       datas.forEach((item, idx) => {
         const { id } = item;
@@ -234,6 +242,32 @@ export default {
           this.next_product = next ? { id: next.id, title: next.title } : false;
         }
       });
+    },
+    // 取得可購買數量最大值
+    getMaxNum() {
+      const filters = this.propsData.carts.filter(
+        (val) => val.product_id === this.product.id,
+      );
+      if (filters.length > 0) {
+        this.maxNum = 30 - filters[0].qty;
+      } else {
+        this.maxNum = 30;
+      }
+      if (this.maxNum <= 0) {
+        this.isMax = true;
+      } else {
+        this.isMax = false;
+      }
+    },
+    focusInput(item) {
+      this.tempNum = item;
+    },
+    blurInput() {
+      this.product = this.tempNum;
+      if (this.tempNum.qty < 1) {
+        this.product.qty = 1;
+      }
+      this.tempNum = '';
     },
     addToCart(item, qty) {
       this.$emitter.emit('add-cart', { item, qty });
@@ -256,6 +290,22 @@ export default {
         }
       },
       deep: true,
+    },
+    tempNum: {
+      handler(val) {
+        const { qty } = val;
+        const newItem = val;
+        if (qty >= this.maxNum) {
+          newItem.qty = this.maxNum;
+        }
+        if (qty < 1) {
+          newItem.qty = '';
+        }
+      },
+      deep: true,
+    },
+    datas() {
+      this.getProduct();
     },
   },
   beforeCreate() {
