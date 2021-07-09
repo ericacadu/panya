@@ -50,8 +50,8 @@
               @focus="isFocus = true"
               @keyup.up="key--"
               @keyup.down="key++"
-              @keypress.enter="toggleProduct(key)"
             >
+            <!-- @keypup.enter="toggleProduct(key)" -->
             <i class="material-icons fs-5" role="button"
               @click="isFocus = false,
                 searchInput = ''">clear</i>
