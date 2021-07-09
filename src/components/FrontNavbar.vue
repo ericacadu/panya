@@ -93,10 +93,9 @@
 
 <script>
 import CartModal from '@/components/FrontCartModal.vue';
-import { apiAllProducts } from '@/scripts/api';
 
 export default {
-  props: ['datas'],
+  props: ['allProducts', 'datas'],
   components: {
     CartModal,
   },
@@ -112,22 +111,14 @@ export default {
     };
   },
   methods: {
-    getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-      });
-    },
     filterProducts() {
       this.key = 0;
-      const keyword = this.searchInput.trim();
+      const keyword = this.searchInput;
       if (!keyword) {
         this.filterDatas = '';
         return;
       }
-      const result = this.products.filter((item) => item.title.match(keyword));
+      const result = this.products.filter((item) => item.title.match(keyword.trim()));
       if (this.isFocus && result) {
         this.filterDatas = result;
       } else {
@@ -171,6 +162,9 @@ export default {
     },
   },
   watch: {
+    allProducts() {
+      this.products = this.allProducts;
+    },
     searchInput() {
       this.filterProducts();
     },
@@ -180,11 +174,7 @@ export default {
     },
   },
   created() {
-    this.getAllProducts();
+    this.$emit('get-products');
   },
 };
 </script>
-<style lang="sass">
-*
-  // outline: 1px solid red
-</style>

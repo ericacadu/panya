@@ -156,12 +156,12 @@
 </template>
 
 <script>
-import { apiAllProducts, apiGetProduct } from '@/scripts/api';
+import { apiGetProduct } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
 import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
-  props: ['isDisabled', 'datas'],
+  props: ['isDisabled', 'datas', 'allProducts'],
   components: {
     FrontSwiper,
   },
@@ -183,21 +183,6 @@ export default {
   },
   mixins: [fadeInMix],
   methods: {
-    getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-        this.getSiblingProduct(this.products);
-        this.filterProducts();
-        this.$emitter.emit('toggle-spinner', false);
-        this.getMaxNum();
-        setTimeout(() => {
-          this.fadeInOnLoad();
-        }, 0);
-      });
-    },
     getProduct() {
       this.propsData = this.datas;
       apiGetProduct(this.id).then((res) => {
@@ -211,7 +196,7 @@ export default {
         const { 0: img } = this.product.imagesUrl;
         this.enterImage = img;
         document.title = `${this.product.title} - PANYA`;
-        this.getAllProducts();
+        this.$emit('get-products');
       });
     },
     // 取得同類別隨機商品
@@ -307,6 +292,16 @@ export default {
     },
     datas() {
       this.getProduct();
+    },
+    allProducts() {
+      this.products = this.allProducts;
+      this.getSiblingProduct(this.products);
+      this.filterProducts();
+      this.$emitter.emit('toggle-spinner', false);
+      this.getMaxNum();
+      setTimeout(() => {
+        this.fadeInOnLoad();
+      }, 0);
     },
   },
   beforeCreate() {
