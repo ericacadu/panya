@@ -100,7 +100,7 @@ export default {
       pages: {},
       modal: {},
       modalTitle: '',
-      isModal: 'add',
+      isModal: '',
       modalData: [],
       deleteData: [],
       apiInfo: {
@@ -152,6 +152,11 @@ export default {
           id = '';
           break;
       }
+      // const { category } = data;
+      // const newData = data;
+      // if (category === '選擇類別') {
+      //   newData.category = '';
+      // }
       this.$emitter.emit('page-loading', true);
       apiUpdateProducts(method, { data }, id).then((res) => {
         if (res.data.success) {
@@ -188,16 +193,18 @@ export default {
         // this.modalData.relative = []; // 清除關聯商品
         this.$emitter.emit('page-loading', true);
       } else if (isModal === 'delete') {
+        this.isModal = 'delete';
         this.modal = bsModal('deleteModal');
         this.modalTitle = '刪除商品';
         this.deleteData = item;
       } else {
         this.modal = bsModal('productModal');
+        this.isModal = 'add';
         this.modalTitle = '新增商品';
         this.modalData = {
           imagesUrl: [],
-          category: '選擇類別',
-          unit: '選擇單位',
+          // category: '選擇類別',
+          // unit: '選擇單位',
           relative: [],
         };
       }

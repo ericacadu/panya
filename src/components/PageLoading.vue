@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { bsToast } from '@/scripts/methods';
+// import { bsToast } from '@/scripts/methods';
 
 export default {
   data() {
@@ -19,10 +19,10 @@ export default {
       this.isLoading = val;
     });
   },
-  watch: {
-    isLoading() {
-      bsToast('toast').hide();
-    },
-  },
+  // watch: {
+  //   isLoading() {
+  //     bsToast('toast').hide();
+  //   },
+  // },
 };
 </script>

@@ -57,7 +57,7 @@ const routes = [
   }, {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/admin/Login.vue'),
+    component: () => import('@/views/front/Login.vue'),
     meta: {
       title: '登入',
     },

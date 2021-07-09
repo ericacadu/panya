@@ -22,6 +22,6 @@ export default {
 @import '@/assets/css/reset'
 .toast.hide
   display: none
-.loading
-  display: none
+// .loading
+//   display: none
 </style>

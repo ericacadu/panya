@@ -79,7 +79,9 @@
               <!-- 商品資訊 -->
               <div class="row g-2">
                 <div class="col-8">
-                  <label class="form-label" for="product-title">商品名稱</label>
+                  <label class="form-label" for="product-title">
+                    商品名稱<small class="text-danger ms-1">*</small>
+                  </label>
                   <input
                     type="text"
                     id="product-title"
@@ -89,9 +91,9 @@
                   />
                 </div>
                 <div class="col-4">
-                  <label class="form-label" for="product-category"
-                    >商品類別</label
-                  >
+                  <label class="form-label" for="product-category">
+                    商品類別<small class="text-danger ms-1">*</small>
+                  </label>
                   <select
                     id="product-category"
                     class="form-control form-select"
@@ -108,9 +110,9 @@
                   </select>
                 </div>
                 <div class="col-4 mt-2">
-                  <label class="form-label" for="product-origin-price"
-                    >原價</label
-                  >
+                  <label class="form-label" for="product-origin-price">
+                    原價<small class="text-danger ms-1">*</small>
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -121,7 +123,9 @@
                   />
                 </div>
                 <div class="col-4 mt-2">
-                  <label class="form-label" for="product-price">售價</label>
+                  <label class="form-label" for="product-price">
+                    售價<small class="text-danger ms-1">*</small>
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -132,7 +136,9 @@
                   />
                 </div>
                 <div class="col-4 mt-2">
-                  <label class="form-label" for="product-unit">單位</label>
+                  <label class="form-label" for="product-unit">
+                    單位<small class="text-danger ms-1">*</small>
+                  </label>
                   <select
                     id="product-unit"
                     class="form-control form-select"
@@ -328,6 +334,12 @@
             </div>
           </div>
         </div>
+        <!-- 拖曳圖片測試 -->
+        <Draggable v-model="photos">
+          <template #item="{item}">
+            {{ item }}
+          </template>
+      </Draggable>
         <div class="modal-footer">
           <button
             type="button"
@@ -339,7 +351,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            @click="$emit('update-data', datas)"
+            @click="updateDatas"
           >
             儲存
           </button>
@@ -351,23 +363,29 @@
 
 <script>
 import { apiUploadFile, apiGetAllProducts } from '@/scripts/api';
+import Draggable from 'vue3-draggable';
 
 export default {
   props: ['modalData'],
+  components: {
+    Draggable,
+  },
   data() {
     return {
       products: [],
       datas: {
         imageUrl: '',
         imagesUrl: [],
-        category: '選擇類別',
-        unit: '選擇單位',
         relative: [],
       },
       category: ['麵包', '蛋糕', '餅乾'],
       unit: ['個', '袋', '片', '盒'],
       tempUrl: '',
       uploadData: '',
+      defaultCate: '選擇類別',
+      defaultUnit: '選擇單位',
+      drags: [],
+      photos: [],
     };
   },
   methods: {
@@ -457,12 +475,28 @@ export default {
       changeTab(pills);
       changeTab(panes);
     },
+    updateDatas() {
+      if (this.datas.category === this.defaultCate) {
+        this.datas.category = '';
+      }
+      if (this.datas.unit === this.defaultUnit) {
+        this.datas.unit = '';
+      }
+      this.$emit('update-data', this.datas);
+    },
   },
   watch: {
     modalData() {
       this.datas = this.modalData;
+      if (!this.datas.category) {
+        this.datas.category = this.defaultCate;
+      }
+      if (!this.datas.unit) {
+        this.datas.unit = this.defaultUnit;
+      }
       this.updateTabs();
       this.getProducts();
+      this.photos = this.datas.imagesUrl;
     },
     datas: {
       handler(val) {
