@@ -15,6 +15,7 @@ import ToastMessage from '@/components/ToastMessage.vue';
 import Pagination from '@/components/pagination.vue';
 import Logo from '@/components/logo.vue';
 import Cart from '@/components/bag.vue';
+import Search from '@/components/search.vue';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Spinner from '@/components/Spinner.vue';
 import PageLoading from '@/components/PageLoading.vue';
@@ -43,6 +44,7 @@ app.component('ToastMessage', ToastMessage)
   .component('PageLoading', PageLoading)
   .component('Logo', Logo)
   .component('Cart', Cart)
+  .component('Search', Search)
   .component('Form', Form)
   .component('Field', Field)
   .component('ErrorMessage', ErrorMessage)

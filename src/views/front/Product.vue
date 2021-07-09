@@ -96,8 +96,8 @@
         </button>
       </div>
     </div>
-    <div class="product-info row g-0 fade-out" v-show="filterDatas.length > 0">
-      <div class="container p-3 py-md-0">
+    <div class="product-info fade-out" v-show="filterDatas.length > 0">
+      <div class="container row g-0 mx-auto p-3 pe-md-0 py-md-0">
         <div class="col-md-6 p-3 px-md-0 py-md-5 lh-lg">
           <h2 class="fs-5 text-primary">注意事項</h2>
           <p class="mb-4">
@@ -131,14 +131,15 @@
             </li>
           </ul>
         </div>
-      </div>
-      <div class="bg-notice col-6">
+        <div class="bg-notice col-6">
         <span
           style="
             background-image: url('https://images.pexels.com/photos/2930966/pexels-photo-2930966.jpeg?w=1280');
           "
         ></span>
       </div>
+      </div>
+
     </div>
     <div class="container px-3 fade-out" v-show="filterDatas.length > 0">
       <FrontSwiper
@@ -191,12 +192,14 @@ export default {
         this.getSiblingProduct(this.products);
         this.filterProducts();
         this.$emitter.emit('toggle-spinner', false);
+        this.getMaxNum();
         setTimeout(() => {
           this.fadeInOnLoad();
         }, 0);
       });
     },
     getProduct() {
+      this.propsData = this.datas;
       apiGetProduct(this.id).then((res) => {
         if (!res.data.success) {
           this.$pushMessage(res);
@@ -208,9 +211,7 @@ export default {
         const { 0: img } = this.product.imagesUrl;
         this.enterImage = img;
         document.title = `${this.product.title} - PANYA`;
-        this.propsData = this.datas;
         this.getAllProducts();
-        this.getMaxNum();
       });
     },
     // 取得同類別隨機商品

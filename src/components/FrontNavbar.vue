@@ -5,8 +5,8 @@
       class="navbar navbar-expand-md navbar-light sticky-top"
       :class="toggleNav ? 'show' : ''"
     >
-      <div class="container py-2 px-3 text-secondary">
-        <router-link to="/">
+      <div class="container py-2 px-3 text-secondary d-flex justify-content-end">
+        <router-link to="/" class="me-auto">
           <Logo class="nav-brand me-5" role="button"></Logo>
         </router-link>
         <div class="collapse navbar-collapse" :class="toggleNav ? 'show' : ''">
@@ -38,19 +38,45 @@
           </ul>
         </div>
         <div
-          class="nav-cart col"
-          @click="$emitter.emit('toggle-cart', true), (toggleNav = fale)"
+          class="nav-icons me-2 d-none d-md-block"
         >
-          <div role="button">
-            <Cart></Cart>
-            <!-- <small class="mx-1">購物車</small> -->
-            <span class="badge rounded-pill fw-normal ms-1" id="cart-num">
-              {{ datas.sum }}
-            </span>
+          <div class="nav-search rounded-pill"
+            :class="isFocus ? 'expand' : ''">
+            <Search :role="isFocus ? '' : 'button'"
+              @click="isFocus = true"></Search>
+            <input type="text" class="form-control" placeholder="商品名稱"
+              v-model.number="searchInput"
+              ref="searchInput"
+              @focus="isFocus = true, filterProducts"
+              @keyup.up="key--"
+              @keyup.down="key++"
+              @keypress.enter="toggleProduct(key)"
+            >
+            <i class="material-icons fs-5" role="button"
+              @click="isFocus = false,
+                searchInput = ''">clear</i>
+            <div class="search-list shadow rounded-1">
+              <ul class="list-unstyled m-0">
+                <li class="p-2" role="button"
+                  v-for="(item, idx) in filterDatas" :key="item.id"
+                  @click="toggleProduct(idx + 1)">
+                  {{ item.title }}
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
+        <div
+          class="nav-icons" role="button"
+          @click="$emitter.emit('toggle-cart', true), (toggleNav = fale)"
+        >
+          <Cart></Cart>
+          <span class="badge rounded-pill fw-normal ms-1" id="cart-num">
+            {{ datas.sum }}
+          </span>
+        </div>
         <button
-          class="navbar-toggler col-2 border-0"
+          class="navbar-toggler border-0"
           type="button"
           @click="toggleNav = !toggleNav"
         >
@@ -67,6 +93,7 @@
 
 <script>
 import CartModal from '@/components/FrontCartModal.vue';
+import { apiAllProducts } from '@/scripts/api';
 
 export default {
   props: ['datas'],
@@ -76,7 +103,88 @@ export default {
   data() {
     return {
       toggleNav: false,
+      products: [],
+      filterDatas: [],
+      searchInput: '',
+      key: 0,
+      pos: 0,
+      isFocus: false,
     };
+  },
+  methods: {
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = res.data.products.reverse();
+      });
+    },
+    filterProducts() {
+      this.key = 0;
+      const keyword = this.searchInput.trim();
+      if (!keyword) {
+        this.filterDatas = '';
+        return;
+      }
+      const result = this.products.filter((item) => item.title.match(keyword));
+      if (this.isFocus && result) {
+        this.filterDatas = result;
+      } else {
+        this.filterDatas = '';
+      }
+    },
+    toggleProduct(key) {
+      const item = this.filterDatas[key - 1];
+      if (!item) {
+        this.$pushMessage(false, '查無商品名稱，或尚未選擇商品');
+      } else {
+        this.searchInput = item.title;
+        this.$router.push(`/product/${item.id}`);
+        this.isFocus = false;
+        this.searchInput = '';
+        this.$refs.searchInput.blur();
+      }
+    },
+    selectOption() {
+      const list = document.querySelectorAll('.search-list li');
+      list.forEach((item, idx) => {
+        const newItem = item;
+        item.classList.remove('curr');
+        this.pos = item.offsetHeight;
+        if (idx + 1 === this.key) {
+          newItem.classList.add('curr');
+        }
+      });
+    },
+    scrollList(val, oldVal) {
+      const wrap = document.querySelector('.search-list');
+      if (val <= 0) {
+        this.key = 1;
+        return;
+      } if (val >= this.filterDatas.length) {
+        this.key = this.filterDatas.length;
+      }
+      if (((val - 1) % 4 === 0 && val > oldVal) || (val < oldVal)) {
+        wrap.scrollTop = this.pos * (this.key - 1);
+      }
+    },
+  },
+  watch: {
+    searchInput() {
+      this.filterProducts();
+    },
+    key(val, oldVal) {
+      this.selectOption();
+      window.addEventListener('scroll', this.scrollList(val, oldVal));
+    },
+  },
+  created() {
+    this.getAllProducts();
   },
 };
 </script>
+<style lang="sass">
+*
+  // outline: 1px solid red
+</style>

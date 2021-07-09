@@ -27,12 +27,16 @@
             v-for="item in cart"
             :key="item"
           >
-            <div
-              class="cart-img"
+            <div class="cart-img" role="button"
               :style="{ 'background-image': `url(${item.product.imageUrl})` }"
+              @click="toggleCart = false,
+              $router.push(`/product/${item.product.id}`)"
             ></div>
             <div class="cart-cont col px-3">
-              <p class="m-0">{{ item.product.title }}</p>
+              <p class="m-0" role="button"
+                @click="toggleCart = false,
+                $router.push(`/product/${item.product.id}`)"
+              >{{ item.product.title }}</p>
               <span class="d-block" style="letter-spacing: 1px"
                 >$ {{ $cash(item.product.price) }} NTD</span
               >

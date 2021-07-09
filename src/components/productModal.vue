@@ -334,12 +334,6 @@
             </div>
           </div>
         </div>
-        <!-- 拖曳圖片測試 -->
-        <Draggable v-model="photos">
-          <template #item="{item}">
-            {{ item }}
-          </template>
-      </Draggable>
         <div class="modal-footer">
           <button
             type="button"
@@ -363,13 +357,9 @@
 
 <script>
 import { apiUploadFile, apiGetAllProducts } from '@/scripts/api';
-import Draggable from 'vue3-draggable';
 
 export default {
   props: ['modalData'],
-  components: {
-    Draggable,
-  },
   data() {
     return {
       products: [],
@@ -384,8 +374,6 @@ export default {
       uploadData: '',
       defaultCate: '選擇類別',
       defaultUnit: '選擇單位',
-      drags: [],
-      photos: [],
     };
   },
   methods: {
@@ -496,7 +484,6 @@ export default {
       }
       this.updateTabs();
       this.getProducts();
-      this.photos = this.datas.imagesUrl;
     },
     datas: {
       handler(val) {

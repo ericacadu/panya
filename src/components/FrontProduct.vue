@@ -8,7 +8,7 @@
       class="products-img px-3"
       :style="{ 'background-image': `url(${item.imageUrl})` }"
       role="button"
-      @click="goToProduct(item.id)"
+      @click="$router.push(`/product/${item.id}`)"
     >
       <span class="sale" v-if="item.price < item.origin_price">On Sale</span>
       <small>查看內容</small>
@@ -45,9 +45,6 @@ export default {
     addToCart(item, qty = 1) {
       this.$emitter.emit('add-cart', { item, qty });
       this.$emitter.emit('toggle-spinner', { id: item.id });
-    },
-    goToProduct(id) {
-      this.$router.push(`/product/${id}`);
     },
   },
 };
