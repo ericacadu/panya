@@ -73,6 +73,7 @@ export default {
           this.$pushMessage(res);
         }
         this.products = res.data.products.reverse();
+        this.$emitter.emit('toggle-spinner', false);
       });
     },
     getCart() {

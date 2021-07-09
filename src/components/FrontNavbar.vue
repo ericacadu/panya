@@ -47,7 +47,7 @@
             <input type="text" class="form-control" placeholder="商品名稱"
               v-model.number="searchInput"
               ref="searchInput"
-              @focus="isFocus = true, filterProducts"
+              @focus="isFocus = true"
               @keyup.up="key--"
               @keyup.down="key++"
               @keypress.enter="toggleProduct(key)"
@@ -118,7 +118,7 @@ export default {
         this.filterDatas = '';
         return;
       }
-      const result = this.products.filter((item) => item.title.match(keyword.trim()));
+      const result = this.products.filter((item) => item.title.match(keyword));
       if (this.isFocus && result) {
         this.filterDatas = result;
       } else {

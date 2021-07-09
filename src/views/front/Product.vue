@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="product container row g-0 px-md-3 mx-auto fade-out"
+    <div class="product container row g-0 px-md-3 mx-auto"
       v-show="filterDatas.length > 0">
       <div class="product-photos col-md-6 row g-0 align-self-start p-3 p-md-0">
         <div class="photo-lg col-12">
@@ -57,7 +57,7 @@
             class="btn btn-primary col-12 col-md-7 ms-md-2 p-3 mt-3 mt-md-0"
             type="button"
             :disabled="isDisabled === product.id || isMax"
-            @click="addToCart(product, product.qty)"
+            @click="addToCart(product)"
           >
             加入購物車
             <Spinner :spin-item="product.id" />
@@ -66,37 +66,31 @@
         <small class="d-block text-danger mt-1" v-if="isMax">已達可購買最大數量</small>
       </div>
       <div
-        class="product-page row g-0 justify-content-between py-4 px-3 px-md-0 fade-out"
+        class="product-page row g-0 justify-content-between py-4 px-3 px-md-0"
       >
         <button
-          class="col-6 col-md-2 btn btn-outline-secondary fs-6"
+          class="col-6 col-md-2 btn btn-outline-secondary fs-7"
           type="button"
           @click="goToProduct(prev_product)"
-        >
-          <i class="material-icons fs-6">west</i>
-          {{ prev_product.title }}
+        ><i class="material-icons fs-6">west</i>{{ prev_product.title }}
         </button>
         <button
-          class="col-6 col-md-2 btn btn-outline-secondary fs-6
+          class="col-6 col-md-2 btn btn-outline-secondary fs-7
           border-start-0 d-md-none"
           type="button"
           @click="goToProduct(next_product)"
-        >
-          {{ next_product.title }}
-          <i class="material-icons fs-6">east</i>
+        >{{ next_product.title }}<i class="material-icons fs-6">east</i>
         </button>
         <button
-          class="col-6 col-md-2 btn btn-outline-secondary fs-6
-          d-none d-md-block"
+          class="col-6 col-md-2 btn btn-outline-secondary fs-7
+          d-none d-md-flex"
           type="button"
           @click="goToProduct(next_product)"
-        >
-          {{ next_product.title }}
-          <i class="material-icons fs-6">east</i>
+        >{{ next_product.title }}<i class="material-icons fs-6">east</i>
         </button>
       </div>
     </div>
-    <div class="product-info fade-out" v-show="filterDatas.length > 0">
+    <div class="product-info" v-show="filterDatas.length > 0">
       <div class="container row g-0 mx-auto p-3 pe-md-0 py-md-0">
         <div class="col-md-6 p-3 px-md-0 py-md-5 lh-lg">
           <h2 class="fs-5 text-primary">注意事項</h2>
@@ -141,7 +135,7 @@
       </div>
 
     </div>
-    <div class="container px-3 fade-out" v-show="filterDatas.length > 0">
+    <div class="container px-3" v-show="filterDatas.length > 0">
       <FrontSwiper
         :datas="filterDatas"
         :is-disabled="isDisabled"
@@ -158,7 +152,7 @@
 <script>
 import { apiGetProduct } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
-import fadeInMix from '@/mixins/fadeInMix.vue';
+// import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
   props: ['isDisabled', 'datas', 'allProducts'],
@@ -181,10 +175,9 @@ export default {
       isMax: false,
     };
   },
-  mixins: [fadeInMix],
+  // mixins: [fadeInMix],
   methods: {
     getProduct() {
-      this.propsData = this.datas;
       apiGetProduct(this.id).then((res) => {
         if (!res.data.success) {
           this.$pushMessage(res);
@@ -196,7 +189,10 @@ export default {
         const { 0: img } = this.product.imagesUrl;
         this.enterImage = img;
         document.title = `${this.product.title} - PANYA`;
-        this.$emit('get-products');
+        this.filterProducts();
+        this.getSiblingProduct(this.products);
+        this.getMaxNum();
+        this.$emitter.emit('page-loading', false);
       });
     },
     // 取得同類別隨機商品
@@ -231,11 +227,15 @@ export default {
     },
     // 取得可購買數量最大值
     getMaxNum() {
-      const filters = this.propsData.carts.filter(
+      if (!this.propsData.carts) {
+        this.maxNum = 30;
+        return;
+      }
+      const cart = this.propsData.carts.filter(
         (val) => val.product_id === this.product.id,
       );
-      if (filters.length > 0) {
-        this.maxNum = 30 - filters[0].qty;
+      if (cart.length > 0) {
+        this.maxNum = 30 - cart[0].qty;
       } else {
         this.maxNum = 30;
       }
@@ -255,8 +255,8 @@ export default {
       }
       this.tempNum = '';
     },
-    addToCart(item, qty) {
-      this.$emitter.emit('add-cart', { item, qty });
+    addToCart(item) {
+      this.$emitter.emit('add-cart', { item, qty: item.qty });
       this.$emitter.emit('toggle-spinner', { id: item.id });
     },
     goToProduct(item) {
@@ -291,17 +291,11 @@ export default {
       deep: true,
     },
     datas() {
-      this.getProduct();
+      this.propsData = this.datas;
     },
     allProducts() {
       this.products = this.allProducts;
-      this.getSiblingProduct(this.products);
-      this.filterProducts();
-      this.$emitter.emit('toggle-spinner', false);
-      this.getMaxNum();
-      setTimeout(() => {
-        this.fadeInOnLoad();
-      }, 0);
+      this.getProduct();
     },
   },
   beforeCreate() {
@@ -309,7 +303,9 @@ export default {
   },
   created() {
     this.id = this.$route.params.id;
-    this.getProduct();
+  },
+  mounted() {
+    this.$emit('get-products');
   },
 };
 </script>

@@ -163,7 +163,7 @@ export default {
       setTimeout(() => {
         this.$emitter.emit('page-loading', false);
         this.fadeInOnLoad();
-      }, 0);
+      }, 1000);
     },
   },
   created() {
