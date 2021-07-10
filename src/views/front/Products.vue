@@ -119,7 +119,6 @@ export default {
   created() {
     this.getPath();
     this.getAllProducts();
-    this.$emit('get-cart');
   },
 };
 </script>

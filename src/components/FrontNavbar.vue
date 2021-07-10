@@ -47,11 +47,9 @@
             <input type="text" class="form-control" placeholder="商品名稱"
               v-model.number="searchInput"
               ref="searchInput"
-              @focus="isFocus = true"
               @keyup.up="key--"
               @keyup.down="key++"
             >
-            <!-- @keypup.enter="toggleProduct(key)" -->
             <i class="material-icons fs-5" role="button"
               @click="isFocus = false,
                 searchInput = ''">clear</i>
@@ -92,10 +90,11 @@
 </template>
 
 <script>
+import { apiAllProducts } from '@/scripts/api';
 import CartModal from '@/components/FrontCartModal.vue';
 
 export default {
-  props: ['allProducts', 'datas'],
+  props: ['datas'],
   components: {
     CartModal,
   },
@@ -108,9 +107,19 @@ export default {
       key: 0,
       pos: 0,
       isFocus: false,
+      oldKey: 0,
+      scroll: {},
     };
   },
   methods: {
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = res.data.products.reverse();
+      });
+    },
     filterProducts() {
       this.key = 0;
       const keyword = this.searchInput;
@@ -134,7 +143,8 @@ export default {
         this.$router.push(`/product/${item.id}`);
         this.isFocus = false;
         this.searchInput = '';
-        this.$refs.searchInput.blur();
+        this.key = 0;
+        this.oldKey = 0;
       }
     },
     selectOption() {
@@ -148,33 +158,41 @@ export default {
         }
       });
     },
-    scrollList(val, oldVal) {
+    scrollList(val) {
       const wrap = document.querySelector('.search-list');
-      if (val <= 0) {
+      if (val <= 0 || this.oldKey <= 0) {
         this.key = 1;
         return;
       } if (val >= this.filterDatas.length) {
         this.key = this.filterDatas.length;
       }
-      if (((val - 1) % 4 === 0 && val > oldVal) || (val < oldVal)) {
+      if (((val - 1) % 4 === 0 && val > this.oldKey)
+          || (val < this.oldKey)) {
         wrap.scrollTop = this.pos * (this.key - 1);
       }
     },
   },
   watch: {
-    allProducts() {
-      this.products = this.allProducts;
-    },
     searchInput() {
       this.filterProducts();
     },
     key(val, oldVal) {
       this.selectOption();
-      window.addEventListener('scroll', this.scrollList(val, oldVal));
+      this.oldKey = oldVal;
+      this.scroll = this.scrollList(val);
+      window.addEventListener('scroll', this.scrollList);
     },
   },
   created() {
-    this.$emit('get-products');
+    this.getAllProducts();
+  },
+  mounted() {
+    this.$refs.searchInput.addEventListener('keydown', (e) => {
+      if (e.keyCode === 13) {
+        this.toggleProduct(this.key);
+        window.removeEventListener('scroll', this.scroll);
+      }
+    });
   },
 };
 </script>

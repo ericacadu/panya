@@ -137,6 +137,7 @@ export default {
   },
   created() {
     this.getCart();
+    this.getAllProducts();
   },
   mounted() {
     this.$emitter.on('add-cart', (res) => {

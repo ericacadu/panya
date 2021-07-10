@@ -1,7 +1,17 @@
-.front .navbar
-  background: $warm
-  &.show
+.front
+  .navbar
     background: $warm
+    &.show
+      background: $warm
+  .nav-link
+    text-transform: uppercase
+    letter-spacing: 1px
+    color: $secondary
+    &.disabled
+      color: $secondary
+    &.active
+      font-weight: 500
+      color: $gray-800 !important
 
 .navbar-collapse
   position: absolute
@@ -34,17 +44,6 @@
 .nav-brand
   width: 100px
   color: $primary
-
-.front
-  .nav-link
-    text-transform: uppercase
-    letter-spacing: 1px
-    color: $secondary
-    &.disabled
-      color: $secondary
-    &.active
-      font-weight: 500
-      color: $gray-800 !important
 
 .nav-icons
   display: flex

@@ -150,12 +150,12 @@
 </template>
 
 <script>
-import { apiGetProduct } from '@/scripts/api';
+import { apiAllProducts, apiGetProduct } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
 // import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
-  props: ['isDisabled', 'datas', 'allProducts'],
+  props: ['isDisabled', 'datas'],
   components: {
     FrontSwiper,
   },
@@ -193,6 +193,15 @@ export default {
         this.getSiblingProduct(this.products);
         this.getMaxNum();
         this.$emitter.emit('page-loading', false);
+      });
+    },
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = res.data.products.reverse();
+        this.getProduct();
       });
     },
     // 取得同類別隨機商品
@@ -293,19 +302,13 @@ export default {
     datas() {
       this.propsData = this.datas;
     },
-    allProducts() {
-      this.products = this.allProducts;
-      this.getProduct();
-    },
   },
   beforeCreate() {
     this.$emitter.emit('page-loading', true);
   },
   created() {
     this.id = this.$route.params.id;
-  },
-  mounted() {
-    this.$emit('get-products');
+    this.getAllProducts();
   },
 };
 </script>

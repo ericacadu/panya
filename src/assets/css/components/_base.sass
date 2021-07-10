@@ -20,6 +20,16 @@ a
   &:hover
     color: lighten($primary, 30%)
 
+article
+  line-height: $line-height-lg
+  h3
+    font-size: $h5-font-size
+    color: $primary
+  p + h3, ul + h3
+    margin-top: 3rem
+  a
+    border-bottom: 1px dashed lighten($primary, 30%)
+
 .loading
   color: $light
   text-transform: uppercase
@@ -45,7 +55,6 @@ a
     &:nth-child(3)
       animation-delay: .3s
 
-  
 .bouncecookie
   display: flex
   justify-content: center

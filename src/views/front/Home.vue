@@ -125,7 +125,7 @@
 </template>
 
 <script>
-// import { apiAllProducts } from '@/scripts/api';
+import { apiAllProducts } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
 import fadeInMix from '@/mixins/fadeInMix.vue';
 
@@ -145,6 +145,19 @@ export default {
   },
   mixins: [fadeInMix],
   methods: {
+    getAllProducts() {
+      apiAllProducts().then((res) => {
+        if (!res.data.success) {
+          this.$pushMessage(res);
+        }
+        this.products = res.data.products.reverse();
+        this.promote = this.products.filter((item) => item.is_promote);
+        setTimeout(() => {
+          this.$emitter.emit('page-loading', false);
+          this.fadeInOnLoad();
+        }, 1000);
+      });
+    },
     onSubmit() {
       this.idDisabled = true;
       this.$emitter.emit('toggle-spinner', this.email);
@@ -156,18 +169,8 @@ export default {
       }, 1500);
     },
   },
-  watch: {
-    allProducts() {
-      this.products = this.allProducts;
-      this.promote = this.products.filter((item) => item.is_promote);
-      setTimeout(() => {
-        this.$emitter.emit('page-loading', false);
-        this.fadeInOnLoad();
-      }, 1000);
-    },
-  },
   created() {
-    this.$emit('get-products');
+    this.getAllProducts();
   },
   beforeMount() {
     this.$emitter.emit('page-loading', true);
