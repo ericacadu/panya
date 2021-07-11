@@ -2,16 +2,12 @@
   <div class="front container-fluid g-0 min-vh-100 text-dark">
     <Navbar
       :datas="cart"
-      :all-products="products"
-      @get-products="getAllProducts"
       />
     <router-view
       class="min-height"
       :datas="cart"
-      :all-products="products"
       :is-disabled="isDisabled"
       @get-cart="getCart"
-      @get-products="getAllProducts"
     />
     <div class="footer bg-dark py-4 py-md-5 text-light">
       <div class="container row g-0 mx-auto px-3 fs-7 ls-2
