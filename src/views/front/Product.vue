@@ -301,6 +301,7 @@ export default {
     },
     datas() {
       this.propsData = this.datas;
+      this.getProduct();
     },
   },
   beforeCreate() {
