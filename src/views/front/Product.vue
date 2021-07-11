@@ -192,7 +192,9 @@ export default {
         this.filterProducts();
         this.getSiblingProduct(this.products);
         this.getMaxNum();
-        this.$emitter.emit('page-loading', false);
+        setTimeout(() => {
+          this.$emitter.emit('page-loading', false);
+        }, 1000);
       });
     },
     getAllProducts() {
@@ -220,7 +222,7 @@ export default {
       arrSet.forEach((i) => {
         this.filterDatas.push(arrFilter[i]);
       });
-      this.$emitter.emit('page-loading', false);
+      // this.$emitter.emit('page-loading', false);
     },
     // 取得前後一筆商品
     getSiblingProduct(datas) {
