@@ -9,7 +9,7 @@
         v-if="products.length > 0"
       >
         <router-link
-          class="px-4 py-1"
+          class="px-3 px-md-4 py-1"
           :to="{ query: { category: 'all', page: 1 } }"
         >
           全部
@@ -23,7 +23,7 @@
         @click="filterProducts(1, item), (isActive = item)"
       >
         <router-link
-          class="px-4 py-1"
+          class="px-3 px-md-4 py-1"
           :to="{ query: { category: item, page: 1 } }"
         >
           {{ item }}
