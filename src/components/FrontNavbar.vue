@@ -15,7 +15,7 @@
               <router-link
                 class="nav-link"
                 to="/about"
-                @click="toggleNav = fale"
+                @click="closeNav"
                 >關於panya</router-link
               >
             </li>
@@ -23,7 +23,7 @@
               <router-link
                 class="nav-link"
                 to="/products?category=all&page=1"
-                @click="toggleNav = fale"
+                @click="closeNav"
                 >手感烘焙</router-link
               >
             </li>
@@ -31,7 +31,7 @@
               <router-link
                 class="nav-link"
                 to="/service"
-                @click="toggleNav = fale"
+                @click="closeNav"
                 >常見問題</router-link
               >
             </li>
@@ -45,7 +45,7 @@
             <Search :role="isFocus ? '' : 'button'"
               @click="isFocus = true"></Search>
             <input type="text" class="form-control" placeholder="商品名稱"
-              v-model.number="searchInput"
+              v-model.trim.number="searchInput"
               ref="searchInput"
               @keyup.up="key--"
               @keyup.down="key++"
@@ -53,11 +53,11 @@
             <i class="material-icons fs-5" role="button"
               @click="isFocus = false,
                 searchInput = ''">clear</i>
-            <div class="search-list shadow rounded-1">
+            <div class="search-list shadow rounded-1" v-if="filterDatas.length > 0">
               <ul class="list-unstyled m-0">
                 <li class="p-2" role="button"
-                  v-for="(item, idx) in filterDatas" :key="item.id"
-                  @click="toggleProduct(idx + 1)">
+                  v-for="(item, index) in filterDatas" :key="item.id"
+                  @click="toggleList(index)">
                   {{ item.title }}
                 </li>
               </ul>
@@ -65,18 +65,18 @@
           </div>
         </div>
         <div
-          class="nav-icons" role="button"
-          @click="$emitter.emit('toggle-cart', true), (toggleNav = fale)"
+          class="nav-icons position-relative" role="button"
+          @click="openCart"
         >
           <Cart></Cart>
-          <span class="badge rounded-pill fw-normal ms-1" id="cart-num">
+          <span class="badge rounded-pill fw-normal" id="cart-num" v-show="datas.sum > 0">
             {{ datas.sum }}
           </span>
         </div>
         <button
           class="navbar-toggler border-0"
           type="button"
-          @click="toggleNav = !toggleNav"
+          @click="openNav"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -84,7 +84,7 @@
       <CartModal />
     </nav>
     <div class="overlay" :class="toggleNav ? 'show' : ''">
-      <div class="overlay-inner" @click="toggleNav = fale"></div>
+      <div class="overlay-inner" @click="closeNav"></div>
     </div>
   </div>
 </template>
@@ -92,59 +92,76 @@
 <script>
 import { apiAllProducts } from '@/scripts/api';
 import CartModal from '@/components/FrontCartModal.vue';
+import Cart from '@/components/IconBag.vue';
+import Search from '@/components/IconSearch.vue';
 
 export default {
   props: ['datas'],
   components: {
     CartModal,
+    Cart,
+    Search,
   },
+  emits: ['toggle-cart', 'page-loading', 'toggle-overlay'],
   data() {
     return {
       toggleNav: false,
       products: [],
       filterDatas: [],
       searchInput: '',
-      key: 0,
+      key: -1,
+      oldKey: 0,
       pos: 0,
       isFocus: false,
-      oldKey: 0,
       scroll: {},
     };
   },
   methods: {
     getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-      });
+      apiAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.products = res.data.products.reverse();
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     filterProducts() {
-      this.key = 0;
       const keyword = this.searchInput;
+      this.key = -1;
       if (!keyword) {
         this.filterDatas = '';
         return;
       }
       const result = this.products.filter((item) => item.title.match(keyword));
-      if (this.isFocus && result) {
+      if (result) {
         this.filterDatas = result;
       } else {
         this.filterDatas = '';
       }
     },
-    toggleProduct(key) {
-      const item = this.filterDatas[key - 1];
-      if (!item) {
-        this.$pushMessage(false, '查無商品名稱，或尚未選擇商品');
-      } else {
-        this.searchInput = item.title;
-        this.$router.push(`/product/${item.id}`);
-        this.isFocus = false;
+    toggleList(index) {
+      if (index >= 0) {
+        this.key = index;
+      }
+      const list = document.querySelectorAll('.search-list li');
+      const option = this.filterDatas.filter(
+        (item) => item.title === list[this.key].textContent,
+      );
+
+      if (option.length > 0) {
+        const { id } = option[0];
+        this.$router.push(`/product/${id}`);
         this.searchInput = '';
-        this.key = 0;
-        this.oldKey = 0;
+        this.filterDatas = [];
+        this.key = -1;
+        this.isFocus = false;
+      } else {
+        this.$pushMessage(false, '查無商品名稱，或尚未選擇商品');
       }
     },
     selectOption() {
@@ -153,23 +170,42 @@ export default {
         const newItem = item;
         item.classList.remove('curr');
         this.pos = item.offsetHeight;
-        if (idx + 1 === this.key) {
+        if (idx === this.key) {
           newItem.classList.add('curr');
         }
       });
     },
-    scrollList(val) {
+    scrollList() {
       const wrap = document.querySelector('.search-list');
-      if (val <= 0 || this.oldKey <= 0) {
-        this.key = 1;
+      const num = this.key;
+      if (num < 0 || this.oldKey < 0) {
+        this.key = 0;
         return;
-      } if (val >= this.filterDatas.length) {
-        this.key = this.filterDatas.length;
       }
-      if (((val - 1) % 4 === 0 && val > this.oldKey)
-          || (val < this.oldKey)) {
-        wrap.scrollTop = this.pos * (this.key - 1);
+      if (num >= this.filterDatas.length - 1) {
+        this.key = this.filterDatas.length - 1;
+        return;
       }
+      if (num % 4 === 0 || this.oldKey > num) {
+        wrap.scrollTop = this.pos * this.key;
+      }
+    },
+    openNav() {
+      this.toggleNav = !this.toggleNav;
+      if (this.toggleNav) {
+        this.toggleNav = true;
+        this.$emitter.emit('toggle-overlay', true);
+      } else {
+        this.closeNav();
+      }
+    },
+    closeNav() {
+      this.toggleNav = false;
+      this.$emitter.emit('toggle-overlay', false);
+    },
+    openCart() {
+      this.$emitter.emit('toggle-cart', true);
+      this.toggleNav = false;
     },
   },
   watch: {
@@ -180,16 +216,14 @@ export default {
       this.selectOption();
       this.oldKey = oldVal;
       this.scroll = this.scrollList(val);
-      window.addEventListener('scroll', this.scrollList);
     },
   },
-  created() {
-    this.getAllProducts();
-  },
   mounted() {
+    this.getAllProducts();
+    window.addEventListener('scroll', this.scrollList);
     this.$refs.searchInput.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
-        this.toggleProduct(this.key);
+        this.toggleList();
         window.removeEventListener('scroll', this.scroll);
       }
     });

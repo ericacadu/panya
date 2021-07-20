@@ -36,6 +36,7 @@
 <script>
 export default {
   props: ['modalData'],
+  emits: ['delete-data'],
   data() {
     return {
       datas: {},

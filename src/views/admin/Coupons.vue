@@ -71,10 +71,11 @@
 <script>
 import { apiGetCoupons, apiUpdateCoupon, apiDeleteCoupon } from '@/scripts/api';
 import { bsModal, getDate } from '@/scripts/methods';
-import CouponModal from '@/components/couponModal.vue';
-import DeleteModal from '@/components/deleteModal.vue';
+import CouponModal from '@/components/AdminCouponModal.vue';
+import DeleteModal from '@/components/AdminDeleteModal.vue';
 
 export default {
+  emits: ['page-loading', 'push-message'],
   components: {
     CouponModal,
     DeleteModal,
@@ -97,20 +98,25 @@ export default {
   },
   methods: {
     getCoupons() {
-      apiGetCoupons().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage();
-        }
-        this.coupons = res.data.coupons;
-        this.pages = res.data.pagination;
-        this.coupons.forEach((item) => {
-          const newItem = item;
-          if (item.due_date < this.today) {
-            newItem.is_enabled = 0;
+      apiGetCoupons()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage();
           }
+          this.coupons = res.data.coupons;
+          this.pages = res.data.pagination;
+          this.coupons.forEach((item) => {
+            const newItem = item;
+            if (item.due_date < this.today) {
+              newItem.is_enabled = 0;
+            }
+          });
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
-        this.$emitter.emit('page-loading', false);
-      });
     },
     getDate(date) {
       return getDate(date);
@@ -128,25 +134,35 @@ export default {
           break;
       }
       this.$emitter.emit('page-loading', true);
-      apiUpdateCoupon(method, { data }, id).then((res) => {
-        if (res.data.success) {
-          this.getCoupons();
-          this.modal.hide();
-        }
-        this.$pushMessage(res);
-        this.$emitter.emit('page-loading', false);
-      });
+      apiUpdateCoupon(method, { data }, id)
+        .then((res) => {
+          if (res.data.success) {
+            this.getCoupons();
+            this.modal.hide();
+          }
+          this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     deleteCoupon(item) {
       this.$emitter.emit('page-loading', true);
-      apiDeleteCoupon(item.id).then((res) => {
-        if (res.data.success) {
-          this.getCoupons();
-          this.modal.hide();
-        }
-        this.$pushMessage(res);
-        this.$emitter.emit('page-loading', false);
-      });
+      apiDeleteCoupon(item.id)
+        .then((res) => {
+          if (res.data.success) {
+            this.getCoupons();
+            this.modal.hide();
+          }
+          this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     openModal(isModal, item) {
       if (isModal === 'edit') {
@@ -172,10 +188,8 @@ export default {
       this.modal.show();
     },
   },
-  beforeCreate() {
-    this.$emitter.emit('page-loading', true);
-  },
   created() {
+    this.$emitter.emit('page-loading', true);
     this.getCoupons();
   },
 };

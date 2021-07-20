@@ -57,10 +57,19 @@
     .badge
       background: $dark
   svg
-    width: 1.2em
+    width: 1.2rem
     fill: $secondary
+  .cart-bag
+    transform: scale(1.1)
+    +media-breakpoint-up(md)
+      transform: scale(1)
   .badge
-    background: $secondary
+    position: absolute
+    top: 0
+    right: 0
+    margin: -30% -60% 0 0
+    transform: scale(0.8)
+    background: $red-400
     transition: all .2s
     &.active
       background: $red-400
@@ -105,7 +114,8 @@
     width: 100%
     background: $white
     max-height: 10rem
-    overflow: scroll
+    overflow-y: auto
+    overflow-x: hidden
     margin-top: .2rem
     font-size: $h6-font-size
     color: rgba($secondary, .8)
@@ -115,10 +125,10 @@
 
 @keyframes jump
   0%, 100%
-    transform: translateY(0) scale(1, 1)
+    transform: translateY(0) scale(0.8)
   10%
-    transform: translateY(20%) scale(1.1, .9)
+    transform: translateY(20%) scale(1, 0.7)
   50%
-    transform: translateY(-20%) scale(.9, 1.1)
+    transform: translateY(-20%) scale(0.7, 1)
 
   

@@ -1,5 +1,5 @@
 <template>
-  <div class="front container-fluid g-0 min-vh-100 text-dark">
+  <div class="front container-fluid g-0 min-vh-100 text-dark" :class="block">
     <Navbar
       :datas="cart"
       />
@@ -9,7 +9,7 @@
       :is-disabled="isDisabled"
       @get-cart="getCart"
     />
-    <div class="footer bg-dark py-4 py-md-5 text-light">
+    <footer class="bg-dark py-4 py-md-5 text-light">
       <div class="container row g-0 mx-auto px-3 fs-7 ls-2
         text-secondary text-uppercase text-center"
         ref="footer">
@@ -36,7 +36,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </footer>
     <div id="scrollTop" role="button" class="p-2 rounded-1 fade d-none" ref="scrollTop"
       @click="scrollToTop">
       <span class="material-icons">
@@ -51,6 +51,7 @@ import Navbar from '@/components/FrontNavbar.vue';
 import { apiAllProducts, apiGetCart, apiAddCart } from '@/scripts/api';
 
 export default {
+  emits: ['page-loading', 'push-message', 'toggle-spinner', 'send-cart'],
   components: {
     Navbar,
   },
@@ -60,29 +61,40 @@ export default {
       cart: [],
       isDisabled: '',
       code: '',
+      block: '',
     };
   },
   methods: {
     getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-        this.$emitter.emit('toggle-spinner', false);
-      });
+      apiAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.products = res.data.products.reverse();
+          this.$emitter.emit('toggle-spinner', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     getCart() {
-      apiGetCart().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.cart = res.data.data;
-        this.isDisabled = '';
-        this.getCartum();
-        this.$emitter.emit('send-cart', this.cart);
-        this.$emitter.emit('toggle-spinner', false);
-      });
+      apiGetCart()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.cart = res.data.data;
+          this.isDisabled = '';
+          this.getCartum();
+          this.$emitter.emit('send-cart', this.cart);
+          this.$emitter.emit('toggle-spinner', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     getCartum() {
       this.cart.sum = 0;
@@ -101,12 +113,17 @@ export default {
         qty,
       };
       this.isDisabled = item.id;
-      apiAddCart({ data }).then((res) => {
-        if (res.data.success) {
-          this.getCart();
-        }
-        this.$pushMessage(res);
-      });
+      apiAddCart({ data })
+        .then((res) => {
+          if (res.data.success) {
+            this.getCart();
+          }
+          this.$pushMessage(res);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     scrollBtnPos() {
       const half = this.$refs.footer.offsetWidth / 2;
@@ -131,17 +148,22 @@ export default {
       });
     },
   },
-  created() {
+  mounted() {
     this.getCart();
     this.getAllProducts();
-  },
-  mounted() {
     this.$emitter.on('add-cart', (res) => {
       const { item, qty } = res;
       this.addCart(item, qty);
     });
     this.$emitter.on('get-cart', () => {
       this.getCart();
+    });
+    this.$emitter.on('toggle-overlay', (val) => {
+      if (val) {
+        this.block = 'vh-100 overflow-hidden';
+      } else {
+        this.block = '';
+      }
     });
     this.scrollBtnPos();
     window.addEventListener('scroll', this.showScrollBtn);

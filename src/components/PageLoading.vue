@@ -1,12 +1,12 @@
 <template>
   <div class="loading bouncecookie"
-    :class="isLoading ? '' : 'd-none fade'">
+    ref="loading"
+    :class="isLoading ? '' : 'fade'">
     <i class="fas fa-2x fa-cookie-bite cookie"></i>
     <span>loading</span>
   </div>
 </template>
 <script>
-// import { bsToast } from '@/scripts/methods';
 
 export default {
   data() {
@@ -16,13 +16,18 @@ export default {
   },
   mounted() {
     this.$emitter.on('page-loading', (val) => {
+      const body = document.querySelector('body');
       this.isLoading = val;
+      if (val) {
+        this.$refs.loading.classList.remove('d-none');
+        body.setAttribute('class', 'mh-100vh overflow-hidden');
+      } else {
+        setTimeout(() => {
+          this.$refs.loading.classList.add('d-none');
+          body.setAttribute('class', '');
+        }, 200);
+      }
     });
   },
-  // watch: {
-  //   isLoading() {
-  //     bsToast('toast').hide();
-  //   },
-  // },
 };
 </script>

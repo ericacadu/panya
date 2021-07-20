@@ -6,7 +6,6 @@ export default {
       const targetPos = document.getElementById('target').offsetTop;
       const { innerHeight } = window;
       all.forEach((item) => {
-        // item.classList.remove('fade-in');
         if (innerHeight - item.offsetTop >= innerHeight - targetPos) {
           item.classList.add('fade-in');
         }
@@ -20,8 +19,6 @@ export default {
       all.forEach((item) => {
         if (windowY + targetPos - item.offsetTop >= innerHeight - targetPos) {
           item.classList.add('fade-in');
-        } else {
-        //   item.classList.remove('fade-in');
         }
       });
     },

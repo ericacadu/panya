@@ -12,10 +12,8 @@ import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 // validate end
 import ToastMessage from '@/components/ToastMessage.vue';
-import Pagination from '@/components/pagination.vue';
-import Logo from '@/components/logo.vue';
-import Cart from '@/components/bag.vue';
-import Search from '@/components/search.vue';
+import Pagination from '@/components/Pagination.vue';
+import Logo from '@/components/IconLogo.vue';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import Spinner from '@/components/Spinner.vue';
 import PageLoading from '@/components/PageLoading.vue';
@@ -43,8 +41,6 @@ app.component('ToastMessage', ToastMessage)
   .component('Spinner', Spinner)
   .component('PageLoading', PageLoading)
   .component('Logo', Logo)
-  .component('Cart', Cart)
-  .component('Search', Search)
   .component('Form', Form)
   .component('Field', Field)
   .component('ErrorMessage', ErrorMessage)

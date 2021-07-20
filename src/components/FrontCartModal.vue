@@ -1,8 +1,8 @@
 <template>
-  <div class="overlay" :class="toggleCart">
+  <div class="overlay" :class="toggleCart ? 'show' : ''">
     <div
       class="cart col-12 col-md-4 flex-column justify-content-start"
-      :class="toggleCart"
+      :class="toggleCart ? 'show' : ''"
     >
       <div class="cart-header p-4 d-flex justify-content-between align-items-center">
         <small class="ls-5">購物車</small>
@@ -29,13 +29,11 @@
           >
             <div class="cart-img" role="button"
               :style="{ 'background-image': `url(${item.product.imageUrl})` }"
-              @click="toggleCart = false,
-              $router.push(`/product/${item.product.id}`)"
+              @click="goToProduct(item.product.id)"
             ></div>
             <div class="cart-cont col px-3">
               <p class="m-0" role="button"
-                @click="toggleCart = false,
-                $router.push(`/product/${item.product.id}`)"
+                @click="goToProduct(item.product.id)"
               >{{ item.product.title }}</p>
               <span class="d-block" style="letter-spacing: 1px"
                 >$ {{ $cash(item.product.price) }} NTD</span
@@ -115,18 +113,25 @@ export default {
     return {
       datas: {},
       cart: {},
-      toggleCart: '',
+      toggleCart: false,
       isDisabled: '',
       tempNum: '',
     };
   },
+  emits: ['get-cart', 'page-loading', 'toggle-spinner', 'toggle-overlay'],
   methods: {
     closeCart() {
       this.toggleCart = false;
+      this.$emitter.emit('toggle-overlay', false);
+    },
+    goToProduct(id) {
+      this.toggleCart = false;
+      this.$router.push(`/product/${id}`);
+      this.$emitter.emit('toggle-overlay', false);
     },
     checkout() {
       this.$router.push('/checkorder');
-      this.toggleCart = false;
+      this.closeCart();
     },
     focusInput(item) {
       this.tempNum = item;
@@ -144,38 +149,53 @@ export default {
       };
       this.isDisabled = item.id;
       this.$emitter.emit('toggle-spinner', { id: item.id });
-      apiUpdateCart(item.id, { data }).then((res) => {
-        if (res.data.success) {
-          this.$emitter.emit('get-cart');
-        }
-        this.isDisabled = '';
-        this.$pushMessage(res);
-        this.$emitter.emit('toggle-spinner', false);
-      });
+      apiUpdateCart(item.id, { data })
+        .then((res) => {
+          if (res.data.success) {
+            this.$emitter.emit('get-cart');
+          }
+          this.isDisabled = '';
+          this.$pushMessage(res);
+          this.$emitter.emit('toggle-spinner', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     deleteCart(id) {
       this.isDisabled = 'id';
       this.$emitter.emit('toggle-spinner', { id });
-      apiDeleteCart(id).then((res) => {
-        if (res.data.success) {
-          this.$emitter.emit('get-cart');
-        }
-        this.isDisabled = '';
-        this.$pushMessage(res);
-        this.$emitter.emit('toggle-spinner', false);
-      });
+      apiDeleteCart(id)
+        .then((res) => {
+          if (res.data.success) {
+            this.$emitter.emit('get-cart');
+          }
+          this.isDisabled = '';
+          this.$pushMessage(res);
+          this.$emitter.emit('toggle-spinner', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     clearCart() {
       this.isDisabled = 'clear';
       this.$emitter.emit('toggle-spinner', 'clear');
-      apiClearCart().then((res) => {
-        if (res.data.success) {
-          this.$emitter.emit('get-cart');
-        }
-        this.isDisabled = '';
-        this.$pushMessage(res);
-        this.$emitter.emit('toggle-spinner', false);
-      });
+      apiClearCart()
+        .then((res) => {
+          if (res.data.success) {
+            this.$emitter.emit('get-cart');
+          }
+          this.isDisabled = '';
+          this.$pushMessage(res);
+          this.$emitter.emit('toggle-spinner', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
   },
   watch: {
@@ -212,9 +232,11 @@ export default {
     });
     this.$emitter.on('toggle-cart', (val) => {
       if (val) {
-        this.toggleCart = 'show';
+        this.toggleCart = true;
+        this.$emitter.emit('toggle-overlay', true);
       } else {
-        this.toggleCart = '';
+        this.toggleCart = false;
+        this.$emitter.emit('toggle-overlay', false);
       }
     });
   },

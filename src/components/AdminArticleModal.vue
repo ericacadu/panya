@@ -145,6 +145,7 @@ import { apiGetArticle } from '@/scripts/api';
 
 export default {
   props: ['modalData'],
+  emits: ['page-loading', 'push-message'],
   data() {
     return {
       datas: {
@@ -172,6 +173,10 @@ export default {
             this.$pushMessage(res);
           }
           this.datas.content = res.data.article.content;
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
         });
     },

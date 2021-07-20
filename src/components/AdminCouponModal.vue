@@ -1,9 +1,11 @@
 <template>
-  <div
-    class="modal fade"
+  <form
+    class="modal fade needs-validation"
     id="couponModal"
     data-bs-backdrop="static"
     data-bs-keyboard="false"
+    novalidate
+    @submit.prevent
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0">
@@ -24,6 +26,7 @@
                 placeholder="輸入標題"
                 id="title"
                 v-model.trim="datas.title"
+                required
               />
             </div>
             <div class="col-5">
@@ -34,6 +37,7 @@
                 placeholder="輸入優惠碼"
                 id="code"
                 v-model.trim="datas.code"
+                required
               />
             </div>
             <div class="col">
@@ -42,7 +46,7 @@
                 type="number"
                 min="0"
                 max="100"
-                class="form-control"
+                class="form-control no-valid"
                 id="percent"
                 v-model.number="datas.percent"
               />
@@ -123,21 +127,25 @@
             取消
           </button>
           <button
-            type="button"
+            type="submit"
             class="btn btn-primary"
-            @click="$emit('update-data', datas)"
+            @click="updateDatas"
           >
             儲存
           </button>
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
+import invalidMix from '@/mixins/InvalidMix.vue';
+
 export default {
   props: ['modalData'],
+  mixins: [invalidMix],
+  emits: ['page-loading', 'push-message', 'update-data'],
   data() {
     return {
       datas: {},
@@ -147,9 +155,19 @@ export default {
       today: new Date(),
     };
   },
+  methods: {
+    updateDatas() {
+      if (!this.isValid) {
+        return;
+      }
+      this.$emit('update-data', this.datas);
+    },
+  },
   watch: {
     modalData() {
       this.datas = { ...this.modalData };
+      document.querySelector('form').classList.remove('was-validated');
+      this.validation();
     },
     datas: {
       handler(val, oldVal) {

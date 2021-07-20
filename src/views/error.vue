@@ -38,6 +38,7 @@
 
 <script>
 export default {
+  emits: ['page-loading'],
   mounted() {
     this.$emitter.emit('page-loading', false);
   },

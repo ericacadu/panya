@@ -18,7 +18,7 @@
     <ul class="list-group list-group-flush shadow-sm">
       <li class="list-group-item p-2"
         v-for="item in articles" :key="item.id">
-        <div class="col-2">{{ getDate(item.create_at) }}</div>
+        <div class="col-2">{{ item.create_date }}</div>
         <div class="col-4 text-start">{{ item.title }}</div>
         <div class="col-3 text-start">{{ item.tagstr }}</div>
         <div class="col-1 text-success">
@@ -64,10 +64,11 @@
 <script>
 import { apiGetArticles, apiUpdateArticle, apiDeleteArticle } from '@/scripts/api';
 import { bsModal, getDate } from '@/scripts/methods';
-import ArticleModal from '@/components/articleModal.vue';
-import DeleteModal from '@/components/deleteModal.vue';
+import ArticleModal from '@/components/AdminArticleModal.vue';
+import DeleteModal from '@/components/AdminDeleteModal.vue';
 
 export default {
+  emits: ['page-loading', 'push-message'],
   components: {
     ArticleModal,
     DeleteModal,
@@ -89,8 +90,8 @@ export default {
     };
   },
   methods: {
-    getArticles(page) {
-      apiGetArticles(page)
+    getArticles() {
+      apiGetArticles()
         .then((res) => {
           if (!res.data.success) {
             this.$pushMessage(res);
@@ -104,12 +105,14 @@ export default {
             } else {
               atc.tagstr = atc.tag;
             }
+            atc.create_date = getDate(item.create_at);
           });
           this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
-    },
-    getDate(date) {
-      return getDate(date);
     },
     updateArticle(data) {
       let { method, id } = this.apiInfo;
@@ -131,6 +134,10 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
         });
     },
@@ -160,20 +167,23 @@ export default {
     },
     deleteArticle(item) {
       this.$emitter.emit('page-loading', true);
-      apiDeleteArticle(item.id).then((res) => {
-        if (res.data.success) {
-          this.getArticles();
-          this.modal.hide();
-        }
-        this.$pushMessage(res);
-        this.$emitter.emit('page-loading', false);
-      });
+      apiDeleteArticle(item.id)
+        .then((res) => {
+          if (res.data.success) {
+            this.getArticles();
+            this.modal.hide();
+          }
+          this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
   },
-  beforeCreate() {
-    this.$emitter.emit('page-loading', true);
-  },
   created() {
+    this.$emitter.emit('page-loading', true);
     this.getArticles();
   },
 };

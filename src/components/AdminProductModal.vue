@@ -1,9 +1,11 @@
 <template>
-  <div
-    class="modal fade"
+  <form
+    class="modal fade needs-validation"
     id="productModal"
     data-bs-backdrop="static"
     data-bs-keyboard="false"
+    novalidate
+    @submit.prevent
   >
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0">
@@ -88,6 +90,7 @@
                     class="form-control"
                     placeholder="輸入商品名稱"
                     v-model="datas.title"
+                    required
                   />
                 </div>
                 <div class="col-4">
@@ -98,8 +101,10 @@
                     id="product-category"
                     class="form-control form-select"
                     v-model="datas.category"
+                    @change="checkInput"
+                    required
                   >
-                    <option value="選擇類別" selected disabled>選擇類別</option>
+                    <option value="" selected disabled>選擇類別</option>
                     <option
                       v-for="(item, i) in category"
                       :key="i"
@@ -120,6 +125,7 @@
                     class="form-control"
                     placeholder="輸入原價"
                     v-model.number="datas.origin_price"
+                    required
                   />
                 </div>
                 <div class="col-4 mt-2">
@@ -133,6 +139,7 @@
                     class="form-control"
                     placeholder="輸入售價"
                     v-model.number="datas.price"
+                    required
                   />
                 </div>
                 <div class="col-4 mt-2">
@@ -143,8 +150,9 @@
                     id="product-unit"
                     class="form-control form-select"
                     v-model="datas.unit"
+                    required
                   >
-                    <option value="選擇單位" selected disabled>選擇單位</option>
+                    <option value="" selected disabled>選擇單位</option>
                     <option v-for="(item, i) in unit" :key="i" :value="item">
                       {{ item }}
                     </option>
@@ -343,7 +351,7 @@
             取消
           </button>
           <button
-            type="button"
+            type="submit"
             class="btn btn-primary"
             @click="updateDatas"
           >
@@ -352,14 +360,17 @@
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
 import { apiUploadFile, apiGetAllProducts } from '@/scripts/api';
+import invalidMix from '@/mixins/InvalidMix.vue';
 
 export default {
   props: ['modalData'],
+  emits: ['page-loading', 'push-message', 'update-data'],
+  mixins: [invalidMix],
   data() {
     return {
       products: [],
@@ -378,15 +389,20 @@ export default {
   },
   methods: {
     getProducts() {
-      apiGetAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        const all = Object.values(res.data.products).reverse();
-        this.products = all.filter((item) => item.id !== this.datas.id);
-        this.filterSelected();
-        this.$emitter.emit('page-loading', false);
-      });
+      apiGetAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          const all = Object.values(res.data.products).reverse();
+          this.products = all.filter((item) => item.id !== this.datas.id);
+          this.filterSelected();
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     filterSelected() {
       this.products.forEach((item) => {
@@ -432,14 +448,19 @@ export default {
         this.$pushMessage(false, '沒有選擇檔案');
         return;
       }
-      apiUploadFile(formData).then((res) => {
-        if (res.data.success) {
-          this.datas.imagesUrl.push(res.data.imageUrl);
-          this.$refs['upload-file'].value = '';
-          this.uploadData = '';
-        }
-        this.$pushMessage(res, res.data.message || '上傳成功');
-      });
+      apiUploadFile(formData)
+        .then((res) => {
+          if (res.data.success) {
+            this.datas.imagesUrl.push(res.data.imageUrl);
+            this.$refs['upload-file'].value = '';
+            this.uploadData = '';
+          }
+          this.$pushMessage(res, res.data.message || '上傳成功');
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     removeImage(item) {
       const result = this.datas.imagesUrl.filter((img) => item !== img);
@@ -464,6 +485,9 @@ export default {
       changeTab(panes);
     },
     updateDatas() {
+      if (!this.isValid) {
+        return;
+      }
       if (this.datas.category === this.defaultCate) {
         this.datas.category = '';
       }
@@ -484,6 +508,8 @@ export default {
       }
       this.updateTabs();
       this.getProducts();
+      document.querySelector('form').classList.remove('was-validated');
+      this.validation();
     },
     datas: {
       handler(val) {

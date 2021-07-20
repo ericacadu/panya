@@ -85,10 +85,11 @@ import {
   apiDeleteProducts,
 } from '@/scripts/api';
 import { bsModal, navigator } from '@/scripts/methods';
-import ProductModal from '@/components/productModal.vue';
-import DeleteModal from '@/components/deleteModal.vue';
+import ProductModal from '@/components/AdminProductModal.vue';
+import DeleteModal from '@/components/AdminDeleteModal.vue';
 
 export default {
+  emits: ['page-loading', 'push-message'],
   components: {
     ProductModal,
     DeleteModal,
@@ -125,6 +126,10 @@ export default {
           this.category = [...newSet];
           this.filterProducts(page);
           this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
     filterProducts(page) {
@@ -152,31 +157,36 @@ export default {
           id = '';
           break;
       }
-      // const { category } = data;
-      // const newData = data;
-      // if (category === '選擇類別') {
-      //   newData.category = '';
-      // }
       this.$emitter.emit('page-loading', true);
-      apiUpdateProducts(method, { data }, id).then((res) => {
-        if (res.data.success) {
-          this.getAllProducts(this.pages.current_page);
-          this.modal.hide();
-        }
-        this.$pushMessage(res);
-        this.$emitter.emit('page-loading', false);
-      });
+      apiUpdateProducts(method, { data }, id)
+        .then((res) => {
+          if (res.data.success) {
+            this.getAllProducts(this.pages.current_page);
+            this.modal.hide();
+          }
+          this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     deleteProduct(item) {
       this.$emitter.emit('page-loading', true);
-      apiDeleteProducts(item.id).then((res) => {
-        if (res.data.success) {
-          this.getAllProducts(this.pages.current_page);
-          this.modal.hide();
-        }
-        this.$pushMessage(res);
-        this.$emitter.emit('page-loading', false);
-      });
+      apiDeleteProducts(item.id)
+        .then((res) => {
+          if (res.data.success) {
+            this.getAllProducts(this.pages.current_page);
+            this.modal.hide();
+          }
+          this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     openModal(isModal, item) {
       if (isModal === 'edit') {
@@ -190,7 +200,6 @@ export default {
         if (!this.modalData.relative) {
           this.modalData.relative = [];
         }
-        // this.modalData.relative = []; // 清除關聯商品
         this.$emitter.emit('page-loading', true);
       } else if (isModal === 'delete') {
         this.isModal = 'delete';
@@ -203,18 +212,14 @@ export default {
         this.modalTitle = '新增商品';
         this.modalData = {
           imagesUrl: [],
-          // category: '選擇類別',
-          // unit: '選擇單位',
           relative: [],
         };
       }
       this.modal.show();
     },
   },
-  beforeCreate() {
-    this.$emitter.emit('page-loading', true);
-  },
   created() {
+    this.$emitter.emit('page-loading', true);
     this.getAllProducts();
   },
 };

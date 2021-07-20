@@ -58,6 +58,8 @@
     &:focus, &:hover
       color: $primary
       border-color: $primary
+  form .panya-input
+    font-weight: 400
   input:disabled
     color: $blue-300
     border-color: $gray-500
@@ -91,7 +93,7 @@
       background: $primary
       border-color: $primary
 
-.footer
+footer
   #logo
     width: 80px
   li a
@@ -115,6 +117,8 @@
   display: flex
   align-items: center
   justify-content: center
+  height: 55vh
+  min-height: 20rem
   +media-breakpoint-up(md)
     background-attachment: fixed
   & > *
@@ -129,7 +133,7 @@
     z-index: 1
 
 .banner
-  background-image: url('https://images.pexels.com/photos/1963999/pexels-photo-1963999.jpeg') 
+  background-image: url('https://images.pexels.com/photos/1963999/pexels-photo-1963999.jpeg')
   &::after
     background: linear-gradient(180deg, $warm 0%, $brown 100%)
     opacity: .2
@@ -137,6 +141,8 @@
     text-shadow: 0 1px 3px rgba($brown, .3)
 
 .booking
+  height: 30vh
+  min-height: 20rem
   background-image: url('https://images.pexels.com/photos/6287221/pexels-photo-6287221.jpeg')
   .form-control
     border-color: rgba($white, .5)
@@ -144,14 +150,14 @@
     background: $dark
     opacity: .5
 
-.header
+header
   background: rgba(lighten($brown, 60%), .6)
   padding: 3rem 0 0
   text-align: center
   position: relative
   +media-breakpoint-up(md)
     padding: 5rem 5rem 7.5rem
-  &-img
+  .header-img
     width: 100%
     height: 10rem
     margin-top: 2.5rem

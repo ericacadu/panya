@@ -119,10 +119,11 @@ import {
   getDate,
   getTime,
 } from '@/scripts/methods';
-import OrderModal from '@/components/orderModal.vue';
-import DeleteModal from '@/components/deleteModal.vue';
+import OrderModal from '@/components/AdminOrderModal.vue';
+import DeleteModal from '@/components/AdminDeleteModal.vue';
 
 export default {
+  emits: ['page-loading', 'push-message'],
   components: {
     OrderModal,
     DeleteModal,
@@ -163,6 +164,10 @@ export default {
           this.filterDatas = this.orders;
           this.isLoading = false;
           this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
     orderDatas(data) {
@@ -190,6 +195,10 @@ export default {
           }
           this.$pushMessage(res);
           this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
     deleteOrder(item) {
@@ -207,6 +216,10 @@ export default {
             this.modal.hide();
           }
           this.$pushMessage(res);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
         });
     },
@@ -254,11 +267,7 @@ export default {
   mounted() {
     this.placeholder = '輸入訂單編號';
     this.searchMode = 'searchOrder';
-  },
-  beforeCreate() {
     this.$emitter.emit('page-loading', true);
-  },
-  created() {
     this.getOrders();
   },
 };

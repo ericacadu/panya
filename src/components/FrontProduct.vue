@@ -41,6 +41,7 @@
 <script>
 export default {
   props: ['filterDatas', 'isDisabled'],
+  emits: ['get-cart', 'toggle-spinner'],
   methods: {
     addToCart(item, qty = 1) {
       this.$emitter.emit('add-cart', { item, qty });

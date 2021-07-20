@@ -22,6 +22,4 @@ export default {
 @import '@/assets/css/reset'
 .toast.hide
   display: none
-// .spinner
-//   display: none
 </style>

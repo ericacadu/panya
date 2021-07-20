@@ -164,7 +164,6 @@
                   <div class="cart-cont col px-3 d-flex">
                     <div class="col-5">
                       <p class="m-0">{{ item.product.title }}</p>
-                      <!-- <small>$ {{ item.product.price }} NTD</small> -->
                       <small>$ {{ Math.round(item.final_total) }} NTD</small>
                     </div>
                     <div class="col-5 d-flex align-items-center text-nowrap">
@@ -227,6 +226,7 @@ import { getDate, getTime, bsTooltip } from '@/scripts/methods';
 
 export default {
   props: ['modalData'],
+  emits: ['update-order', 'push-message'],
   data() {
     return {
       datas: {},

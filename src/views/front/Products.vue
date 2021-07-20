@@ -42,9 +42,10 @@
 import { apiAllProducts } from '@/scripts/api';
 import { navigator } from '@/scripts/methods';
 import Product from '@/components/FrontProduct.vue';
-import fadeInMix from '@/mixins/fadeInMix.vue';
+import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
+  emits: ['page-loading', 'push-message'],
   props: ['isDisabled'],
   components: {
     Product,
@@ -66,17 +67,22 @@ export default {
   mixins: [fadeInMix],
   methods: {
     getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-        const arry = this.products.map((item) => item.category);
-        const newSet = new Set(arry);
-        this.category = [...newSet];
-        this.filterProducts(this.path.page, this.path.category);
-        this.$emitter.emit('page-loading', false);
-      });
+      apiAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.products = res.data.products.reverse();
+          const arry = this.products.map((item) => item.category);
+          const newSet = new Set(arry);
+          this.category = [...newSet];
+          this.filterProducts(this.path.page, this.path.category);
+          this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     getPath() {
       this.path.category = this.$route.query.category || 'all';
@@ -113,10 +119,8 @@ export default {
       deep: true,
     },
   },
-  beforeCreate() {
+  mounted() {
     this.$emitter.emit('page-loading', true);
-  },
-  created() {
     this.getPath();
     this.getAllProducts();
   },

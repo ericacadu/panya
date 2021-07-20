@@ -98,6 +98,7 @@ import { apiGetOrder, apiPayOrder } from '@/scripts/api';
 import { getDate, getTime } from '@/scripts/methods';
 
 export default {
+  emits: ['page-loading', 'push-message', 'toggle-spinner'],
   data() {
     return {
       order: {},
@@ -119,6 +120,10 @@ export default {
           if (this.order.id) {
             this.$emitter.emit('page-loading', false);
           }
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
     payOrder() {
@@ -131,13 +136,15 @@ export default {
           }
           this.$pushMessage(res);
           this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
   },
-  beforeCreate() {
-    this.$emitter.emit('page-loading', true);
-  },
   created() {
+    this.$emitter.emit('page-loading', true);
     this.getOrder();
   },
 };

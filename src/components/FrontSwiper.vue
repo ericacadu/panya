@@ -79,6 +79,7 @@ export default {
     SwiperSlide,
   },
   props: ['datas', 'isDisabled', 'title'],
+  emits: ['get-cart', 'toggle-spinner'],
   methods: {
     addToCart(item, qty = 1) {
       this.$emitter.emit('add-cart', { item, qty });

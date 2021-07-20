@@ -166,6 +166,7 @@
 import { apiCheckout, apiPostCoupon } from '@/scripts/api';
 
 export default {
+  emits: ['page-loading', 'push-message', 'toggle-spinner', 'get-cart'],
   props: ['datas'],
   data() {
     return {
@@ -193,6 +194,10 @@ export default {
           this.$emitter.emit('get-cart');
           this.isDiscount = true;
           this.$emitter.emit('toggle-spinner', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
     isPhone(val) {
@@ -210,6 +215,10 @@ export default {
           }
           this.$pushMessage(res);
           this.$emitter.emit('page-loading', false);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
   },
@@ -222,10 +231,8 @@ export default {
       }
     },
   },
-  created() {
-    this.$emit('get-cart');
-  },
   mounted() {
+    this.$emit('get-cart');
     this.$emitter.emit('page-loading', true);
   },
   updated() {

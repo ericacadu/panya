@@ -30,6 +30,12 @@ article
   a
     border-bottom: 1px dashed lighten($primary, 30%)
 
+.page-item:first-child .page-link
+  border-right: 0 !important
+
+.page-item:last-child .page-link
+  border-left: 0 !important
+
 .loading
   color: $light
   text-transform: uppercase
@@ -65,12 +71,14 @@ article
   left: 0
   width: 100vw
   height: 100vh
-  background: rgba($dark, .9)
+  background: rgba($dark, .6)
   z-index: 1400
+  // backdrop-filter: blur(2px)
   span
     margin-top: .25rem
   .cookie
     animation: bouncecookie .45s cubic-bezier(0, 0, 0.15, 1) alternate infinite
+
 
 @keyframes bounceball
   from

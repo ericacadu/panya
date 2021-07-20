@@ -10,7 +10,7 @@
           align-items-start
         "
       >
-        <router-link to="../" target="_blank"
+        <router-link to="/" target="_blank"
           class="navbar-brand fs-6 fw-light">PANYA</router-link>
         <button
           class="navbar-toggler"
@@ -77,6 +77,7 @@
 import { apiUserCheck, apiUserLogout } from '@/scripts/api';
 
 export default {
+  emits: ['page-loading', 'push-message'],
   data() {
     return {
       path: '',
@@ -105,15 +106,24 @@ export default {
             this.$pushMessage(res, '已登入');
             this.status = res.data.message || '登入中';
           }
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
         });
     },
     logout() {
       this.$emitter.emit('page-loading', true);
-      apiUserLogout().then((res) => {
-        document.cookie = `panyaToken= ; expires=${new Date()}`;
-        this.$router.push('/login');
-        this.$pushMessage(res);
-      });
+      apiUserLogout()
+        .then((res) => {
+          document.cookie = `panyaToken= ; expires=${new Date()}`;
+          this.$router.push('/login');
+          this.$pushMessage(res);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
   },
   created() {

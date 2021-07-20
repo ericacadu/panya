@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="bg-cover banner min-vh-65">
+    <div class="bg-cover banner">
       <div class="container row g-2">
         <h1
           class="col-12 fs-5 fs-md-3 ls-md-5 fw-normal text-white text-center"
@@ -88,7 +88,7 @@
         title="熱銷商品"
       />
     </div>
-    <div class="bg-cover booking min-vh-50 text-light flex-column">
+    <div class="bg-cover booking text-light flex-column">
       <h3 class="fs-5 ls-2 fw-normal mb-4">訂閱最新消息</h3>
         <Form class="container row g-2 g-md-0 px-5 w-md-50
           d-md-flex justify-content-md-center"
@@ -127,10 +127,11 @@
 <script>
 import { apiAllProducts } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
-import fadeInMix from '@/mixins/fadeInMix.vue';
+import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
-  props: ['isDisabled', 'allProducts'],
+  emits: ['page-loading', 'push-message', 'toggle-spinner'],
+  props: ['isDisabled'],
   components: {
     FrontSwiper,
   },
@@ -146,17 +147,22 @@ export default {
   mixins: [fadeInMix],
   methods: {
     getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-        this.promote = this.products.filter((item) => item.is_promote);
-        setTimeout(() => {
+      apiAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.products = res.data.products.reverse();
+          this.promote = this.products.filter((item) => item.is_promote);
+          setTimeout(() => {
+            this.$emitter.emit('page-loading', false);
+            this.fadeInOnLoad();
+          }, 1000);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
-          this.fadeInOnLoad();
-        }, 1000);
-      });
+        });
     },
     onSubmit() {
       this.idDisabled = true;
@@ -171,8 +177,6 @@ export default {
   },
   created() {
     this.getAllProducts();
-  },
-  beforeMount() {
     this.$emitter.emit('page-loading', true);
   },
 };

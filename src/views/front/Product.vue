@@ -152,9 +152,9 @@
 <script>
 import { apiAllProducts, apiGetProduct } from '@/scripts/api';
 import FrontSwiper from '@/components/FrontSwiper.vue';
-// import fadeInMix from '@/mixins/fadeInMix.vue';
 
 export default {
+  emits: ['page-loading', 'push-message', 'toggle-spinner', 'add-cart'],
   props: ['isDisabled', 'datas'],
   components: {
     FrontSwiper,
@@ -175,36 +175,45 @@ export default {
       isMax: false,
     };
   },
-  // mixins: [fadeInMix],
   methods: {
     getProduct() {
-      apiGetProduct(this.id).then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-          this.$router.push('/error');
-        }
-        this.product = res.data.product;
-        this.product.qty = 1;
-        this.category = this.product.category;
-        const { 0: img } = this.product.imagesUrl;
-        this.enterImage = img;
-        document.title = `${this.product.title} - PANYA`;
-        this.filterProducts();
-        this.getSiblingProduct(this.products);
-        this.getMaxNum();
-        setTimeout(() => {
+      apiGetProduct(this.id)
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+            this.$router.push('/error');
+          }
+          this.product = res.data.product;
+          this.product.qty = 1;
+          this.category = this.product.category;
+          const { 0: img } = this.product.imagesUrl;
+          this.enterImage = img;
+          document.title = `${this.product.title} - PANYA`;
+          this.filterProducts();
+          this.getSiblingProduct(this.products);
+          this.getMaxNum();
+          setTimeout(() => {
+            this.$emitter.emit('page-loading', false);
+          }, 1000);
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
-        }, 1000);
-      });
+        });
     },
     getAllProducts() {
-      apiAllProducts().then((res) => {
-        if (!res.data.success) {
-          this.$pushMessage(res);
-        }
-        this.products = res.data.products.reverse();
-        this.getProduct();
-      });
+      apiAllProducts()
+        .then((res) => {
+          if (!res.data.success) {
+            this.$pushMessage(res);
+          }
+          this.products = res.data.products.reverse();
+          this.getProduct();
+        })
+        .catch((err) => {
+          this.$pushMessage(err);
+          this.$emitter.emit('page-loading', false);
+        });
     },
     // 取得同類別隨機商品
     filterProducts() {
@@ -222,7 +231,6 @@ export default {
       arrSet.forEach((i) => {
         this.filterDatas.push(arrFilter[i]);
       });
-      // this.$emitter.emit('page-loading', false);
     },
     // 取得前後一筆商品
     getSiblingProduct(datas) {
@@ -306,10 +314,8 @@ export default {
       this.getProduct();
     },
   },
-  beforeCreate() {
+  mounted() {
     this.$emitter.emit('page-loading', true);
-  },
-  created() {
     this.id = this.$route.params.id;
     this.getAllProducts();
   },
