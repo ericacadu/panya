@@ -1,0 +1,29 @@
+.login
+  width: 90%
+  max-width: 640px
+  position: relative
+  z-index: 2
+  box-shadow: -3rem 3rem 3rem rgba($black, .4)
+ 
+.bg-blur
+  position: fixed
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  z-index: 0
+  background: url('https://images.pexels.com/photos/1291281/pexels-photo-1291281.jpeg?w=1080') no-repeat center 30%
+  background-size: cover
+  width: 101vw
+  height: 101vh
+  opacity: .75
+  filter: blur(.25rem)
+
+.sticky-img
+  background: url('https://images.unsplash.com/photo-1613703155029-7323926e221c?w=1080') no-repeat center center
+  background-size: cover
+  min-height: 10rem
+  max-height: 500px
+  +media-breakpoint-up(md)
+    min-height: 15rem
+  +media-breakpoint-up(lg)
+    min-height: 40vh

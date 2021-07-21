@@ -90,23 +90,24 @@
     </div>
     <div class="bg-cover booking text-light flex-column">
       <h3 class="fs-5 ls-2 fw-normal mb-4">訂閱最新消息</h3>
-        <Form class="container row g-2 g-md-0 px-5 w-md-50
+        <Form class="container row g-2 g-md-0 px-5 w-md-60
           d-md-flex justify-content-md-center"
           :class="show ? '' : 'd-none d-md-none'"
           v-slot="{ errors }" @submit="onSubmit" id="subscribe">
-          <span class="col-12 col-md-8 col-lg-7 m-0 me-md-2">
+          <p class="col-12 col-md-8 col-lg-5 m-0 me-md-2">
             <Field type="email" id="email" name="Email"
-            class="form-control ls-2"
+            class="form-control ls-2 ms-auto"
             :class="{ 'is-invalid': errors['Email'] }"
             :disabled="idDisabled"
             placeholder="customer@panya.io"
             rules="email|required"
             inputmode="email"
             v-model="email"></Field>
-          <ErrorMessage name="Email" class="invalid-feedback position-md-absolute">
+            <ErrorMessage name="Email"
+            class="invalid-feedback position-md-absolute">
           </ErrorMessage>
-          </span>
-          <button type="submit" class="btn btn-primary col-12 col-md-3"
+          </p>
+          <button type="submit" class="btn btn-primary col-12 col-md-3 col-lg-2"
           :disabled="idDisabled"
           @submit="onSubmit">
           訂閱

@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style lang="sass">
-@import '@/assets/css/reset'
+@import '@/assets/css/style'
 .toast.hide
   display: none
 </style>

@@ -28,12 +28,13 @@
       <button
         type="button"
         class="btn btn-sm btn-outline-primary mx-auto fs-6"
-        :disabled="isDisabled === item.id"
+        :disabled="isDisabled === item.id || item.is_max"
         @click="addToCart(item)"
       >
         加入購物車
         <Spinner :spin-item="item.id" />
       </button>
+      <small class="d-block text-danger mt-1" v-if="item.is_max">已達可購買最大數量</small>
     </div>
   </li>
 </template>
@@ -41,7 +42,7 @@
 <script>
 export default {
   props: ['filterDatas', 'isDisabled'],
-  emits: ['get-cart', 'toggle-spinner'],
+  emits: ['add-cart', 'toggle-spinner'],
   methods: {
     addToCart(item, qty = 1) {
       this.$emitter.emit('add-cart', { item, qty });

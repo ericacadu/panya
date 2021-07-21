@@ -12,115 +12,119 @@
     &.active
       font-weight: 500
       color: $gray-800 !important
-
-.navbar-collapse
-  position: absolute
-  left: 50%
-  top: 100%
-  transform: translateX(-50%)
-  transition: all .3s
-  width: 100vw
-  height: 0
-  padding: 0
-  text-align: center
-  overflow: hidden
-  &:not(.show)
-    display: block
-  &.show
-    background: $warm
-    z-index: 9
-    height: auto
-    padding: $spacer 0
-    overflow: visible
-  +media-breakpoint-up(md)
-    position: relative
-    width: auto
-    height: auto
-    text-align: left
-    top: 0
-    left: 0
-    transform: translateX(0%)
-
-.nav-brand
-  width: 100px
-  color: $primary
-
-.nav-icons
-  display: flex
-  justify-content: center
-  align-items: center
-  color: $secondary
-  &:hover
-    color: $dark
-    svg
-      fill: $dark
-    .badge
-      background: $dark
-  svg
-    width: 1.2rem
-    fill: $secondary
-  .cart-bag
-    transform: scale(1.1)
-    +media-breakpoint-up(md)
-      transform: scale(1)
-  .badge
+  .navbar-collapse
     position: absolute
-    top: 0
-    right: 0
-    margin: -30% -60% 0 0
-    transform: scale(0.8)
-    background: $red-400
-    transition: all .2s
-    &.active
-      background: $red-400
-      animation: jump .6s forwards cubic-bezier(0.65, 0.05, 0.15, 1)
-
-.front .nav-search
-  display: flex
-  justify-content: center
-  align-items: center
-  position: relative
-  border: 1px solid transparent
-  transition: all .2s
-  svg
-    width: 1.25em
-  .material-icons
-    display: none
-  .form-control
-    display: none
-    width: 0
-    padding: 0
-    color: $secondary
-    border: 0
-    text-align: left
-    &::placeholder
-      color: rgba($secondary, .3)
-      font-size: $h7-font-size
-    &:hover, &:focus
-      color: $secondary
-  &.expand
-    padding: .2rem .5rem
-    border-color: rgba($secondary, .5)
-    .material-icons
-      display: block
-    .form-control
-      width: 100%
-      padding: 0 .5rem
-      display: block
-  .search-list
-    position: absolute
+    left: 50%
     top: 100%
-    right: 0
-    width: 100%
-    background: $white
-    max-height: 10rem
-    overflow-y: auto
-    overflow-x: hidden
-    margin-top: .2rem
-    font-size: $h6-font-size
-    color: rgba($secondary, .8)
-    li:hover, .curr
-      background: rgba($secondary, .1)
+    transform: translateX(-50%)
+    transition: all .3s
+    width: 100vw
+    height: 0
+    padding: 0
+    text-align: center
+    overflow: hidden
+    &:not(.show)
+      display: block
+    &.show
+      background: $warm
+      z-index: 9
+      height: auto
+      padding: $spacer 0
+      overflow: visible
+    +media-breakpoint-up(md)
+      position: relative
+      width: auto
+      height: auto
+      text-align: left
+      top: 0
+      left: 0
+      transform: translateX(0%)
+
+  .nav-brand
+    width: 100px
+    color: $primary
+
+  .nav-icons
+    display: flex
+    justify-content: center
+    align-items: center
+    color: $secondary
+    &:hover
+      color: $dark
+      svg
+        fill: $dark
+      .badge
+        background: $dark
+    svg
+      width: 1.2rem
+      fill: $secondary
+    .cart-bag
+      transform: scale(1.1)
+      +media-breakpoint-up(md)
+        transform: scale(1)
+    .badge
+      position: absolute
+      top: 0
+      right: 0
+      margin: -40% -75% 0 0
+      transform: scale(0.8)
+      background: $red-400
+      transition: all .2s
+      width: 24px
+      height: 24px
+      display: flex
+      align-items: center
+      justify-content: center
+      &.active
+        background: $red-400
+        animation: jump .6s forwards cubic-bezier(0.65, 0.05, 0.15, 1)
+        
+  .nav-search
+    display: flex
+    justify-content: center
+    align-items: center
+    position: relative
+    border: 1px solid transparent
+    transition: all .2s
+    svg
+      width: 1.25em
+    .material-icons
+      display: none
+    .form-control
+      display: none
+      width: 0
+      padding: 0
+      color: $secondary
+      border: 0
+      text-align: left
+      &::placeholder
+        color: rgba($secondary, .3)
+        font-size: $h7-font-size
+      &:hover, &:focus
+        color: $secondary
+    &.expand
+      padding: .2rem .5rem
+      border-color: rgba($secondary, .5)
+      .material-icons
+        display: block
+      .form-control
+        width: 100%
+        padding: 0 .5rem
+        display: block
+    .search-list
+      position: absolute
+      top: 100%
+      right: 0
+      width: 100%
+      background: $white
+      max-height: 10rem
+      overflow-y: auto
+      overflow-x: hidden
+      margin-top: .2rem
+      font-size: $h6-font-size
+      color: rgba($secondary, .8)
+      li:hover, .curr
+        background: rgba($secondary, .1)
 
 
 @keyframes jump

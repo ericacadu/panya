@@ -1,0 +1,54 @@
+.admin
+  min-width: 960px
+  .navbar-brand
+    letter-spacing: .5rem
+  .navbar-toggler:not(.collapsed)
+    border-color: rgba($light, .5)
+  .breadcrumb-item
+    color: $gray-600
+    svg
+      margin-left: 5px
+      transform: scale(.9)
+    &.active
+      color: $gray-700
+  .btn .material-icons
+    font-size: $font-size-base * 1.2
+    
+  .products-list-header
+    background: $gray-200
+    color: $gray-700
+    text-align: center
+
+  .list-group-item
+    display: flex
+    justify-content: center
+    align-items: center
+    text-align: center
+  .dropdown-item
+    &.active, &:active
+      background: $gray-200
+      color: $dark
+  .input-tags
+    display: flex
+    flex-flow: wrap
+    padding: .3rem
+    input
+      border: 0
+      min-width: 2rem
+      &:focus
+        outline: 0
+  .btn-tags
+    padding: 0
+    display: flex
+    align-items: center
+    color: $blue-500
+    margin: .15rem
+    span
+      padding: .1rem .5rem
+    i
+      display: flex
+      align-items: center
+      height: 100%
+      padding: 3px
+      border-left: 1px solid $blue-200
+    

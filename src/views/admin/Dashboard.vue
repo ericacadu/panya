@@ -133,20 +133,3 @@ export default {
   },
 };
 </script>
-
-<style lang="sass" scope>
-@import '@/assets/css/admin'
-.navbar-brand
-  letter-spacing: .5rem
-.navbar-toggler:not(.collapsed)
-  border-color: rgba($light, .5)
-.breadcrumb-item
-  color: $gray-600
-  svg
-    margin-left: 5px
-    transform: scale(.9)
-  &.active
-    color: $gray-700
-.btn .material-icons
-  font-size: $font-size-base * 1.2
-</style>

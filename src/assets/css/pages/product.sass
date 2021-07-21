@@ -1,6 +1,3 @@
-*
-  // outline: 1px solid red
-
 $img-size-sm: calc(100vw - 2em)
 $img-size-md: calc(30vw - 2em)
 $img-max-size-sm: 250px
@@ -10,50 +7,50 @@ $img-min-size-md: 340px
   line-height: 1.6
   h1
     font-size: 2rem
-  .photo-lg, .photo-sm
-    span
-      display: block
-      width: 100%
-      height: 100%
-      overflow: hidden
-      position: relative
-      background-repeat: no-repeat
-      background-position: center 60%
-      background-size: cover
-      +media-breakpoint-up(md)
-        background-position: center 70%
-  .photo-lg
-    height: $img-size-sm
-    margin-bottom: 1em
-    min-height: $img-max-size-sm
-    max-height: $img-max-size-sm
+.photo-lg, .photo-sm
+  span
+    display: block
+    width: 100%
+    height: 100%
+    overflow: hidden
+    position: relative
+    background-repeat: no-repeat
+    background-position: center 60%
+    background-size: cover
     +media-breakpoint-up(md)
-      height: $img-size-md
-      max-height: 400px
-      min-height: $img-min-size-md
-  .photo-sm
-    height: calc(#{$img-size-sm} / 3)
-    max-height: calc(#{$img-max-size-sm} / 3)
+      background-position: center 70%
+.photo-lg
+  height: $img-size-sm
+  margin-bottom: 1em
+  min-height: $img-max-size-sm
+  max-height: $img-max-size-sm
+  +media-breakpoint-up(md)
+    height: $img-size-md
+    max-height: 400px
+    min-height: $img-min-size-md
+.photo-sm
+  height: calc(#{$img-size-sm} / 3)
+  max-height: calc(#{$img-max-size-sm} / 3)
+  span::after
+    content: ''
+    display: block
+    width: 100%
+    height: 100%
+    position: absolute
+    left: 0
+    top: 0
+    background: rgba($dark, .3)
+    opacity: 0
+    transition: all .15s
+  +media-breakpoint-up(md)
+    height: calc(#{$img-size-md} / 3)
+    min-height: calc(#{$img-min-size-md} / 3)
     span::after
-      content: ''
-      display: block
-      width: 100%
-      height: 100%
-      position: absolute
-      left: 0
-      top: 0
-      background: rgba($dark, .3)
+      opacity: 1
+    &:hover span::after, &.active span::after
       opacity: 0
-      transition: all .15s
-    +media-breakpoint-up(md)
-      height: calc(#{$img-size-md} / 3)
-      min-height: calc(#{$img-min-size-md} / 3)
-      span::after
-        opacity: 1
-      &:hover span::after, &.active span::after
-        opacity: 0
-    & + .photo-sm
-      padding-left: 1em
+  & + .photo-sm
+    padding-left: 1em
 
 .product-content
   padding: 0 1rem

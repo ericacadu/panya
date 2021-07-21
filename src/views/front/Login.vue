@@ -10,10 +10,7 @@
     "
   >
     <div class="login row g-0 rounded mx-auto flex-column flex-lg-row">
-      <div
-        class="col col-lg-5 sticky-img"
-        :style="`background-image: url(${stickyImg})`"
-      ></div>
+      <div class="col col-lg-5 sticky-img"></div>
       <form
         class="
           col col-lg-7
@@ -53,18 +50,18 @@
           <label for="password">Password</label>
         </div>
         <button
-          class="btn btn-dark w-100 mt-auto"
+          class="btn btn-dark w-100 mt-auto py-2"
           type="submit"
           @click="signin"
         >
           登入
         </button>
-        <router-link to="./" class="btn btn-outline-primary text-center mt-1">
+        <router-link to="./" class="btn btn-outline-primary text-center mt-1 py-2">
           回首頁</router-link
         >
       </form>
     </div>
-    <div class="bg-blur" :style="`background-image: url(${imgUrl})`"></div>
+    <div class="bg-blur"></div>
   </div>
 </template>
 
@@ -77,10 +74,6 @@ export default {
   mixins: [invalidMix],
   data() {
     return {
-      imgUrl:
-        'https://images.unsplash.com/photo-1447078806655-40579c2520d6?w=1080',
-      stickyImg:
-        'https://images.unsplash.com/photo-1613703155029-7323926e221c?w=1080',
       user: {
         username: '',
         password: '',

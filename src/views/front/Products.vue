@@ -46,7 +46,7 @@ import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
   emits: ['page-loading', 'push-message'],
-  props: ['isDisabled'],
+  props: ['datas', 'isDisabled'],
   components: {
     Product,
   },
@@ -62,6 +62,7 @@ export default {
         category: '',
         page: '',
       },
+      isMax: false,
     };
   },
   mixins: [fadeInMix],
@@ -84,6 +85,17 @@ export default {
           this.$emitter.emit('page-loading', false);
         });
     },
+    filterCart() {
+      this.filterDatas.forEach((item) => {
+        const newItem = item;
+        const inCart = this.datas.carts.filter((el) => item.id === el.product_id && el.qty >= 30);
+        if (inCart.length > 0) {
+          newItem.is_max = true;
+        } else {
+          newItem.is_max = false;
+        }
+      });
+    },
     getPath() {
       this.path.category = this.$route.query.category || 'all';
       this.path.page = this.$route.query.page || 1;
@@ -101,6 +113,7 @@ export default {
       const newNavigator = navigator(page, this.tempArry);
       this.pages = newNavigator.pages;
       this.filterDatas = newNavigator.newArray;
+      this.filterCart();
       this.$router.push(
         `./products?category=${this.path.category}&page=${page}`,
       );
@@ -117,6 +130,9 @@ export default {
         }
       },
       deep: true,
+    },
+    datas() {
+      this.getAllProducts();
     },
   },
   mounted() {

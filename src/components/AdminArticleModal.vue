@@ -63,7 +63,7 @@
                   :placeholder="
                     datas.tag.length > 0 ? '' : '輸入標籤，用 [ENTER] 新增'
                   "
-                  v-model="insertTag"
+                  v-model.trim="insertTag"
                   @keydown.enter="pushTags"
                 />
               </label>

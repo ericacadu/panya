@@ -1,36 +1,5 @@
-@import './mixin'
-@import '~swiper/swiper'
-@import './components/nav'
-@import './components/cart'
-@import './components/products'
-@import './components/product'
-*
-  // outline: 1px solid red
-
-.container
-  position: relative
-  +media-breakpoint-up(md)
-    max-width: 1040px
-  #logo
-    max-width: 100px
-    max-height: 2rem
-  
-.min-height
-  min-height: calc(100vh - 136px)
-  +media-breakpoint-up(md)
-    min-height: calc(100vh - 72px - 136px)
-
 .front
   background: $warm
-  .fade-out
-    opacity: 0
-    transform: translateY(10%)
-    transition: all 1s
-  .fade-in
-    opacity: 1
-    transform: translateY(0%)
-    transition: all 1s
-    transition-delay: .25s
   .form-control
     background: transparent
     border-radius: 0
@@ -92,22 +61,6 @@
     .active .page-link
       background: $primary
       border-color: $primary
-
-footer
-  #logo
-    width: 80px
-  li a
-    display: flex
-    align-items: center
-    justify-content: center
-    width: 2.5rem
-    height: 2.5rem
-    border: 1px solid rgba($secondary, .5)
-    border-radius: 50%
-    &:hover
-      border: 1px solid rgba($secondary, 1)
-  li + li
-      margin-left: .5rem
 
 .bg-cover
   background-repeat: no-repeat
@@ -192,17 +145,3 @@ header
   span
     display: block
     
-#scrollTop
-  background: rgba(lighten($primary, 30%), .2)
-  position: fixed
-  bottom: 0
-  right: 50%
-  margin: 1rem
-  display: flex
-  align-self: center
-  z-index: 2
-  transition: all .15s
-  span
-    color: $white
-  &:hover
-    background: rgba(lighten($primary, 30%), .5)

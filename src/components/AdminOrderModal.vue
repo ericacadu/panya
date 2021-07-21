@@ -145,7 +145,7 @@
                 <p class="m-0">
                   訂單金額：
                   <span class="fs-5 fw-bold text-danger">{{
-                    Math.round(datas.total)
+                    $cash(Math.round(datas.total))
                   }}</span>
                 </p>
               </div>
@@ -164,7 +164,7 @@
                   <div class="cart-cont col px-3 d-flex">
                     <div class="col-5">
                       <p class="m-0">{{ item.product.title }}</p>
-                      <small>$ {{ Math.round(item.final_total) }} NTD</small>
+                      <small>$ {{ $cash(Math.round(item.final_total)) }} NTD</small>
                     </div>
                     <div class="col-5 d-flex align-items-center text-nowrap">
                       數量：

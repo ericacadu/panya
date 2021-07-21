@@ -49,21 +49,21 @@
             class="form-control panya-input text-center text-md-start"
             v-model.number="product.qty"
             inputmode="numeric"
-            :disabled="isDisabled === product.id || isMax"
-            @focus="focusInput(product)"
+            :disabled="isDisabled === product.id || product.is_max"
+            @focus="tempNum = product"
             @blur="blurInput"
           />
           <button
             class="btn btn-primary col-12 col-md-7 ms-md-2 p-3 mt-3 mt-md-0"
             type="button"
-            :disabled="isDisabled === product.id || isMax"
+            :disabled="isDisabled === product.id || product.is_max"
             @click="addToCart(product)"
           >
             加入購物車
             <Spinner :spin-item="product.id" />
           </button>
         </div>
-        <small class="d-block text-danger mt-1" v-if="isMax">已達可購買最大數量</small>
+        <small class="d-block text-danger mt-1" v-if="product.is_max">已達可購買最大數量</small>
       </div>
       <div
         class="product-page row g-0 justify-content-between py-4 px-3 px-md-0"
@@ -169,10 +169,8 @@ export default {
       prev_product: {},
       next_product: {},
       filterDatas: [],
-      propsData: {},
-      tempNum: '',
+      tempNum: {},
       maxNum: 0,
-      isMax: false,
     };
   },
   methods: {
@@ -246,33 +244,30 @@ export default {
     },
     // 取得可購買數量最大值
     getMaxNum() {
-      if (!this.propsData.carts) {
+      const inCart = this.datas.carts.filter(
+        (item) => this.product.id === item.product_id,
+      );
+      if (!inCart) {
         this.maxNum = 30;
         return;
       }
-      const cart = this.propsData.carts.filter(
-        (val) => val.product_id === this.product.id,
-      );
-      if (cart.length > 0) {
-        this.maxNum = 30 - cart[0].qty;
+      if (inCart.length > 0) {
+        this.maxNum = 30 - inCart[0].qty;
       } else {
         this.maxNum = 30;
       }
       if (this.maxNum <= 0) {
-        this.isMax = true;
+        this.product.is_max = true;
       } else {
-        this.isMax = false;
+        this.product.is_max = false;
       }
-    },
-    focusInput(item) {
-      this.tempNum = item;
     },
     blurInput() {
       this.product = this.tempNum;
       if (this.tempNum.qty < 1) {
         this.product.qty = 1;
       }
-      this.tempNum = '';
+      this.tempNum = {};
     },
     addToCart(item) {
       this.$emitter.emit('add-cart', { item, qty: item.qty });
@@ -310,7 +305,6 @@ export default {
       deep: true,
     },
     datas() {
-      this.propsData = this.datas;
       this.getProduct();
     },
   },

@@ -316,7 +316,7 @@
                   <small class="text-muted">( 前台用隨機商品代替 )</small>
                 </label>
                 <div
-                  class="form-control overflow-scroll"
+                  class="form-control overflow-auto"
                   style="max-height: 10rem;"
                 >
                   <div

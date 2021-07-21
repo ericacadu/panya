@@ -1,0 +1,57 @@
+.container
+  position: relative
+  +media-breakpoint-up(md)
+    max-width: 1200px
+  #logo
+    max-width: 100px
+    max-height: 2rem
+
+.min-height
+  min-height: calc(100vh - 136px)
+  +media-breakpoint-up(md)
+    min-height: calc(100vh - 72px - 136px)
+
+.fade-out
+  opacity: 0
+  transform: translateY(10%)
+  transition: all 1s
+
+.fade-in
+  opacity: 1
+  transform: translateY(0%)
+  transition: all 1s
+  transition-delay: .25s
+  
+.btn
+  display: flex
+  justify-content: center
+  align-items: center
+  white-space: nowrap
+  transition: all .2s
+  &-outline-light:hover
+    color: $primary
+  &-primary
+    .bounceball span
+      background: $light
+  &.disabled
+    opacity: .6
+    cursor: default
+
+a
+  text-decoration: none
+  color: $secondary
+  transition: all .1s
+  &:hover
+    color: lighten($primary, 30%)
+
+article
+  line-height: $line-height-lg
+  h3
+    font-size: $h5-font-size
+    color: $primary
+  p + h3, ul + h3
+    margin-top: 3rem
+  a
+    border-bottom: 1px dashed lighten($primary, 30%)
+
+

@@ -65,7 +65,7 @@
           </div>
         </div>
         <div
-          class="nav-icons position-relative" role="button"
+          class="nav-icons position-relative me-2" role="button"
           @click="openCart"
         >
           <Cart></Cart>
