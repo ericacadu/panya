@@ -20,8 +20,13 @@
         </p>
         <ul class="list-unstyled d-flex justify-content-center m-0">
           <li class="fs-7">
-            <a href="https://www.facebook.com/" target="_blank">
-              <i class="fab fa-lg fa-facebook-f"></i>
+            <a href="https://github.com/ericacadu/panya" target="_blank">
+              <i class="fab fa-lg fa-github"></i>
+            </a>
+          </li>
+          <li class="fs-7">
+            <a href="https://codepen.io/ericadu/collections/" target="_blank">
+              <i class="fab fa-lg fa-codepen"></i>
             </a>
           </li>
           <li class="fs-7">
@@ -30,8 +35,8 @@
             </a>
           </li>
           <li class="fs-7">
-            <a href="tel:0800000000" target="_blank">
-              <i class="fas fa-phone-alt"></i>
+            <a href="https://line.me/ti/p/tznKV152eK" target="_blank">
+              <Line class="flat-icon"/>
             </a>
           </li>
         </ul>
@@ -49,11 +54,13 @@
 <script>
 import Navbar from '@/components/FrontNavbar.vue';
 import { apiAllProducts, apiGetCart, apiAddCart } from '@/scripts/api';
+import Line from '@/components/IconLine.vue';
 
 export default {
   emits: ['page-loading', 'push-message', 'toggle-spinner', 'send-cart'],
   components: {
     Navbar,
+    Line,
   },
   data() {
     return {
@@ -72,7 +79,6 @@ export default {
             this.$pushMessage(res);
           }
           this.products = res.data.products.reverse();
-          this.$emitter.emit('toggle-spinner', false);
         })
         .catch((err) => {
           this.$pushMessage(err);
@@ -161,8 +167,10 @@ export default {
     this.$emitter.on('toggle-overlay', (val) => {
       if (val) {
         this.block = 'vh-100 overflow-hidden';
+        // document.body.classList.add('overflow-hidden')
       } else {
         this.block = '';
+        // document.body.classList.remove('overflow-hidden')
       }
     });
     this.scrollBtnPos();

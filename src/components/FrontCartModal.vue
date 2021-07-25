@@ -96,7 +96,6 @@
             @click="clearCart"
           >
             清空購物車
-            <Spinner spin-item="clear" />
           </button>
         </p>
       </div>
@@ -182,7 +181,6 @@ export default {
     },
     clearCart() {
       this.isDisabled = 'clear';
-      this.$emitter.emit('toggle-spinner', 'clear');
       apiClearCart()
         .then((res) => {
           if (res.data.success) {
@@ -190,7 +188,6 @@ export default {
           }
           this.isDisabled = '';
           this.$pushMessage(res);
-          this.$emitter.emit('toggle-spinner', false);
         })
         .catch((err) => {
           this.$pushMessage(err);

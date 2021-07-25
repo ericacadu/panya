@@ -43,7 +43,7 @@
           <div class="nav-search rounded-pill"
             :class="isFocus ? 'expand' : ''">
             <Search :role="isFocus ? '' : 'button'"
-              @click="isFocus = true"></Search>
+              @click="isFocus = true"/>
             <input type="text" class="form-control" placeholder="商品名稱"
               v-model.trim.number="searchInput"
               ref="searchInput"

@@ -8,18 +8,22 @@
 </template>
 <script>
 export default {
-  props: ['spinItem'],
+  props: {
+    spinItem: {
+      default: null,
+    },
+  },
   data() {
     return {
       isLoading: false,
-      id: '',
+      itemId: '',
     };
   },
   mounted() {
     this.$emitter.on('toggle-spinner', (val) => {
       const { id } = val;
-      this.id = id;
-      if (this.spinItem === this.id || this.spinItem === val) {
+      this.itemId = id;
+      if (this.spinItem === this.itemId || this.spinItem === val) {
         this.isLoading = true;
       } else {
         this.isLoading = false;
