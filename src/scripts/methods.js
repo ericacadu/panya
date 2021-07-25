@@ -25,16 +25,18 @@ export const getTime = (date) => {
   return newDate.toLocaleTimeString('it-IT');
 };
 
-export const pushMessageState = (response, message) => {
-  if (response && response.data.success) {
+export const pushMessageState = (response, msg) => {
+  const { success, message } = response.data;
+  console.log(response);
+  if (response && success) {
     mitt.emit('push-message', {
       style: 'success',
-      content: response.data.message || message,
+      content: message || msg,
     });
   } else {
     mitt.emit('push-message', {
       style: 'danger',
-      content: message || response.data.message,
+      content: msg || message,
     });
   }
 };
