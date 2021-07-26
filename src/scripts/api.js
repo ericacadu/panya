@@ -68,7 +68,7 @@ export const apiDeleteArticle = (id) => axios.delete(
 
 // 商品
 export const apiAllProducts = () => axios.get(
-  `${api}/api/${path}/products/alls`,
+  `${api}/api/${path}/products/all`,
 );
 export const apiProducts = (page = 1) => axios.get(
   `${api}/api/${path}/products?page=${page}`,

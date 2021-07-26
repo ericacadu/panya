@@ -27,7 +27,6 @@ export const getTime = (date) => {
 
 export const pushMessageState = (response, msg) => {
   const { success, message } = response.data;
-  console.log(response);
   if (response && success) {
     mitt.emit('push-message', {
       style: 'success',

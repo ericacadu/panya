@@ -69,8 +69,8 @@
           @click="openCart"
         >
           <Cart></Cart>
-          <span class="badge rounded-pill fw-normal" id="cart-num" v-show="datas.sum > 0">
-            {{ datas.sum }}
+          <span class="badge rounded-pill fw-normal" id="cart-num" v-show="cartDatas.sum > 0">
+            {{ cartDatas.sum }}
           </span>
         </div>
         <button
@@ -96,7 +96,7 @@ import Cart from '@/components/IconBag.vue';
 import Search from '@/components/IconSearch.vue';
 
 export default {
-  props: ['datas'],
+  inject: ['cartDatas'],
   components: {
     CartModal,
     Cart,
@@ -107,7 +107,6 @@ export default {
     return {
       toggleNav: false,
       products: [],
-      filterDatas: [],
       searchInput: '',
       key: -1,
       oldKey: 0,
@@ -130,20 +129,6 @@ export default {
           this.$emitter.emit('page-loading', false);
         });
     },
-    filterProducts() {
-      const keyword = this.searchInput;
-      this.key = -1;
-      if (!keyword) {
-        this.filterDatas = '';
-        return;
-      }
-      const result = this.products.filter((item) => item.title.match(keyword));
-      if (result) {
-        this.filterDatas = result;
-      } else {
-        this.filterDatas = '';
-      }
-    },
     toggleList(index) {
       if (index >= 0) {
         this.key = index;
@@ -158,7 +143,6 @@ export default {
         this.$router.push(`/product/${id}`);
         this.searchInput = '';
         this.filterDatas = [];
-        this.key = -1;
         this.isFocus = false;
       } else {
         this.$pushMessage(false, '查無商品名稱，或尚未選擇商品');
@@ -178,10 +162,6 @@ export default {
     scrollList() {
       const wrap = document.querySelector('.search-list');
       const num = this.key;
-      if (num < 0 || this.oldKey < 0) {
-        this.key = 0;
-        return;
-      }
       if (num >= this.filterDatas.length - 1) {
         this.key = this.filterDatas.length - 1;
         return;
@@ -208,22 +188,40 @@ export default {
       this.toggleNav = false;
     },
   },
-  watch: {
-    searchInput() {
-      this.filterProducts();
+  computed: {
+    filterDatas() {
+      const keyword = this.searchInput;
+      if (!keyword) { return []; }
+      const result = this.products.filter((item) => item.title.match(keyword));
+      return result || [];
     },
+  },
+  watch: {
     key(val, oldVal) {
       this.selectOption();
       this.oldKey = oldVal;
+      if (val <= 0 && this.oldKey <= 0) {
+        this.key = 0;
+        this.oldKey = 0;
+        return;
+      }
       this.scroll = this.scrollList(val);
     },
   },
+  updated() {
+    this.key = -1;
+    this.oldKey = 0;
+  },
   mounted() {
+    // 接收 provide 資料
+    console.log(this.cartDatas);
+
     this.getAllProducts();
     window.addEventListener('scroll', this.scrollList);
     this.$refs.searchInput.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
         this.toggleList();
+        // 這段不確定有沒有正確移除監聽，該怎麼確認呢？
         window.removeEventListener('scroll', this.scroll);
       }
     });

@@ -1,8 +1,6 @@
 <template>
   <div class="front container-fluid g-0 min-vh-100 text-dark" :class="block">
-    <Navbar
-      :datas="cart"
-      />
+    <Navbar/>
     <router-view
       class="min-height"
       :datas="cart"
@@ -69,6 +67,11 @@ export default {
       isDisabled: '',
       code: '',
       block: '',
+    };
+  },
+  provide() {
+    return {
+      cartDatas: this.cart,
     };
   },
   methods: {
@@ -152,6 +155,11 @@ export default {
         top: 0,
         behavior: 'smooth',
       });
+    },
+  },
+  computed: {
+    cartDatas() {
+      return this.cart;
     },
   },
   mounted() {

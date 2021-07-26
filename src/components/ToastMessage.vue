@@ -28,8 +28,8 @@ export default {
   },
   mounted() {
     this.toast = bsToast('toast');
-    this.$emitter.on('push-message', (message) => {
-      const { style = 'success', content } = message;
+    this.$emitter.on('push-message', (val) => {
+      const { style = 'success', content } = val;
       this.data.style = style;
       this.data.content = content;
       this.toast.show();
