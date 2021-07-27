@@ -45,6 +45,7 @@ import Product from '@/components/FrontProduct.vue';
 import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
+  inject: ['provideCart'],
   emits: ['page-loading', 'push-message'],
   props: ['datas', 'isDisabled'],
   components: {
@@ -88,7 +89,9 @@ export default {
     filterCart() {
       this.filterDatas.forEach((item) => {
         const newItem = item;
-        const inCart = this.datas.carts.filter((el) => item.id === el.product_id && el.qty >= 30);
+        const inCart = this.provideCart.data.carts.filter(
+          (el) => item.id === el.product_id && el.qty >= 30,
+        );
         if (inCart.length > 0) {
           newItem.is_max = true;
         } else {

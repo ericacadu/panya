@@ -6,6 +6,7 @@
       :datas="cart"
       :is-disabled="isDisabled"
       @get-cart="getCart"
+      @get-products="getAllProducts"
     />
     <footer class="bg-dark py-4 py-md-5 text-light">
       <div class="container row g-0 mx-auto px-3 fs-7 ls-2
@@ -64,6 +65,9 @@ export default {
     return {
       products: [],
       cart: [],
+      provideCart: {
+        data: [],
+      },
       isDisabled: '',
       code: '',
       block: '',
@@ -71,7 +75,8 @@ export default {
   },
   provide() {
     return {
-      cartDatas: this.cart,
+      provideCart: this.provideCart,
+      isDisabled: this.isDisabled,
     };
   },
   methods: {
@@ -95,6 +100,7 @@ export default {
             this.$pushMessage(res);
           }
           this.cart = res.data.data;
+          this.provideCart.data = res.data.data;
           this.isDisabled = '';
           this.getCartum();
           this.$emitter.emit('send-cart', this.cart);
@@ -157,11 +163,6 @@ export default {
       });
     },
   },
-  computed: {
-    cartDatas() {
-      return this.cart;
-    },
-  },
   mounted() {
     this.getCart();
     this.getAllProducts();
@@ -175,10 +176,8 @@ export default {
     this.$emitter.on('toggle-overlay', (val) => {
       if (val) {
         this.block = 'vh-100 overflow-hidden';
-        // document.body.classList.add('overflow-hidden')
       } else {
         this.block = '';
-        // document.body.classList.remove('overflow-hidden')
       }
     });
     this.scrollBtnPos();

@@ -69,8 +69,9 @@
           @click="openCart"
         >
           <Cart></Cart>
-          <span class="badge rounded-pill fw-normal" id="cart-num" v-show="cartDatas.sum > 0">
-            {{ cartDatas.sum }}
+          <span class="badge rounded-pill fw-normal" id="cart-num"
+          v-show="provideCart.data.sum > 0">
+            {{ provideCart.data.sum }}
           </span>
         </div>
         <button
@@ -96,7 +97,8 @@ import Cart from '@/components/IconBag.vue';
 import Search from '@/components/IconSearch.vue';
 
 export default {
-  inject: ['cartDatas'],
+  props: ['datas'],
+  inject: ['provideCart'],
   components: {
     CartModal,
     Cart,
@@ -213,9 +215,6 @@ export default {
     this.oldKey = 0;
   },
   mounted() {
-    // 接收 provide 資料
-    console.log(this.cartDatas);
-
     this.getAllProducts();
     window.addEventListener('scroll', this.scrollList);
     this.$refs.searchInput.addEventListener('keydown', (e) => {
