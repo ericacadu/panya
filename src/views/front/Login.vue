@@ -3,7 +3,6 @@
     class="
       container-fluid
       min-vh-100
-      bg-dark
       py-5
       d-md-flex
       align-items-md-center
@@ -98,8 +97,8 @@ export default {
           }
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
   },
@@ -112,7 +111,9 @@ export default {
     },
   },
   mounted() {
-    this.$emitter.emit('page-loading', false);
+    setTimeout(() => {
+      this.$emitter.emit('page-loading', false);
+    }, 1000);
   },
 };
 </script>

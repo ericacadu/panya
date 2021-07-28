@@ -127,8 +127,8 @@ export default {
           this.products = res.data.products.reverse();
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     toggleList(index) {

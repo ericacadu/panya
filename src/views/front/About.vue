@@ -5,7 +5,7 @@
       <div
         class="container header-img fade-out"
         style="
-          background-image: url('https://images.pexels.com/photos/1731532/pexels-photo-1731532.jpeg?w=1280');
+          background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/panya/1627475932702.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=BsJv%2Bj2U5ysjsLH4eVzTuWDaQVQDuOoRxmrmGkEY46AJzKFvJp4bdyJxirtXqqqszlXJ%2FT94S%2BOG9i%2FIDL%2Bg%2FDRr82DyP4QZplfezIXysG1P0%2BsbZv5BEe0lRS4cHYtiuYl6DnrGf0WVyt0lj0Ccu4n8ujq6D0nt5Wt8PAzrWxUXj7XXNNlKb73XHl3C1JiwmRiVjVzw1PjOsvA2osDqFVCuHYHCK7NYlMsG9wCFe%2BmOGdEluoF6ZBKUYPi9fMO3swfOxwlxcyxPWVBtPPrEz2gB%2B4KZkTXCiBPa1VXFbn32uWlnemkVFuz%2BThRDvGjyKwSE1yqg7MhFJvcryD5uAQ%3D%3D');
         "
       ></div>
     </header>
@@ -35,8 +35,8 @@ export default {
           this.getContent(this.articles[0]);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     getContent(data) {
@@ -53,8 +53,8 @@ export default {
           setTimeout(this.fadeIn, 1000);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
   },

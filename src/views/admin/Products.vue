@@ -128,8 +128,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     filterProducts(page) {
@@ -168,8 +168,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     deleteProduct(item) {
@@ -184,8 +184,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     openModal(isModal, item) {

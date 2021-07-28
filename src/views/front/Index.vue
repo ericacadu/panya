@@ -14,7 +14,8 @@
         ref="footer">
         <Logo class="mb-3 mx-auto"/>
         <p>
-          本網站僅供個人作品使用，不提供商業用途
+          本網站僅供個人作品使用，不提供商業用途 |
+          <router-link to="/login" target="_blank">登入後台</router-link>
           <small class="d-block mt-1">PANYA &copy; 2021 copyright</small>
         </p>
         <ul class="list-unstyled d-flex justify-content-center m-0">
@@ -76,7 +77,6 @@ export default {
   provide() {
     return {
       provideCart: this.provideCart,
-      isDisabled: this.isDisabled,
     };
   },
   methods: {
@@ -107,8 +107,8 @@ export default {
           this.$emitter.emit('toggle-spinner', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     getCartum() {
@@ -136,8 +136,8 @@ export default {
           this.$pushMessage(res);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     scrollBtnPos() {

@@ -110,8 +110,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     updateArticle(data) {
@@ -137,8 +137,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     openModal(isModal, item) {
@@ -177,8 +177,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
   },

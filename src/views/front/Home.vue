@@ -19,7 +19,7 @@
         <div class="col-12 col-md-6">
           <img
             class="img-fluid"
-            src="https://images.pexels.com/photos/6489624/pexels-photo-6489624.jpeg?w=1280"
+            src="https://storage.googleapis.com/vue-course-api.appspot.com/panya/1627475381663.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=SJCl4Zi3QL1cXkZ8n%2FRnLN3Wx4YbNsjz516AP9H3HCSTt8nY0uRVdEh2JBPU2HE1l7%2F0rDyh1fmpuuUsx%2Fn5JSETzLhxlKEnufiHLNhAcvqASys0gV8Qcr8%2FNbx6S6EWfJblnzROTJbfe%2B5Hwpqcbqlbub2cm12VB0gTno%2BfRGFiyD505k1xuVVf274%2F9QK%2ByLBTtcdyFE8sVTCd6q05loHI8yzakl8GCmDQn3tsylP1J5OZXLUeQYHyrrI2v3nTtg7gxvV1JwAD0%2FkKmNqQ8dONo338%2BYZXhLsKmtQzHveeXHIYV%2Bh%2Beb5wTa9wJsUSyAoYU3Zcdlfzw7lr%2BX9dTA%3D%3D"
             alt=""
           />
         </div>
@@ -52,7 +52,7 @@
         <div class="col-12 col-md-6">
           <img
             class="img-fluid"
-            src="https://images.pexels.com/photos/5545923/pexels-photo-5545923.jpeg?h=500"
+            src="https://storage.googleapis.com/vue-course-api.appspot.com/panya/1627475396914.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=FheeG0HUO7LM0l0AbBvH3W15wlHc0vN0CeYnRIgG4K3Pv8hxF83wFlrqKefPuQwNTWiYXok1VUpJXkl3aiw8uMwGJXfNpXCET64iFhTeeKMCn09RXcZORPfPNtn%2BrKbtISSmOQqf%2BaOrAxSK%2FbmAjdcNmTy4BGxRy9lZ%2BNKUj19wdy04PEJo4vUTzd1HXn0RI9z5N%2Fo5b7GwoMDMt0nPtuFBUTtiMiedISpGzCNZ8WIngB%2F%2B%2BuuTgZALpQmGk3BcGl%2BEqcbhfy7%2F3eZHC7RCFNvjSFPlG8eAZyG%2FxZrlr7ME7cw5Ue5F8SUPBoUHgt%2Brkt4ePzPsZBE%2B%2F1gjbMF45g%3D%3D"
             alt=""
           />
         </div>
@@ -161,8 +161,8 @@ export default {
           }, 1000);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     onSubmit() {

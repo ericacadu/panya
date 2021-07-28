@@ -158,8 +158,8 @@ export default {
           this.$emitter.emit('toggle-spinner', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     deleteCart(id) {
@@ -175,8 +175,8 @@ export default {
           this.$emitter.emit('toggle-spinner', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     clearCart() {
@@ -190,8 +190,8 @@ export default {
           this.$pushMessage(res);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
   },

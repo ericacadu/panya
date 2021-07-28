@@ -108,8 +108,8 @@ export default {
           }
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     logout() {
@@ -121,8 +121,8 @@ export default {
           this.$pushMessage(res);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
   },

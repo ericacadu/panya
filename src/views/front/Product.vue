@@ -128,7 +128,7 @@
         <div class="bg-notice col-6">
         <span
           style="
-            background-image: url('https://images.pexels.com/photos/2930966/pexels-photo-2930966.jpeg?w=1280');
+            background-image: url('https://storage.googleapis.com/vue-course-api.appspot.com/panya/1627476566603.jpeg?GoogleAccessId=firebase-adminsdk-zzty7%40vue-course-api.iam.gserviceaccount.com&Expires=1742169600&Signature=p3Hs3ZDZOVQHup%2ByuFxmTCCzZdZ61mRuNZYlZapNzSzW8dPb0u9qNtjmZxalOUdM8sYUicXS2UQgilr3%2F8fFXBWr1nfbLKjgFuY5wQcLpPbBEnIM1BFT45LtMxWgOExwNgG2eANiTWOZfbtZCwYcOO%2F3Pz2cShtKK8F29vE%2FKarXoHLnkEvYzppZtphgRTGQeFW2aJwia%2F1tcTAoseHPALQ7lbROXdZNS6mqRs0%2FK1NT%2BA1C5EKUlzXXbbZ8ps3Lln%2FZ35d0Ni1mtQSeDGvWyEdJdd%2F%2BBiab4WfRQByqZAJGmR06IhGMLqnOkEdFJcSok7QZQ7wMnpatOkQWIFExIg%3D%3D');
           "
         ></span>
       </div>
@@ -195,8 +195,8 @@ export default {
           }, 1000);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     getAllProducts() {
@@ -209,8 +209,8 @@ export default {
           this.getProduct();
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     // 取得同類別隨機商品

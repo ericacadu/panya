@@ -400,8 +400,8 @@ export default {
           this.$emitter.emit('page-loading', false);
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     filterSelected() {
@@ -458,8 +458,8 @@ export default {
           this.$pushMessage(res, res.data.message || '上傳成功');
         })
         .catch((err) => {
-          this.$pushMessage(err);
           this.$emitter.emit('page-loading', false);
+          this.$pushMessage(err);
         });
     },
     removeImage(item) {
