@@ -88,7 +88,7 @@ export default {
       apiUserLogin(this.user)
         .then((res) => {
           if (!res.data.success) {
-            this.$pushMessage(false, '帳號密碼錯誤');
+            this.$pushMessage(res, res.data.message || '帳號或密碼錯誤');
             this.$emitter.emit('page-loading', false);
           } else {
             const { token, expired } = res.data;
@@ -113,7 +113,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.$emitter.emit('page-loading', false);
-    }, 1000);
+    }, 1500);
   },
 };
 </script>
