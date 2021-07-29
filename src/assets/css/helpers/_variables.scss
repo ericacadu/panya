@@ -1241,7 +1241,7 @@ $badge-border-radius: $border-radius !default;
 // Modals
 
 // scss-docs-start modal-variables
-$modal-inner-padding: $spacer !default;
+$modal-inner-padding: $spacer * 1.5 !default;
 
 $modal-footer-margin-between: .5rem !default;
 
@@ -1270,8 +1270,8 @@ $modal-header-padding-x: $modal-inner-padding !default;
 $modal-header-padding: $modal-header-padding-y $modal-header-padding-x !default; // Keep this for backwards compatibility
 
 $modal-sm: 300px !default;
-$modal-md: 500px !default;
-$modal-lg: 800px !default;
+$modal-md: 640px !default;
+$modal-lg: 960px !default;
 $modal-xl: 1140px !default;
 
 $modal-fade-transform: translate(0, -50px) !default;

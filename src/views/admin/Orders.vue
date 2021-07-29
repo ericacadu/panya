@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <div class="input-group">
+      <div class="input-group order-filter">
         <input
           type="text"
           class="form-control"
