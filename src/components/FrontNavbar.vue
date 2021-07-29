@@ -84,9 +84,7 @@
       </div>
       <CartModal />
     </nav>
-    <div class="overlay" :class="toggleNav ? 'show' : ''">
-      <div class="overlay-inner" @click="closeNav"></div>
-    </div>
+    <div class="overlay" :class="toggleNav ? 'show' : ''" @click="closeNav"></div>
   </div>
 </template>
 

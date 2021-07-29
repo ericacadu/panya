@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="d-flex justify-content-between mb-3">
       <select
-        class="form-select mw-25"
+        class="form-select"
         v-model="filterInput"
         @change="filterProducts(1)"
       >

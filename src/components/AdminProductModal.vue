@@ -59,18 +59,6 @@
                 商品圖片
               </button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button
-                class="nav-link"
-                id="pills-relative-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#pills-relative"
-                type="button"
-                role="tab"
-              >
-                關聯商品
-              </button>
-            </li>
           </ul>
           <div class="tab-content" id="pills-tabContent">
             <div
@@ -308,38 +296,6 @@
                 </div>
               </div>
             </div>
-            <div class="tab-pane fade" id="pills-relative" role="tabpanel">
-              <!-- 關聯商品 -->
-              <div class="col-12">
-                <label class="form-label" for="relative-products">
-                  選擇關聯商品
-                  <small class="text-muted">( 前台用隨機商品代替 )</small>
-                </label>
-                <div
-                  class="form-control overflow-auto"
-                  style="max-height: 10rem;"
-                >
-                  <div
-                    class="form-check"
-                    v-for="(item, i) in products"
-                    :key="i"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      :id="item.id"
-                      :checked="item.is_relativ"
-                      v-model="item.is_relativ"
-                      @click="item.is_relativ = !item.is_relativ,
-                              toggleProduct(item)"
-                    />
-                    <label class="form-check-label" :for="item.id">
-                      {{ item.title }}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -364,7 +320,7 @@
 </template>
 
 <script>
-import { apiUploadFile, apiGetAllProducts } from '@/scripts/api';
+import { apiUploadFile } from '@/scripts/api';
 import invalidMix from '@/mixins/InvalidMix.vue';
 
 export default {
@@ -373,7 +329,6 @@ export default {
   mixins: [invalidMix],
   data() {
     return {
-      products: [],
       datas: {
         imageUrl: '',
         imagesUrl: [],
@@ -388,22 +343,6 @@ export default {
     };
   },
   methods: {
-    getProducts() {
-      apiGetAllProducts()
-        .then((res) => {
-          if (!res.data.success) {
-            this.$pushMessage(res);
-          }
-          const all = Object.values(res.data.products).reverse();
-          this.products = all.filter((item) => item.id !== this.datas.id);
-          this.filterSelected();
-          this.$emitter.emit('page-loading', false);
-        })
-        .catch((err) => {
-          this.$emitter.emit('page-loading', false);
-          this.$pushMessage(err);
-        });
-    },
     filterSelected() {
       this.products.forEach((item) => {
         const status = item;
@@ -507,9 +446,9 @@ export default {
         this.datas.unit = this.defaultUnit;
       }
       this.updateTabs();
-      this.getProducts();
       document.querySelector('form').classList.remove('was-validated');
       this.validation();
+      this.$emitter.emit('page-loading', false);
     },
     datas: {
       handler(val) {

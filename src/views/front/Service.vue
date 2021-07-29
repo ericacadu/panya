@@ -31,7 +31,7 @@ export default {
     getArticles() {
       apiGetAllArticles()
         .then((res) => {
-          this.articles = res.data.articles.filter((item) => item.tag.includes('常見問題'));
+          this.articles = res.data.articles.filter((item) => item.title.includes('常見問題'));
           this.getContent(this.articles[0]);
         })
         .catch((err) => {

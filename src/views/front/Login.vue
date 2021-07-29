@@ -1,6 +1,7 @@
 <template>
   <div
     class="
+      bg-login
       container-fluid
       min-vh-100
       py-5
@@ -60,7 +61,6 @@
         >
       </form>
     </div>
-    <div class="bg-blur"></div>
   </div>
 </template>
 

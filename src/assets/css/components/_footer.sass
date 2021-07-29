@@ -11,10 +11,15 @@ footer
     border-radius: 50%
     &:hover
       border: 1px solid rgba($secondary, 1)
-  .flat-icon
-    transform: scale(0.55)
   li + li
-    margin-left: .5rem
+    margin-left: .5rem   
+  .flat-icon
+    width: 22px
+    height: 22px
+    background: url('~@/assets/images/line.png') no-repeat center top
+    background-size: auto 200%
+  li:hover .flat-icon
+    background-position: center bottom
 
 #scrollTop
   background: rgba(lighten($primary, 30%), .2)

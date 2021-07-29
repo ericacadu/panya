@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay" :class="toggleCart ? 'show' : ''">
+  <div>
     <div
       class="cart col-12 col-md-4 flex-column justify-content-start"
       :class="toggleCart ? 'show' : ''"
@@ -100,7 +100,7 @@
         </p>
       </div>
     </div>
-    <div class="overlay-inner" @click="closeCart"></div>
+    <div class="overlay" :class="toggleCart ? 'show' : ''" @click="closeCart"></div>
   </div>
 </template>
 

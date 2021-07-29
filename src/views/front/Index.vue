@@ -14,8 +14,10 @@
         ref="footer">
         <Logo class="mb-3 mx-auto"/>
         <p>
-          本網站僅供個人作品使用，不提供商業用途 |
-          <router-link to="/login" target="_blank">登入後台</router-link>
+          本網站僅供個人作品使用，不提供商業用途
+          <span class="d-none d-md-inline-block"> |
+            <router-link to="/login" target="_blank">登入後台</router-link>
+          </span>
           <small class="d-block mt-1">PANYA &copy; 2021 copyright</small>
         </p>
         <ul class="list-unstyled d-flex justify-content-center m-0">
@@ -35,8 +37,8 @@
             </a>
           </li>
           <li class="fs-7">
-            <a href="https://line.me/ti/p/tznKV152eK" target="_blank">
-              <Line class="flat-icon"/>
+            <a href="https://line.me/ti/p/tznKV152eK" class="d-flex" target="_blank">
+              <span class="flat-icon d-block"></span>
             </a>
           </li>
         </ul>
@@ -54,13 +56,11 @@
 <script>
 import Navbar from '@/components/FrontNavbar.vue';
 import { apiAllProducts, apiGetCart, apiAddCart } from '@/scripts/api';
-import Line from '@/components/IconLine.vue';
 
 export default {
   emits: ['page-loading', 'push-message', 'toggle-spinner', 'send-cart'],
   components: {
     Navbar,
-    Line,
   },
   data() {
     return {
