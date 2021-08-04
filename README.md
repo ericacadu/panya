@@ -1,23 +1,21 @@
 ![](https://i.imgur.com/8aE1ZEr.jpg)
 
 # パンヤ PANYA 手感烘焙
-:::info
-麵包烘焙電商網站
-:::
-Demo <i class="fa fa-fw fa-external-link"></i>：<a href="https://ericacadu.github.io/panya/" target="_blank">https://ericacadu.github.io/panya/</a>
+> 麵包烘焙電商網站
+
+Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 ## 設計概念
-* **創作理念：** 麵包 <small>(パン)</small> ＋ 吃太多 ＝ 胖呀 <small>(パンヤ)</small><br>
-* **主要風格：** 日系、簡單、溫暖<br>
-* **色系搭配：** 
-<font color="#414666">■ #414666</font> &nbsp; 
-<font color="#eae7e3">■ #FFFCF7</font> &nbsp; 
-<font color="#D6D1CE">■ #D6D1CE</font> &nbsp; 
-<font color="#FFCE07">■ #FFCE07</font><br>
-* **圖片來源：**
-<a href="https://www.pexels.com/" target="_blank">Pexels</a>、
-<a href="https://unsplash.com/" target="_blank">Unsplash</a>、
-<a href="http://www.flaticon.com/" target="_blank">flaticon</a>
+**創作理念：** 麵包 <small>(パン)</small> ＋ 吃太多 ＝ 胖呀 <small>(パンヤ)</small><br>
+**主要風格：** 日系、簡單、溫暖<br>
+**色系搭配：** <br>
+![](https://i.imgur.com/zhl1w8O.png =350x)
+
+
+**圖片來源：**
+[Pexels](https://www.pexels.com/)、
+[Unsplash](https://unsplash.com/)、
+[flaticon](http://www.flaticon.com/)
 
 
 
