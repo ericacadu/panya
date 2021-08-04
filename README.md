@@ -9,8 +9,7 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 **創作理念：** 麵包 <small>(パン)</small> ＋ 吃太多 ＝ 胖呀 <small>(パンヤ)</small><br>
 **主要風格：** 日系、簡單、溫暖<br>
 **色系搭配：** <br>
-![](https://i.imgur.com/zhl1w8O.png =350x)
-
+![](https://i.imgur.com/zhl1w8O.png | width=350)
 
 **圖片來源：**
 [Pexels](https://www.pexels.com/)、
