@@ -145,7 +145,7 @@ import { apiGetArticle } from '@/scripts/api';
 
 export default {
   props: ['modalData'],
-  emits: ['page-loading', 'push-message'],
+  emits: ['page-loading', 'push-message', 'update-data'],
   data() {
     return {
       datas: {

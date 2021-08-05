@@ -30,5 +30,8 @@ export default {
       }
     });
   },
+  unmounted() {
+    this.$emitter.off('toggle-spinner');
+  },
 };
 </script>

@@ -92,10 +92,7 @@ export default {
   },
   methods: {
     checking() {
-      let token = document.cookie.replace(/(?:(?:^|.*;\s*)panyaToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-      this.$emitter.on('upload-check', (val) => {
-        token = val;
-      });
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)panyaToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
       this.$http.defaults.headers.common.Authorization = token;
       apiUserCheck()
         .then((res) => {

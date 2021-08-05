@@ -7,16 +7,13 @@ export default {
   },
   methods: {
     validation() {
-      const forms = document.querySelectorAll('.needs-validation');
-      Array.prototype.slice.call(forms)
-        .forEach((form) => {
-          form.addEventListener('submit', (e) => {
-            this.validated(e, form);
-          });
-          form.addEventListener('change', (e) => {
-            this.validated(e, form);
-          });
-        });
+      const form = document.querySelector('.needs-validation');
+      form.addEventListener('submit', (e) => {
+        this.validated(e, form);
+      });
+      form.addEventListener('change', (e) => {
+        this.validated(e, form);
+      });
     },
     validated(e, form) {
       form.classList.remove('was-validated');

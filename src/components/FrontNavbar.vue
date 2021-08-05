@@ -218,7 +218,6 @@ export default {
     this.$refs.searchInput.addEventListener('keydown', (e) => {
       if (e.keyCode === 13) {
         this.toggleList();
-        // 這段不確定有沒有正確移除監聽，該怎麼確認呢？
         window.removeEventListener('scroll', this.scroll);
       }
     });

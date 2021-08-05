@@ -185,6 +185,9 @@ export default {
     window.addEventListener('resize', this.scrollBtnPos);
   },
   unmounted() {
+    this.$emitter.off('add-cart');
+    this.$emitter.off('get-cart');
+    this.$emitter.off('toggle-overlay');
     window.removeEventListener('scroll', this.showScrollBtn);
     window.removeEventListener('resize', this.scrollBtnPos);
   },

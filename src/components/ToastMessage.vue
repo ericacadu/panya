@@ -35,5 +35,8 @@ export default {
       this.toast.show();
     });
   },
+  unmounted() {
+    this.$emitter.off('push-message');
+  },
 };
 </script>

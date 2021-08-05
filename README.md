@@ -16,12 +16,8 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 [Unsplash](https://unsplash.com/)、
 [flaticon](http://www.flaticon.com/)
 
-
-
-
 ## 專案說明
-* 框架使用 `Vue.js` 
-* 使用 `Vue Cli` 開發的電商網站
+* 網站主要使用 `Vue.js` 和 `Vue Cli` 架設而成
 * 引入 `Vue-Router` 與 `Vue-Axios` 等套件
 * 引入 `Bootstrap 5` 樣式
 * 開發後台管理系統
@@ -30,7 +26,6 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * 透過 `mitt` 傳遞跨元件資料
 * Layout 使用 `Bootstrap 5` 結合 `Sass` 切版
 * 使用 `Font Awesome**`、`Material icons`
-
 
 ### 前台
 * 限制各商品可購買數量最大值，避免使用者超買

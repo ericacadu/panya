@@ -29,5 +29,8 @@ export default {
       }
     });
   },
+  unmounted() {
+    this.$emitter.off('page-loading');
+  },
 };
 </script>

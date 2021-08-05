@@ -237,5 +237,9 @@ export default {
       }
     });
   },
+  unmounted() {
+    this.$emitter.off('send-cart');
+    this.$emitter.off('toggle-cart');
+  },
 };
 </script>
