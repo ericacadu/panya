@@ -18,7 +18,7 @@
           <span class="d-none d-md-inline-block"> |
             <router-link to="/login" target="_blank">登入後台</router-link>
           </span>
-          <small class="d-block mt-1">PANYA &copy; 2021 copyright</small>
+          <small class="d-block mt-1">PANYA &copy; {{ new Date().getFullYear() }} copyright</small>
         </p>
         <ul class="list-unstyled d-flex justify-content-center m-0">
           <li class="fs-7">
@@ -34,11 +34,6 @@
           <li class="fs-7">
             <a href="mailto:erica.du0916@gmail.com" target="_blank">
               <i class="far fa-lg fa-envelope"></i>
-            </a>
-          </li>
-          <li class="fs-7">
-            <a href="https://line.me/ti/p/tznKV152eK" class="d-flex" target="_blank">
-              <span class="flat-icon d-block"></span>
             </a>
           </li>
         </ul>
