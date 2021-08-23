@@ -56,8 +56,6 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * Font Awesome
 * Material icons
 
-<br>
-<hr>
 
 ## 前端介紹
 ### 首頁
@@ -79,7 +77,6 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" width="360">
 
 <br>
-<br>
 
 ### 可購數量最大值
 限制各商品可購買數量最大值 (預設 30)，避免使用者超買，可在購物車 / 商品介紹頁進行操作
@@ -90,8 +87,7 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" width="360">
 
-<br>
-<hr>
+
 
 ## 後台介紹
 ### 商品管理
