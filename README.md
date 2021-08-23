@@ -56,28 +56,42 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * Font Awesome
 * Material icons
 
+<br>
+<hr>
 
 ## 前端介紹
-## 首頁
+### 首頁
 ![Image](https://i.imgur.com/DnleZOm.png)
+
+<br>
 
 ### 商品列表
 ![Image](https://i.imgur.com/PzW03P6.png)
 
+<br>
+
 ### 商品介紹
 ![Image](https://i.imgur.com/Q9KzrJS.png)
+
+<br>
 
 ### 搜尋商品 (Auto Complete 可使用鍵盤操作)
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" width="360">
 
+<br>
+<br>
+
 ### 可購數量最大值
 限制各商品可購買數量最大值 (預設 30)，避免使用者超買，可在購物車 / 商品介紹頁進行操作
+<br>
 當可購買數量超過 30，則不可再加入購物車
 
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/cartqty.gif" width="360">
 
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" width="360">
 
+<br>
+<hr>
 
 ## 後台介紹
 ### 商品管理
