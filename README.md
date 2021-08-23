@@ -68,15 +68,15 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 ![Image](https://i.imgur.com/Q9KzrJS.png)
 
 ### 搜尋商品 (Auto Complete 可使用鍵盤操作)
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" style="width: 360px;">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" width="360">
 
 ### 可購數量最大值
 限制各商品可購買數量最大值 (預設 30)，避免使用者超買，可在購物車 / 商品介紹頁進行操作
 當可購買數量超過 30，則不可再加入購物車
 
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/cartqty.gif" style="width: 360px;">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/cartqty.gif" width="360">
 
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" style="width: 360px;">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" width="360">
 
 
 ## 後台介紹
@@ -105,15 +105,15 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 ## 網站動畫
 ### 按鈕讀取效果
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/loading.gif" style="width: 150px;">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/loading.gif" width="150">
 
 ### 轉場動畫
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/transition.gif" style="width: 360px;">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/transition.gif" width="360">
 
 ### 404 小精靈吃餅乾動畫
 Demo：[404 頁面](https://ericacadu.github.io/panya/#/404)
 
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/error-page.gif" style="width: 360px;">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/error-page.gif" width="360">
 
 <br>
 <hr>
