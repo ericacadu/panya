@@ -18,7 +18,7 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 ## 專案說明
 * 網站主要使用 `Vue.js` 和 `Vue Cli` 架設而成
-* 引入 `Vue-Router` 與 `Vue-Axios` 等套件
+* 引入 `Vue Router` 與 `Vue Axios` 等套件
 * 引入 `Bootstrap 5` 樣式
 * 開發後台管理系統
 * 加入 `ESLint Airbnb` 風格
@@ -28,37 +28,95 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * 使用 `Font Awesome**`、`Material icons`
 
 ### 前台
-* 限制各商品可購買數量最大值，避免使用者超買
-* 使用 `Swiper` 套件製作熱銷及相關商品區塊
-* 相關商品區塊會依照各商品 **隨機篩選同類別** 商品
-* 使用 `Vee Validation` 套件驗證表單
-* 建立商品分類，依照類別篩選商品，產生分頁
-* 搜尋商品加入 `Auto complete` 功能
-* 結帳時可使用優惠碼，並計算優惠價格
-* 設計 Loading 及 [`404 頁面`](https://ericacadu.github.io/panya/#/404) 動畫，優化使用者體驗
-* 支援 RWD 響應式網站
+* 電商展示：首頁、商品列表、商品介紹等
+* 購物車：刪除、修改商品數量
+* 優惠券
+* 結帳
+
 
 ### 後台
-* 使用 Cookie 驗證後台登入狀態
-* 商品管理：
-  * 新增、編輯、刪除商品資訊
-  * 開啟、關閉 商品啟用或推薦狀態
-  * 可上傳圖片連結網址，或上傳圖片檔案
-  * 商品列表可依照類別分類
-* 訂單管理：
-  * 新增、編輯、刪除優惠券
-  * 加入 `V-Calendar` 日期選取套件
-* 訂單管理：
-  * 編輯、刪除訂單資訊
-  * 修改商品數量及資訊，並記錄修改時間
-  * 模擬實際訂單功能，可提供付款頁面連結
-  * 依照訂單編號或 Email 篩選訂單
-* 文章管理：
-  * 加入 `CKEditor 5` 文章編輯器
-  * 文章內可建立、刪除標籤
-  * 透過 API 實現上傳文章圖片功能
-  * 透過文章管理建立前台靜態頁面內容
+* 管理者登入
+* 商品管理
+* 優惠券管理
+* 訂單管理
+* 文章管理
+
+## 使用技術
+* Vue3
+* Vue Cli
+* Vue Component
+* Vue Router
+* Vue Axios
+* Vee Validation
+* V-Calendar
+* CKEditor 5
+* Swiper
+* mitt
+* Bootstrap 5
+* Font Awesome
+* Material icons
 
 
+## 前端介紹
+## 首頁
+![Image](https://i.imgur.com/DnleZOm.png)
+
+### 商品列表
+![Image](https://i.imgur.com/PzW03P6.png)
+
+### 商品介紹
+![Image](https://i.imgur.com/Q9KzrJS.png)
+
+### 搜尋商品 (Auto Complete 可使用鍵盤操作)
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" style="max-width: 360px;">
+
+### 可購數量最大值
+限制各商品可購買數量最大值 (預設 30)，避免使用者超買，可在購物車 / 商品介紹頁進行操作
+當可購買數量超過 30，則不可再加入購物車
+
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/cartqty.gif" style="max-width: 360px;">
+
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" style="max-width: 360px;">
 
 
+## 後台介紹
+### 商品管理
+* 商品列表可依照類別分類
+* 個別商品可上傳圖片連結網址，或上傳圖片檔案
+
+![Image](https://i.imgur.com/80dQium.png)
+![Image](https://i.imgur.com/2fU7C5P.png)
+![Image](https://i.imgur.com/9Jd0vab.png)
+
+### 訂單管理
+![Image](https://i.imgur.com/ZAVf8IR.png)
+
+1. 模擬實際電商後台，未付款訂單會產生付款連結
+2. 可分別修改訂單資訊及訂單內容，並需完成修改才可更新訂單
+3. 修改訂單後會產生最後修改時間以供查閱
+
+### 文章管理
+* 文章編輯器使用 `CKEditor 5` 套件
+* 日期選擇使用 `V-Calendar` 日期選取套件
+* 可自行輸入標籤內容，按下 ENTER 產生標籤
+
+![Image](https://i.imgur.com/Pvfb6dw.png)
+
+
+## 網站動畫
+### 按鈕讀取效果
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/loading.gif" style="max-width: 150px;">
+
+### 轉場動畫
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/transition.gif" style="max-width: 360px;">
+
+### 404 小精靈吃餅乾動畫
+Demo：[404 頁面](https://ericacadu.github.io/panya/#/404)
+
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/error-page.gif" style="max-width: 360px;">
+
+<br>
+<hr>
+<br>
+
+其餘更多細節部分，歡迎至 Demo 網站觀看 [https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
