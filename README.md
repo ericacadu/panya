@@ -98,12 +98,16 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 ![Image](https://i.imgur.com/2fU7C5P.png)
 ![Image](https://i.imgur.com/9Jd0vab.png)
 
+<br>
+
 ### 訂單管理
 ![Image](https://i.imgur.com/ZAVf8IR.png)
 
 1. 模擬實際電商後台，未付款訂單會產生付款連結
 2. 可分別修改訂單資訊及訂單內容，並需完成修改才可更新訂單
 3. 修改訂單後會產生最後修改時間以供查閱
+
+<br>
 
 ### 文章管理
 * 文章編輯器使用 `CKEditor 5` 套件
@@ -112,13 +116,18 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 ![Image](https://i.imgur.com/Pvfb6dw.png)
 
+<br>
 
 ## 網站動畫
 ### 按鈕讀取效果
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/loading.gif" width="150">
 
+<br>
+
 ### 轉場動畫
 <img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/transition.gif" width="360">
+
+<br>
 
 ### 404 小精靈吃餅乾動畫
 Demo：[404 頁面](https://ericacadu.github.io/panya/#/404)
