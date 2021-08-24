@@ -59,21 +59,22 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 ## 前端介紹
 ### 首頁
-![Image](https://i.imgur.com/p0Bm6pj.png)
+![Image](https://i.imgur.com/WeDJwLm.png)
+
 <br>
 
 ### 商品列表
-![Image](https://i.imgur.com/aENPGfN.png)
+![Image](https://i.imgur.com/Xmn63J1.png)
 
 <br>
 
 ### 商品介紹
-![Image](https://i.imgur.com/eabMCHM.png)
+![Image](https://i.imgur.com/Xlb5Tzc.png)
 
 <br>
 
 ### 搜尋商品 (Auto Complete 可使用鍵盤操作)
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" width="360">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/auto-complete.gif" width="350">
 
 <br>
 
@@ -82,9 +83,9 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 <br>
 當可購買數量超過 30，則不可再加入購物車
 
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/cartqty.gif" width="360">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/cartqty.gif" width="350">
 
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" width="360">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/productqty.gif" width="350">
 
 
 
@@ -93,9 +94,9 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * 商品列表可依照類別分類
 * 個別商品可上傳圖片連結網址，或上傳圖片檔案
 
-![Image](https://i.imgur.com/80dQium.png)
-![Image](https://i.imgur.com/2fU7C5P.png)
-![Image](https://i.imgur.com/9Jd0vab.png)
+![Image](https://i.imgur.com/LbHuonE.png)
+![Image](https://i.imgur.com/jNdr1x0.png)
+![Image](https://i.imgur.com/emN7vOJ.png)
 
 <br>
 
@@ -113,7 +114,7 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * 日期選擇使用 `V-Calendar` 日期選取套件
 * 可自行輸入標籤內容，按下 ENTER 產生標籤
 
-![Image](https://i.imgur.com/Pvfb6dw.png)
+![Image](https://i.imgur.com/H62ZIgA.png)
 
 <br>
 
@@ -124,14 +125,14 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 <br>
 
 ### 轉場動畫
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/transition.gif" width="360">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/transition.gif" width="350">
 
 <br>
 
 ### 404 小精靈吃餅乾動畫
 Demo：[404 頁面](https://ericacadu.github.io/panya/#/404)
 
-<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/error-page.gif" width="360">
+<img src="https://raw.githubusercontent.com/ericacadu/panya/master/public/images/error-page.gif" width="350">
 
 <br>
 <hr>
