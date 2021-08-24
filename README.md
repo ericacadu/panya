@@ -59,17 +59,16 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 
 ## 前端介紹
 ### 首頁
-![Image](https://i.imgur.com/DnleZOm.png)
-
+![Image](https://i.imgur.com/p0Bm6pj.png)
 <br>
 
 ### 商品列表
-![Image](https://i.imgur.com/PzW03P6.png)
+![Image](https://i.imgur.com/aENPGfN.png)
 
 <br>
 
 ### 商品介紹
-![Image](https://i.imgur.com/Q9KzrJS.png)
+![Image](https://i.imgur.com/eabMCHM.png)
 
 <br>
 
@@ -136,6 +135,5 @@ Demo：[404 頁面](https://ericacadu.github.io/panya/#/404)
 
 <br>
 <hr>
-<br>
 
 其餘更多細節部分，歡迎至 Demo 網站觀看 [https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
