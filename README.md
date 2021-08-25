@@ -25,7 +25,7 @@ Demo：[https://ericacadu.github.io/panya/](https://ericacadu.github.io/panya/)
 * 統一管理 API 路徑
 * 透過 `mitt` 傳遞跨元件資料
 * Layout 使用 `Bootstrap 5` 結合 `Sass` 切版
-* 使用 `Font Awesome**`、`Material icons`
+* 使用 `Font Awesome`、`Material icons`
 
 ### 前台
 * 電商展示：首頁、商品列表、商品介紹等
