@@ -88,7 +88,7 @@ export default {
       apiUserLogin(this.user)
         .then((res) => {
           if (!res.data.success) {
-            this.$pushMessage(res, res.data.message || '帳號或密碼錯誤');
+            this.$pushMessage(false, '帳號或密碼錯誤');
             this.$emitter.emit('page-loading', false);
           } else {
             const { token, expired } = res.data;
@@ -96,9 +96,9 @@ export default {
             this.$router.push('/admin/products');
           }
         })
-        .catch((err) => {
+        .catch(() => {
           this.$emitter.emit('page-loading', false);
-          this.$pushMessage(err);
+          this.$pushMessage(false, '連線錯誤');
         });
     },
   },

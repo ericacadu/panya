@@ -26,16 +26,15 @@ export const getTime = (date) => {
 };
 
 export const pushMessageState = (response, msg) => {
-  const { success, message } = response.data;
-  if (response && success) {
+  if (response && response.data.success) {
     mitt.emit('push-message', {
       style: 'success',
-      content: message || msg,
+      content: response.data.message || msg,
     });
   } else {
     mitt.emit('push-message', {
       style: 'danger',
-      content: msg || message,
+      content: msg || response.data.message,
     });
   }
 };
