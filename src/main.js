@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import Vuex from '@/store';
 import VCalendar from 'v-calendar';
 import fontawesome from '@fortawesome/fontawesome-free/js/all';
 // validate start
@@ -49,4 +50,5 @@ app.component('ToastMessage', ToastMessage)
   .use(fontawesome)
   .use(VueAxios, axios)
   .use(router)
+  .use(Vuex)
   .mount('#app');

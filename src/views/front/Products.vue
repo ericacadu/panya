@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { apiAllProducts } from '@/scripts/api';
+// import { apiAllProducts } from '@/scripts/api';
 import { navigator } from '@/scripts/methods';
 import Product from '@/components/FrontProduct.vue';
 import fadeInMix from '@/mixins/FadeInMix.vue';
@@ -53,9 +53,9 @@ export default {
   },
   data() {
     return {
-      products: [],
+      // products: [],
       pages: [],
-      category: [],
+      // category: [],
       filterDatas: [],
       tempArry: [],
       isActive: 'all',
@@ -69,22 +69,25 @@ export default {
   mixins: [fadeInMix],
   methods: {
     getAllProducts() {
-      apiAllProducts()
-        .then((res) => {
-          if (!res.data.success) {
-            this.$pushMessage(res);
-          }
-          this.products = res.data.products.reverse();
-          const arry = this.products.map((item) => item.category);
-          const newSet = new Set(arry);
-          this.category = [...newSet];
-          this.filterProducts(this.path.page, this.path.category);
-          this.$emitter.emit('page-loading', false);
-        })
-        .catch((err) => {
-          this.$emitter.emit('page-loading', false);
-          this.$pushMessage(err);
-        });
+      // this.$store.dispatch('getAllProducts');
+      // apiAllProducts()
+      //   .then((res) => {
+      //     if (!res.data.success) {
+      //       this.$pushMessage(res);
+      //     }
+      //     this.products = res.data.products.reverse();
+      //     const arry = this.products.map((item) => item.category);
+      //     const newSet = new Set(arry);
+      //     this.category = [...newSet];
+      //     this.filterProducts(this.path.page, this.path.category);
+      //     // this.$emitter.emit('page-loading', false);
+      //     this.$store.dispatch('updateLoading', false);
+      //   })
+      //   .catch((err) => {
+      //     // this.$emitter.emit('page-loading', false);
+      //     this.$store.dispatch('updateLoading', false);
+      //     this.$pushMessage(err);
+      //   });
     },
     filterCart() {
       this.filterDatas.forEach((item) => {
@@ -100,17 +103,21 @@ export default {
       });
     },
     getPath() {
-      this.path.category = this.$route.query.category || 'all';
-      this.path.page = this.$route.query.page || 1;
+      this.path = {
+        category: this.$route.query.category || 'all',
+        page: this.$route.query.page || 1,
+      };
+      // this.path.category = this.$route.query.category || 'all';
+      // this.path.page = this.$route.query.page || 1;
       this.isActive = this.path.category;
     },
-    filterProducts(page) {
-      this.getPath();
-      if (this.path.category === 'all') {
+    filterProducts(page, category) {
+      if (category.toString() === 'all') {
         this.tempArry = this.products;
+        console.log(this.products);
       } else {
         this.tempArry = this.products.filter(
-          (item) => item.category === this.path.category,
+          (item) => item.category === category,
         );
       }
       const newNavigator = navigator(page, this.tempArry);
@@ -118,11 +125,12 @@ export default {
       this.filterDatas = newNavigator.newArray;
       this.filterCart();
       this.$router.push(
-        `./products?category=${this.path.category}&page=${page}`,
+        `./products?category=${category}&page=${page}`,
       );
-      setTimeout(() => {
-        this.fadeInOnLoad();
-      }, 0);
+      this.$nextTick(() => this.fadeInOnLoad());
+      // setTimeout(() => {
+      //   this.fadeInOnLoad();
+      // }, 0);
     },
   },
   watch: {
@@ -138,10 +146,22 @@ export default {
       this.getAllProducts();
     },
   },
+  computed: {
+    products() {
+      return this.$store.state.products;
+    },
+    category() {
+      const arry = this.products.map((item) => item.category);
+      const newSet = new Set(arry);
+      return [...newSet];
+    },
+  },
   mounted() {
-    this.$emitter.emit('page-loading', true);
+    // this.$emitter.emit('page-loading', true);
     this.getPath();
-    this.getAllProducts();
+    // this.getAllProducts();
+    this.filterProducts(this.path.page, this.path.category);
+    this.$store.dispatch('getAllProducts');
   },
 
 };

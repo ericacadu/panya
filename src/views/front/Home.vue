@@ -131,7 +131,7 @@ import FrontSwiper from '@/components/FrontSwiper.vue';
 import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
-  emits: ['page-loading', 'push-message', 'toggle-spinner'],
+  // emits: ['page-loading', 'push-message', 'toggle-spinner'],
   props: ['isDisabled'],
   components: {
     FrontSwiper,
@@ -156,12 +156,14 @@ export default {
           this.products = res.data.products.reverse();
           this.promote = this.products.filter((item) => item.is_promote);
           setTimeout(() => {
-            this.$emitter.emit('page-loading', false);
+            this.$store.dispatch('updateLoading', false);
+            // this.$emitter.emit('page-loading', false);
             this.fadeInOnLoad();
           }, 1000);
         })
         .catch((err) => {
-          this.$emitter.emit('page-loading', false);
+          // this.$emitter.emit('page-loading', false);
+          this.$store.dispatch('updateLoading', false);
           this.$pushMessage(err);
         });
     },
@@ -178,7 +180,7 @@ export default {
   },
   created() {
     this.getAllProducts();
-    this.$emitter.emit('page-loading', true);
+    // this.$emitter.emit('page-loading', true);
   },
 };
 </script>

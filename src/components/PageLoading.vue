@@ -1,7 +1,6 @@
 <template>
   <div class="loading bouncecookie"
-    ref="loading"
-    :class="isLoading ? '' : 'fade'">
+    :class="[status ? '' : 'fade', show]">
     <i class="fas fa-2x fa-cookie-bite cookie"></i>
     <span>loading</span>
   </div>
@@ -11,26 +10,27 @@
 export default {
   data() {
     return {
-      isLoading: true,
+      show: '',
     };
   },
-  mounted() {
-    this.$emitter.on('page-loading', (val) => {
+  computed: {
+    status() {
+      return this.$store.state.isLoading;
+    },
+  },
+  watch: {
+    status(val) {
       const body = document.querySelector('body');
-      this.isLoading = val;
       if (val) {
-        this.$refs.loading.classList.remove('d-none');
+        this.show = '';
         body.setAttribute('class', 'mh-100vh overflow-hidden');
       } else {
         setTimeout(() => {
-          this.$refs.loading.classList.add('d-none');
+          this.show = 'd-none';
           body.setAttribute('class', '');
         }, 200);
       }
-    });
-  },
-  unmounted() {
-    this.$emitter.off('page-loading');
+    },
   },
 };
 </script>
