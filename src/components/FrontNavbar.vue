@@ -89,13 +89,12 @@
 </template>
 
 <script>
-import { apiAllProducts } from '@/scripts/api';
+import { mapGetters, mapActions } from 'vuex';
 import CartModal from '@/components/FrontCartModal.vue';
 import Cart from '@/components/IconBag.vue';
 import Search from '@/components/IconSearch.vue';
 
 export default {
-  props: ['datas'],
   inject: ['provideCart'],
   components: {
     CartModal,
@@ -106,7 +105,6 @@ export default {
   data() {
     return {
       toggleNav: false,
-      products: [],
       searchInput: '',
       key: -1,
       oldKey: 0,
@@ -116,19 +114,7 @@ export default {
     };
   },
   methods: {
-    getAllProducts() {
-      apiAllProducts()
-        .then((res) => {
-          if (!res.data.success) {
-            this.$pushMessage(res);
-          }
-          this.products = res.data.products.reverse();
-        })
-        .catch((err) => {
-          this.$emitter.emit('page-loading', false);
-          this.$pushMessage(err);
-        });
-    },
+    ...mapActions(['getAllProducts']),
     toggleList(index) {
       if (index >= 0) {
         this.key = index;
@@ -195,6 +181,7 @@ export default {
       const result = this.products.filter((item) => item.title.match(keyword));
       return result || [];
     },
+    ...mapGetters(['products']),
   },
   watch: {
     key(val, oldVal) {

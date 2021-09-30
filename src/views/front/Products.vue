@@ -39,23 +39,21 @@
 </template>
 
 <script>
-// import { apiAllProducts } from '@/scripts/api';
+import { mapGetters, mapActions } from 'vuex';
 import { navigator } from '@/scripts/methods';
 import Product from '@/components/FrontProduct.vue';
 import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
   inject: ['provideCart'],
-  emits: ['page-loading', 'push-message'],
-  props: ['datas', 'isDisabled'],
+  emits: ['push-message'],
+  props: ['isDisabled'],
   components: {
     Product,
   },
   data() {
     return {
-      // products: [],
       pages: [],
-      // category: [],
       filterDatas: [],
       tempArry: [],
       isActive: 'all',
@@ -68,27 +66,7 @@ export default {
   },
   mixins: [fadeInMix],
   methods: {
-    getAllProducts() {
-      // this.$store.dispatch('getAllProducts');
-      // apiAllProducts()
-      //   .then((res) => {
-      //     if (!res.data.success) {
-      //       this.$pushMessage(res);
-      //     }
-      //     this.products = res.data.products.reverse();
-      //     const arry = this.products.map((item) => item.category);
-      //     const newSet = new Set(arry);
-      //     this.category = [...newSet];
-      //     this.filterProducts(this.path.page, this.path.category);
-      //     // this.$emitter.emit('page-loading', false);
-      //     this.$store.dispatch('updateLoading', false);
-      //   })
-      //   .catch((err) => {
-      //     // this.$emitter.emit('page-loading', false);
-      //     this.$store.dispatch('updateLoading', false);
-      //     this.$pushMessage(err);
-      //   });
-    },
+    ...mapActions(['getAllProducts']),
     filterCart() {
       this.filterDatas.forEach((item) => {
         const newItem = item;
@@ -107,14 +85,11 @@ export default {
         category: this.$route.query.category || 'all',
         page: this.$route.query.page || 1,
       };
-      // this.path.category = this.$route.query.category || 'all';
-      // this.path.page = this.$route.query.page || 1;
       this.isActive = this.path.category;
     },
-    filterProducts(page, category) {
+    filterProducts(page, category = this.path.category) {
       if (category.toString() === 'all') {
         this.tempArry = this.products;
-        console.log(this.products);
       } else {
         this.tempArry = this.products.filter(
           (item) => item.category === category,
@@ -128,9 +103,6 @@ export default {
         `./products?category=${category}&page=${page}`,
       );
       this.$nextTick(() => this.fadeInOnLoad());
-      // setTimeout(() => {
-      //   this.fadeInOnLoad();
-      // }, 0);
     },
   },
   watch: {
@@ -142,14 +114,12 @@ export default {
       },
       deep: true,
     },
-    datas() {
-      this.getAllProducts();
+    products() {
+      this.filterProducts(this.path.page, this.path.category);
     },
   },
   computed: {
-    products() {
-      return this.$store.state.products;
-    },
+    ...mapGetters(['products']),
     category() {
       const arry = this.products.map((item) => item.category);
       const newSet = new Set(arry);
@@ -157,11 +127,8 @@ export default {
     },
   },
   mounted() {
-    // this.$emitter.emit('page-loading', true);
     this.getPath();
-    // this.getAllProducts();
-    this.filterProducts(this.path.page, this.path.category);
-    this.$store.dispatch('getAllProducts');
+    this.getAllProducts();
   },
 
 };

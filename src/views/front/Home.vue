@@ -126,20 +126,17 @@
 </template>
 
 <script>
-import { apiAllProducts } from '@/scripts/api';
+import { mapActions, mapGetters } from 'vuex';
 import FrontSwiper from '@/components/FrontSwiper.vue';
 import fadeInMix from '@/mixins/FadeInMix.vue';
 
 export default {
-  // emits: ['page-loading', 'push-message', 'toggle-spinner'],
   props: ['isDisabled'],
   components: {
     FrontSwiper,
   },
   data() {
     return {
-      products: [],
-      promote: [],
       email: '',
       idDisabled: false,
       show: true,
@@ -147,26 +144,7 @@ export default {
   },
   mixins: [fadeInMix],
   methods: {
-    getAllProducts() {
-      apiAllProducts()
-        .then((res) => {
-          if (!res.data.success) {
-            this.$pushMessage(res);
-          }
-          this.products = res.data.products.reverse();
-          this.promote = this.products.filter((item) => item.is_promote);
-          setTimeout(() => {
-            this.$store.dispatch('updateLoading', false);
-            // this.$emitter.emit('page-loading', false);
-            this.fadeInOnLoad();
-          }, 1000);
-        })
-        .catch((err) => {
-          // this.$emitter.emit('page-loading', false);
-          this.$store.dispatch('updateLoading', false);
-          this.$pushMessage(err);
-        });
-    },
+    ...mapActions(['getAllProducts']),
     onSubmit() {
       this.idDisabled = true;
       this.$emitter.emit('toggle-spinner', this.email);
@@ -178,9 +156,15 @@ export default {
       }, 1500);
     },
   },
-  created() {
+  computed: {
+    ...mapGetters(['products']),
+    promote() {
+      return this.products.filter((item) => item.is_promote);
+    },
+  },
+  mounted() {
     this.getAllProducts();
-    // this.$emitter.emit('page-loading', true);
+    this.$nextTick(() => this.fadeInOnLoad());
   },
 };
 </script>
