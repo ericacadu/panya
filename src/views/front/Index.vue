@@ -22,11 +22,6 @@
         </p>
         <ul class="list-unstyled d-flex justify-content-center m-0">
           <li class="fs-7">
-            <a href="https://github.com/ericacadu/panya" target="_blank">
-              <i class="fab fa-lg fa-github"></i>
-            </a>
-          </li>
-          <li class="fs-7">
             <a href="https://codepen.io/ericadu/collections/" target="_blank">
               <i class="fab fa-lg fa-codepen"></i>
             </a>
