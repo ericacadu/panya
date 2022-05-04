@@ -24,3 +24,4 @@ pnpm-debug.log*
 
 yarn.lock
 package-lock.json
+.editorconfig
