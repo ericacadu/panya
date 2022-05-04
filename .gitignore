@@ -4,6 +4,7 @@ node_modules
 
 
 # local env files
+.env
 .env.local
 .env.*.local
 
@@ -23,4 +24,5 @@ pnpm-debug.log*
 *.sw?
 
 yarn.lock
+package-lock.json
 .editorconfig
