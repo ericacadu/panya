@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const api = process.env.VUE_APP_API;
 const path = process.env.VUE_APP_PATH;
+const adminPath = `${api}/api/${path}/admin`
 
 // 後台相關 (需驗證)
 export const apiUserLogin = (data) => axios.post(`${api}/admin/signin`, data);
@@ -10,58 +11,58 @@ export const apiUserCheck = () => axios.post(`${api}/api/user/check`);
 
 // 商品管理
 export const apiGetAllProducts = () => axios.get(
-  `${api}/api/${path}/admin/products/all`,
+  `${adminPath}/products/all`,
 );
 export const apiGetProducts = (page = 1) => axios.get(
-  `${api}/api/${path}/admin/products?page=${page}`,
+  `${adminPath}/products?page=${page}`,
 );
 export const apiUpdateProducts = (method, data, id) => axios[method](
-  `${api}/api/${path}/admin/product/${id}`, data,
+  `${adminPath}/product/${id}`, data,
 );
 export const apiDeleteProducts = (id) => axios.delete(
-  `${api}/api/${path}/admin/product/${id}`,
+  `${adminPath}/product/${id}`,
 );
 export const apiUploadFile = (data) => axios.post(
-  `${api}/api/${path}/admin/upload`, data,
+  `${adminPath}/upload`, data,
 );
 
 // 優惠券
 export const apiGetCoupons = (page = 1) => axios.get(
-  `${api}/api/${path}/admin/coupons?page=${page}`,
+  `${adminPath}/coupons?page=${page}`,
 );
 export const apiUpdateCoupon = (method, data, id) => axios[method](
-  `${api}/api/${path}/admin/coupon/${id}`, data,
+  `${adminPath}/coupon/${id}`, data,
 );
 export const apiDeleteCoupon = (id) => axios.delete(
-  `${api}/api/${path}/admin/coupon/${id}`,
+  `${adminPath}/coupon/${id}`,
 );
 
 // 訂單管理
 export const apiGetOrders = (page = 1) => axios.get(
-  `${api}/api/${path}/admin/orders?page=${page}`,
+  `${adminPath}/orders?page=${page}`,
 );
 export const apiUpdateOrder = (id, data) => axios.put(
-  `${api}/api/${path}/admin/order/${id}`, data,
+  `${adminPath}/order/${id}`, data,
 );
 export const apiDeleteOrder = (id) => axios.delete(
-  `${api}/api/${path}/admin/order/${id}`,
+  `${adminPath}/order/${id}`,
 );
 export const apiDeleteOrders = () => axios.delete(
-  `${api}/api/${path}/admin/orders/all`,
+  `${adminPath}/orders/all`,
 );
 
 // 文章管理
 export const apiGetArticles = (page = 1) => axios.get(
-  `${api}/api/${path}/admin/articles?page=${page}`,
+  `${adminPath}/articles?page=${page}`,
 );
 export const apiGetArticle = (id) => axios.get(
-  `${api}/api/${path}/admin/article/${id}`,
+  `${adminPath}/article/${id}`,
 );
 export const apiUpdateArticle = (method, data, id) => axios[method](
-  `${api}/api/${path}/admin/article/${id}`, data,
+  `${adminPath}/article/${id}`, data,
 );
 export const apiDeleteArticle = (id) => axios.delete(
-  `${api}/api/${path}/admin/article/${id}`,
+  `${adminPath}/article/${id}`,
 );
 
 // 前台相關
