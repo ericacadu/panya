@@ -1,4 +1,4 @@
-![](https://i.imgur.com/8aE1ZEr.jpg)
+![cover](https://i.imgur.com/8aE1ZEr.jpg)
 
 # パンヤ PANYA 手感烘焙
 > 麵包烘焙電商網站
