@@ -4,7 +4,6 @@ const api = process.env.VUE_APP_API;
 const path = process.env.VUE_APP_PATH;
 const adminPath = `${api}/api/${path}/admin`;
 
-
 // 後台相關 (需驗證)
 export const apiUserLogin = (data) => axios.post(`${api}/admin/signin`, data);
 export const apiUserLogout = () => axios.post(`${api}/logout`);
